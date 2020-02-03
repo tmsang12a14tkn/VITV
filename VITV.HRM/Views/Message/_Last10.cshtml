@@ -1,0 +1,101 @@
+﻿@model List<Message>
+@{
+    string myId = ViewBag.MyId;
+}
+
+@foreach (var message in Model)
+{
+    <div class="col-sm-3 divchat">
+        <div class="widget-box ">
+            <div class="widget-header">
+                <h4 class="widget-title lighter smaller">
+                    <i class="ace-icon fa fa-comment blue"></i>
+                    Conversation
+                </h4>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <div class="dialogs">
+                        <div class="itemdiv dialogdiv">
+                            <div class="user">
+                                <img alt="Alexa's Avatar" src="assets/avatars/avatar1.png" />
+                            </div>
+
+                            <div class="body">
+                                <div class="time">
+                                    <i class="ace-icon fa fa-clock-o"></i>
+                                    <span class="green">4 sec</span>
+                                </div>
+
+                                <div class="name">
+                                    <a href="#">Alexa</a>
+                                </div>
+                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
+
+                                <div class="tools">
+                                    <a href="#" class="btn btn-minier btn-info">
+                                        <i class="icon-only ace-icon fa fa-share"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+
+                    <form>
+                        <div class="form-actions">
+                            <div class="input-group">
+                                <input placeholder="Type your message here ..." type="text" class="form-control" name="message" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-sm btn-info no-radius" type="button">
+                                        <i class="ace-icon fa fa-share"></i>
+                                        Send
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+        </div><!-- /.widget-box -->
+    </div>
+
+
+    @*if (message.SenderId == myId)
+    {
+        <li class="right clearfix">
+            <span class="chat-img pull-right">
+                <img src="@message.Sender.UserName" alt="User Avatar" class="img-responsive img-circle">
+            </span>
+            <div class="chat-body clearfix">
+                <div class="header">
+                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>time</small>
+                    <strong class="pull-right primary-font">@message.Sender.UserName</strong>
+                </div>
+                <p>
+                    @message.MessageContent
+                </p>
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="left clearfix">
+            <span class="chat-img pull-left">
+                <img src="@message.Sender.UserName" alt="User Avatar" class="img-responsive img-circle">
+            </span>
+            <div class="chat-body clearfix">
+                <div class="header">
+                    <strong class="primary-font">@message.Sender.UserName</strong> <small class="pull-right text-muted">
+                        <span class="glyphicon glyphicon-time"></span>time
+                    </small>
+                </div>
+                <p>
+                    @message.MessageContent
+                </p>
+            </div>
+        </li>
+    }*@
+}

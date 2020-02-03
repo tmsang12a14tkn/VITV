@@ -1,0 +1,150 @@
+﻿@model List<ArticleCustomView>
+
+@{
+    IEnumerable<IGrouping<DateTime, ArticleCustomView>> groups = Model.OrderByDescending(b => b.PublishedTime).GroupBy(b => b.PublishedTime.Value.Date);
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th><span>Tiêu đề</span></th>
+                <th><span>Người đăng</span></th>
+                <th><span>Tình trạng</span></th>
+                <th><span>Lượt xem</span></th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+
+        @foreach (IGrouping<DateTime, ArticleCustomView> agroup in groups)
+        {
+            <thead class="theadvideo">
+                <tr>
+                    <th colspan="6">
+                        <h2><b>@(agroup.Key.DayOfWeek == 0 ? "Chủ nhật - " + agroup.Key.ToShortDateString() : "Thứ " + ((int)agroup.Key.DayOfWeek + 1) + " - " + agroup.Key.ToString("dd/MM/yyyy"))</b></h2>
+                    </th>
+                </tr>
+            </thead>
+
+            List<ArticleCustomView> lstArticle = agroup.OrderBy(b => b.PublishedTime).ToList();
+
+            foreach (ArticleCustomView art in lstArticle)
+            {
+                <tbody class="tbodyvideo">
+                    <tr>
+                        <td>
+                            <div class="col-lg-1">
+                                <div style="background:url('@art.Thumbnail') no-repeat;background-size:cover;background-position: 50% 50%;width:50px;height:50px;"></div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div style="background:url('@art.CatThumbnail') no-repeat;background-size:cover;background-position: 50% 50%;width:50px;height:50px;"></div>
+                            </div>
+                            <div class="col-lg-10">
+                                @if (art.SeriesId > 0)
+                                {
+                                    <div class="row">
+                                        <a href="@Url.Action("Details", "ArticleSeries", new { id = art.SeriesId })" style="font-weight: 600;font-size: 14px;color: #3498db;">
+                                            Series: @Html.DisplayFor(modelItem => art.SeriesName)
+                                        </a>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <a href="@Url.Action("Edit", new { id = art.Id })" style="font-size: 14px;">
+                                        @Html.DisplayFor(modelItem => art.ArticleName)
+                                    </a>
+                                </div>
+                                <div class="row" style="font-size: 12px;">
+                                    @art.CatName
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            @foreach (Employee rpt in art.Reporters)
+                            {
+                                <img src="@rpt.ProfilePicture" style="width: 50px; height: auto;">
+                            }
+                        </td>
+                        <td>
+                            @if (art.ArticleStatus == 1)
+                            {
+                                <span class="label label-default">Chưa duyệt</span>
+                            }
+                            else if (art.ArticleStatus == 2)
+                            {
+                                <span class="label label-warning">Cần chỉnh sửa</span>
+                            }
+                            else if (art.ArticleStatus == 3)
+                            {
+                                <span class="label label-danger">Bị loại</span>
+                            }
+                            else if (art.ArticleStatus == 4)
+                            {
+                                <span class="label label-success">Tốt</span>
+                            }
+                            @if (art.IsPublished)
+                            {
+                                <span class="label label-primary">Đã đăng</span>
+                            }
+                        </td>
+                        <td>
+                            @art.FirstWeekCount | @art.AllTimeCount
+                        </td>
+
+                        <td>
+                            @if (User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                            {
+                                <a href="http://startup.vitv.vn/tin-chu/@(art.PublishedTime.Value.ToString("dd-MM-yyyy"))/@(art.UniqueTitle)/@(art.Id)" target="_blank" class="table-link">
+                                    <span class="fa-stack">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+
+                                <a href="#" id="btnCD@(art.Id)" data-toggle="modal" data-target="#changeDateModal" data-id="@art.Id" class="table-link">
+                                    <span class="fa-stack">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+
+                                if (art.ArticleStatus == (int)ArticleStatus.Good)
+                                {
+                                    <a href="#" id="btnHLA@(art.Id)" data-toggle="modal" data-target="#highlightModal" data-id="@art.Id" data-hltype="0" class="table-link @(art.IsHighlightAll ? "success" : "")" title="Nổi bật chung" data-title="Tin nổi bật chung">
+                                        <span class="fa-stack">
+                                            <i class="fa fa-square fa-stack-2x"></i>
+                                            <i class="fa fa-star-o fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                    <a href="#" id="btnHLC@(art.Id)" data-toggle="modal" data-target="#highlightModal" data-id="@art.Id" data-hltype="1" class="table-link @(art.IsHighlightCat ? "success" : "")" title="Nổi bật chuyên mục" data-title="Tin nổi bật chuyên mục">
+                                        <span class="fa-stack">
+                                            <i class="fa fa-square fa-stack-2x"></i>
+                                            <i class="fa fa-star-o fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    @*<a href="@Url.Action("Approve", new { id = art.Id, week = week })" class="btn btn-success">Kiểm bài</a>*@
+                                }
+
+                                <a href="@Url.Action("Edit", new { id = art.Id})" class="table-link">
+                                    <span class="fa-stack">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+
+                                <a href="@Url.Action("Delete", "Article", new { id = art.Id})" class="table-link danger">
+                                    <span class="fa-stack">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        }
+    </table>
+</div>

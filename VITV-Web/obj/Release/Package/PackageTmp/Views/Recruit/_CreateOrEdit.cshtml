@@ -1,0 +1,165 @@
+﻿@model Recruit
+
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <div class="checkbox-nice">
+            <input type="checkbox" id="IsRecruiting" name="IsRecruiting" value="true" @(Model == null || Model.Id == default(int) ? "" : (Model.IsRecruiting ? "checked" : ""))>
+            <label for="IsRecruiting">@Html.DisplayNameFor(model => model.IsRecruiting)</label>
+            <input name="IsRecruiting" type="hidden" value="false" />
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Thumbnail, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.Thumbnail)
+    <div class="col-lg-10">
+        <img id="photoView" width=400 height=400 src="@(Model != null && !String.IsNullOrEmpty(Model.Thumbnail) ? Model.Thumbnail : "")" />
+        <input class="form-control" id="photoinput" type="file" name="thumbnail" accept="image/*">
+    </div>
+    @Html.ValidationMessageFor(model => model.Thumbnail, string.Empty, new { @class = "help-block" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.JobPosition, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.JobPosition, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.JobPosition, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Amount, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Amount, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-lg-2" })
+    <div class="col-lg-10">
+        @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CategoryId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CityId, htmlAttributes: new { @class = "control-label col-lg-2" })
+    <div class="col-lg-10">
+        @Html.DropDownList("CityId", null, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CityId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.JobFeature, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.JobFeature, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.JobFeature, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Description, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Description, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Requirement, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Requirement, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Requirement, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Experience, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Experience, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Experience, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Degree, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Degree, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Degree, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Gender, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Gender, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Gender, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.JobType, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.JobType, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.JobType, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Salary, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Salary, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Salary, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Probation, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Probation, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Probation, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Remuneration, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Remuneration, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Remuneration, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Resume, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Resume, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Resume, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.DateExpire, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.DateExpire, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DateExpire, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Submission, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Submission, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Submission, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ContactInfo, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.ContactInfo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ContactInfo, string.Empty, new { @class = "help-block" })
+    </div>
+</div>

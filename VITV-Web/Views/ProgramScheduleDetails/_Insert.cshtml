@@ -1,0 +1,21 @@
+﻿@model ProgramScheduleDetail
+ 
+@using (Ajax.BeginForm("Insert", "ProgramScheduleDetails", new AjaxOptions()
+{
+    UpdateTargetId = "tableDetail" + Model.DateTime.ToString("dd-MM-yyyy"),
+    InsertionMode = InsertionMode.Replace,
+    OnComplete = "clearForm('" + Model.DateTime.ToString("dd-MM-yyyy") + "');"
+}, new { @class = "form-horizontal", role = "form", id = "form" + Model.DateTime.ToString("dd-MM-yyyy") }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.Partial("_InsertOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-success">
+                <span class="fa fa-check"></span> Hoàn thành
+            </button>
+        </div>
+    </div>
+}

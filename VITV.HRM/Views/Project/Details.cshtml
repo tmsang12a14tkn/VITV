@@ -1,0 +1,149 @@
+﻿@model Project
+@{
+    ViewBag.Title = "Project: " + Model.Title;
+    Employee me = ViewBag.Me;
+    
+   
+}
+
+@if (ViewBag.CanEdit == true)
+{ 
+    <div class="row">
+        <a href="#" class="pull-left btn btn-danger" data-action="add" data-toggle="modal" data-target="#request-modal" data-href="/TaskRequest/Add?projectId=@Model.Id">Thêm công việc</a>
+    </div>
+}
+<div class="col-sm-12">
+    <h5>Quản lý:</h5>
+    <div class="profile-users clearfix">
+        @foreach(var employee in Model.Employees)
+        { 
+            <div class="itemdiv memberdiv">
+                <div class="inline pos-rel">
+                    <div class="user">
+                        <a href="#">
+                            <img src="@employee.ProfilePicture" alt="avatar">
+                        </a>
+                    </div>
+
+                    <div class="body">
+                        <div class="name">
+                            <a href="#">
+                                <span class="user-status status-online"></span>
+                                @employee.Name
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="tabbable tabs-left col-sm-12 ">
+    <ul class="nav nav-tabs">
+        @{var first = true;}
+        @foreach (var task in Model.TaskRequests)
+        {
+            if(ViewBag.CanEdit == true || task.JobLists.Any(jl=>jl.Jobs.Any(j=>j.Employees.Any(e=>e.Id==me.Id))))
+            { 
+                var _class = "";
+                if (first)
+                {
+                    _class = "active";
+                    first = false;
+                }
+                <li class="@_class">
+                    <a data-toggle="tab" href="#tab-task-@task.Id" aria-expanded="true">
+                        <i class="pink ace-icon fa fa-tachometer bigger-110"></i>
+                        @task.Title
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+    <div class="tab-content">
+        @{first = true;}
+        @foreach (var task in Model.TaskRequests)
+        {
+             if(ViewBag.CanEdit == true || task.JobLists.Any(jl=>jl.Jobs.Any(j=>j.Employees.Any(e=>e.Id==me.Id))))
+            { 
+                var _class = "tab-pane";
+                if(first)
+                {
+                    _class = "tab-pane active";
+                    first = false;
+                }
+                <div class="@_class" id="tab-task-@task.Id">
+                   @Html.Partial("~/Views/TaskRequest/Details.cshtml", task)
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section styles
+{
+
+}
+@section scripts
+{
+    
+    <script>
+
+        $(function () {
+            registerJobList();
+            //var registerAddItemForm = function ($elements) {
+            //    $elements.ajaxForm({
+            //        success: function (data, statusText, xhr, $form) {
+            //            if (data.success == true) {
+            //                $.get("/Checklist/Item/" + data.checkItemId, function (item) {
+            //                    $("#checklist-items-" + data.checklistId).append(item);
+
+            //                    registerEditable($('#checklist-item-' + data.checkItemId + ' .item-editable'));
+            //                });
+            //                $("#checklist-count-" + data.checklistId).html(data.done + '/' + data.all);
+            //            }
+            //            $form[0].reset();
+            //        }
+            //    })
+            //};
+            
+            //$('.response-form').ajaxForm({
+            //    success: function (responseText, statusText, xhr, $form) {
+            //        $form[0].reset();
+            //        var id = $form.data('id');
+
+            //        $.get("/TaskResponse/Details/" + responseText.id, function (result) {
+            //            $("#response-items-" + id).prepend(result);
+            //        })
+            //    }
+            //});
+            //$('.input-attachments').ace_file_input({
+            //    no_file: 'Không có tệp ...',
+            //    btn_choose: 'Chọn',
+            //    btn_change: 'Thay đổi',
+            //    droppable: false,
+            //    onchange: null,
+            //    thumbnail: false //| true | large
+            //    //whitelist:'gif|png|jpg|jpeg'
+            //    //blacklist:'exe|php'
+            //    //onchange:''
+            //    //
+            //});
+
+            //$('[data-toggle="buttons"] .btn').on('click', function (e) {
+            //    var target = $(this).find('input[type=radio]');
+            //    var which = parseInt(target.val());
+            //    $('[id*="timeline-"]').addClass('hide');
+            //    $('#timeline-' + which).removeClass('hide');
+            //});
+
+            
+
+            //registerAddItemForm($('.add-checkitem-form'));
+
+            //$.fn.editable.defaults.mode = 'inline';
+          
+        })
+    </script>
+}

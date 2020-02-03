@@ -1,0 +1,168 @@
+﻿@model List<IntroByCategory>
+
+@{
+    ViewBag.Title = "Quản lý video intro";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="tabs-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box clearfix">
+                <header class="main-box-header clearfix">
+                    <h2 class="pull-left"><b>Quản lý video hình hiệu</b></h2>
+                    <div class="filter-block pull-right">
+                        <a href="/CategoryIntro/Create" class="btn btn-success pull-right" data-backdrop="static" data-toggle="modal" data-target="#introModal"
+                           data-ajax="true"
+                           data-ajax-complete=""
+                           data-ajax-mode="replace"
+                           data-ajax-update="#introContent">
+                            <i class="fa fa-plus fa-lg"></i> Tạo mới video hình hiệu
+                        </a>
+                    </div>
+                </header>
+                <div class="main-box-body clearfix">
+                    <div class="row" id="tabserver">
+                        <ul id="tabvcg" class="nav nav-tabs" role="tablist">
+                            @{
+                                List<VideoCatGroup> list = (List<VideoCatGroup>)ViewBag.videocatgroups;    
+                            }
+                            
+                            @for (int i = 0; i < list.Count(); i++)
+                            {
+                                <li class="@(i == 0 ? "active" : "") itemvct">
+                                    <a href="#tabvcg@(list[i].Id)" id="namevct@(list[i].Id)" role="tab" data-toggle="tab" data-type="2" data-vcgid="@(list[i].Id)" data-namevcg="@(list[i].Name)">
+                                        <b>@list[i].Name</b>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                        <div id="myTabContent" class="tab-content">
+                                
+                            @for (int i = 0; i < list.Count(); i++)
+                            {
+                                ViewBag.groupid = list[i].Id;
+                                <div class="tab-pane fade @(i == 0 ? "active in" : "")" id="tabvcg@(list[i].Id)">
+                                    <div class="row">
+                                        <div class="table-responsive">
+                                            <table class="table user-list table-hover intro-list" id="tableintro@(list[i].Id)">
+                                                @Html.Partial("_ListManagement", Model)
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <video src="" controls preload="auto" width="100%" height="100%" id="videotvcstop"></video>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="introModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="introContent">
+        </div>
+    </div>
+</div>
+
+    @section Scripts {
+        <script src="~/Scripts/jquery.vitv.js"></script>
+        <script src="~/Scripts/jquery.form.min.js"></script>
+
+        <script>
+
+            $('#videoModal').on('show.bs.modal', function (e) {
+                var button = $(e.relatedTarget)
+                var videoUrl = button.data('video');
+                $(this).find('video').attr('src', videoUrl);
+                $("video").each(function () { this.play() });
+                // do something...
+            });
+
+            $('#videoModal').on('hide.bs.modal', function (e) {
+                $("video").each(function () { this.pause() });
+
+            });
+
+            $('#introModal').on("hidden.bs.modal", function (e) {
+                $(this).find(".modal-content").empty();
+            });
+            function registerForm() {
+                $('#videoForm').ajaxForm(function (data) {
+                    console.log(data);
+                    console.log(data.groupid);
+                    if (data.success == true) {
+                        $("#introModal").modal("hide");
+                        reloadIntros(data.groupid);
+                    }
+                    else {
+                        $("#introModal").find(".modal-content").html(data.view);
+                        //run javascript
+                        $("#introModal").find("script").each(function (i) {
+                            if ($(this).attr("src") != "") {
+                                $.getScript($(this).attr("src"));
+                            }
+                            else {
+                                eval($(this).text());
+                            }
+                        });
+                        registerForm();
+                    }
+                });
+            }
+            function reloadIntros(groupid) {
+                $("#tableintro" + groupid).load('/CategoryIntro/PartialManagement?groupid=' + groupid);
+            }
+
+            $(".intro-list").on('change', 'input[type=checkbox]', function () {
+                if (this.checked == true) {
+                    var introId = $(this).data('id');
+                    var catId = $(this).data('catid');
+                    var target = '.intro-item[data-catid=' + catId + ']';
+                    //$(target).removeClass("green-bg").addClass("emerald-bg");
+                    //$(this).closest(target).removeClass("emerald-bg").addClass("green-bg");
+                    $(target).find("input[type=checkbox]").not(this).attr("checked", false);
+                    $.post('/VideoCategory/EditIntro', { introId: introId, catId: catId, select: true }, function (result) {
+                        console.log(result);
+                    });
+                }
+                else {
+                    var introId = $(this).data('id');
+                    var catId = $(this).data('catid');
+                    var target = '.intro-item[data-catid=' + catId + ']';
+                    //$(this).closest(target).removeClass("green-bg").addClass("emerald-bg");
+
+                    $.post('/VideoCategory/EditIntro', { introId: introId, catId: catId, select: false }, function (result) {
+                        console.log(result);
+                    });
+                }
+            })
+
+            $(document).ready(function () {
+                $('#sidebar-nav #videoMng').toggleClass("active");
+                $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+                $('#sidebar-nav a#vd-li-3').toggleClass("active");
+                $('#sidebar-nav a#vd-li-3').parent().siblings().removeClass("active");
+            });
+        </script>
+    }
+

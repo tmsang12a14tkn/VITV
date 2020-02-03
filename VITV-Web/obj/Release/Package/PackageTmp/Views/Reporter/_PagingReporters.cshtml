@@ -1,0 +1,73 @@
+﻿@model ReporterFilterView
+
+<div class="row">
+    <ul class="pagination pagingvideos">
+        @if (Model.Page > 1)
+        {
+            <li>
+                <a href="@Url.Action("Management", "Reporter", new { page = 1, filter = Model.Filter, order = Model.Order, name = Model.Name })">
+                    <b>Đầu tiên</b>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Management", "Reporter", new { page = 1, filter = Model.Filter, order = Model.Order, name = Model.Name })">
+                    <i class="fa fa-chevron-left"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="disabled">
+                <a href="#"><i class="fa fa-chevron-left"></i></a>
+            </li>
+        }
+        @{
+            int startPag = Math.Max(1, Model.Page - 2);
+            int endPag = Math.Min(startPag + 4, Model.PageCount);
+            for (int pag = startPag; pag <= endPag; pag++)
+            {
+                if (pag == Model.Page)
+                {
+                    <li class="active"><a href="#">@pag</a></li>
+                }
+                else
+                {
+                    <li>
+                        @Html.ActionLink(pag.ToString(), "Management", "Reporter", new { page = pag, filter = Model.Filter, order = Model.Order, name = Model.Name }, new { @class = "" })
+                    </li>
+                }
+            }
+            if (endPag != Model.PageCount)
+            {
+                <li class="disabled"><a href="#">…</a></li>
+                <li>
+                    @Html.ActionLink(Model.PageCount.ToString(), "Management", "Reporter", new { page = Model.PageCount, filter = Model.Filter, order = Model.Order, name = Model.Name }, new { @class = "" })
+                </li>
+
+
+            }
+        }
+        @if (Model.Page < Model.PageCount)
+        {
+            <li>
+                <a href="@Url.Action("Management", "Reporter", new { page = Model.Page + 1, filter = Model.Filter, order = Model.Order, name = Model.Name })">
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Management", "Reporter", new { page = Model.PageCount, filter = Model.Filter, order = Model.Order, name = Model.Name })">
+                    <b>Cuối cùng</b>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="disabled"><a href="#"><i class="fa fa-chevron-right"></i></a></li>
+        }
+
+    </ul>
+
+</div>
+
+
+

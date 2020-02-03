@@ -1,0 +1,58 @@
+﻿@model CatWeekDateReport
+@{
+    var daysOfWeek = new string[]{"CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6","Thứ 7"};  
+}
+
+   
+        <div class="chart col-sm-5" id="chart_@(Model.CatId)"></div>
+        <div class="col-sm-7">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Thứ</th>
+                        <th>Lượt xem</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (CatWeekDate dateData in Model.Data)
+                    {
+                        <tr>
+                            <td>@daysOfWeek[(int)dateData.DOW]</td>
+                            <td>@dateData.IPViewCount</td>
+                            <td>@dateData.PercentIPViewCount.ToString("00.00") %</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+<script>
+    $("#chart_@(Model.CatId)").highcharts({
+        chart: { type: "column", animation: false },
+        title: { text: "Tỉ lệ lượt xem" },
+        tooltip: {
+            //pointFormat: 'Tỉ lệ: <b>{point.percentage:.1f}%</b><br/>Số lượng: <b>{point.y}</b>'
+        },
+        yAxis:
+        {
+            tickInterval: 1
+        },
+        xAxis: {
+            categories: ["CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"]
+        },
+        series: [
+            {
+                name: "Các ngày trong  tuần",
+                data: [ @foreach (CatWeekDate dateData in Model.Data)
+                {
+                    <text>
+                    ["@((int)dateData.DOW)", @dateData.IPViewCount],
+                    </text>
+                }]
+                }
+        ],
+        plotOptions: {
+            pie: { animation: false }
+        }
+    });
+</script>

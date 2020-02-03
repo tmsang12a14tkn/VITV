@@ -1,0 +1,17 @@
+﻿@model List<VideoCatType>
+<div class="row">
+     @foreach (var catType in Model)
+     {
+         <div class="col-md-3">
+             <h3> @catType.Name</h3>
+             <ul class="list-unstyled">
+                 @foreach(var cat in catType.VideoCategories)
+                 {
+                     <li>
+                         <a href="/VideoCategory/Edit/@cat.Id">@cat.Name</a>
+                     </li>
+                 }
+             </ul>
+         </div>
+    } 
+</div>

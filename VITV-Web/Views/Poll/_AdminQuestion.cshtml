@@ -1,0 +1,108 @@
+﻿@model PollQuestion
+
+@{
+    int sumVote = Model.Answers.Sum(a => a.Count);
+    var now = DateTime.Now;
+}
+<tr class="tbodyvideo show_info_poll" id="infopoll@(Model.Id)">
+    <td>
+        @if(!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@Model.Image" alt="" width="70" height="50">    
+        }
+        <span class="user-subhead"><b>@Model.Name</b></span>
+        
+    </td>
+    <td>
+        <b>@Model.Answers.Count()</b>
+    </td>
+    <td>
+        <b>@Model.Answers.Sum(a => a.Count)</b>
+    </td>
+    <td>
+        <b>@Model.FromDate.ToShortDateString()</b>
+    </td>
+    <td>
+        <b>@(Model.EndDate.HasValue ? Model.EndDate.Value.ToShortDateString() : "")</b>
+    </td>
+    <td>
+        @if (!Model.Done && Model.FromDate <= now && (Model.EndDate == null || Model.EndDate >= now))
+        {
+            <span class="label label-success">Đang hoạt động</span>
+        }else
+        {
+            <span class="label label-danger">Ngừng hoạt động</span>
+
+        }
+    </td>
+    <td style="width: 15%;">
+        <a href="#" class="table-link settingcatgroup viewresultpoll" data-questionid="@Model.Id" title="Xem kết quả">
+            <span class="fa-stack">
+                <i class="fa fa-square fa-stack-2x"></i>
+                <i class="fa fa-bar-chart-o fa-stack-1x fa-2x fa-inverse settingcatgroupchild"></i>
+            </span>
+        </a>
+
+        <a data-ajax="true" data-ajax-complete="" data-ajax-mode="replace" data-ajax-update="#pollModalContent" data-target="#pollModal" data-toggle="modal" href="@Url.Action("Edit", "Poll", new { questionid = Model.Id })" class="table-link settingcatgroup" title="Chỉnh sửa">
+            <span class="fa-stack">
+                <i class="fa fa-square fa-stack-2x"></i>
+                <i class="fa fa-pencil fa-stack-1x fa-2x fa-inverse settingcatgroupchild"></i>
+            </span>
+        </a>
+        <a data-ajax="true" data-ajax-complete="" data-ajax-mode="replace" data-ajax-update="#pollModalContent" data-target="#pollModal" data-toggle="modal" href="@Url.Action("Clone", "Poll", new { questionid = Model.Id })" class="table-link settingcatgroup" title="Sao chép">
+            <span class="fa-stack">
+                <i class="fa fa-square fa-stack-2x"></i>
+                <i class="fa fa-copy fa-stack-1x fa-2x fa-inverse settingcatgroupchild"></i>
+            </span>
+        </a>
+        <a data-ajax="true" data-ajax-complete="" data-ajax-mode="replace" data-ajax-update="#pollModalContent" data-target="#pollModal" data-toggle="modal" href="@Url.Action("Delete", "Poll", new { questionid = Model.Id })" class="table-link settingcatgroup" title="Xóa">
+            <span class="fa-stack">
+                <i class="fa fa-square fa-stack-2x"></i>
+                <i class="fa fa-trash fa-stack-1x fa-2x fa-inverse settingcatgroupchild"></i>
+            </span>
+        </a>
+    </td>
+</tr>
+<tr class="show_result_poll" id="resultpoll@(Model.Id)" style="display:none">
+    <td colspan="7">
+        <table>
+            <tr>
+                <td>
+                    <div class="md-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <p style="word-wrap: break-word;font-size: 13px"><b>@Html.Raw(Model.Question)</b></p>
+                            </div>
+                            <div class="row">
+                                @foreach (var answer in Model.Answers)
+                                {
+                                    string percent = sumVote == 0 ? "0" : Math.Round((double)answer.Count / sumVote * 100, 2).ToString().Replace(',', '.');
+                                    <div class="row">
+                                        <label>@Html.Raw(answer.Answer)</label>
+                                    </div>
+                                    <div class="row" style="">
+                                        <div class="col-md-8">
+                                            <div class="progress progress-4x"><div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: @(percent)%"><span class="" style="float:right; color:#fff; margin-right: 5px">@answer.Count</span></div></div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@(percent)%</label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <label class="pull-left">Tổng số phiếu: @sumVote</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+
+
+
+        
+

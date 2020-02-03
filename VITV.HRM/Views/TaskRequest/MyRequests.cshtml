@@ -1,0 +1,69 @@
+﻿@model EmployeeRequests
+@{
+    ViewBag.Title = "Yêu cầu";
+}
+<div class="row">
+    <a href="#" class="pull-left btn btn-danger" data-action="add" data-toggle="modal" data-target="#request-modal" data-href="/TaskRequest/Add">Gửi yêu cầu</a>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="header smaller lighter green">Danh sách công việc</h3>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#current">
+                        <i class="green ace-icon fa fa-home bigger-120"></i>
+                        Đang làm
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#done">
+                        <i class="green ace-icon fa fa-home bigger-120"></i>
+                        Đã làm
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="current" class="tab-pane fade in active">
+                    <div>
+                        @foreach (var request in Model.RequestsToMe)
+                        {
+                            <label class="inline">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl"></span>
+                            </label>
+
+                            <i class="message-star ace-icon fa fa-star orange2"></i>
+                            <span class="sender" title="Người gửi">@request.RequestedEmployee.Name </span>
+                            <span class="time">@request.CreatedTime.PassTimeString()</span>
+
+                            <span class="summary">
+                                <span class="text">
+                                    @request.Title
+                                </span>
+                            </span>
+                        }
+                    </div>
+                </div>
+                <div id="done" class="tab-pane fade">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section styles
+{
+
+}
+@section scripts
+{
+    
+}
+
+
+
+

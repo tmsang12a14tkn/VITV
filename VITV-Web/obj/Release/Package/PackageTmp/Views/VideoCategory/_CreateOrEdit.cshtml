@@ -1,0 +1,140 @@
+﻿@using System.Globalization
+@model VideoCategory
+
+@{
+    var catIntroes = (IEnumerable<CategoryIntro>)ViewBag.catIntro;
+}
+
+@Html.HiddenFor(model => model.MobileProfilePhoto)
+@Html.HiddenFor(model => model.Order)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.PageGroupId, "Chuyên trang", htmlAttributes: new { @class = "control-label col-lg-2" })
+    <div class="col-lg-10">
+        @Html.DropDownListFor(model => model.PageGroupId, ((IEnumerable<PageGroup>)ViewBag.PageGroups).Select(option => new SelectListItem
+       {
+           Text = (option == null ? "None" : option.Name),
+           Value = (option == null ? "0" : option.Id.ToString(CultureInfo.InvariantCulture)),
+           Selected = (option != null) && (Model != null) && (option.Id == Model.PageGroupId)
+       }), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PageGroupId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.GroupId, "Nhóm chuyên mục", htmlAttributes: new { @class = "control-label col-lg-2" })
+    <div class="col-lg-10">
+        @Html.DropDownListFor(model => model.GroupId, ((IEnumerable<VideoCatGroup>)ViewBag.PossibleGroups).Select(option => new SelectListItem
+       {
+           Text = (option == null ? "None" : option.Name),
+           Value = (option == null ? "0" : option.Id.ToString(CultureInfo.InvariantCulture)),
+           Selected = (option != null) && (Model != null) && (option.Id == Model.GroupId)
+       }), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.GroupId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.TypeId, "Loại chuyên mục", htmlAttributes: new { @class = "control-label col-lg-2" })
+    <div class="col-lg-10">
+        @Html.DropDownListFor(model => model.TypeId, ((IEnumerable<VideoCatType>)ViewBag.videocattypes).Select(option => new SelectListItem
+       {
+           Text = (option == null ? "None" : option.Name),
+           Value = (option == null ? "0" : option.Id.ToString(CultureInfo.InvariantCulture)),
+           Selected = (option != null) && (Model != null) && (option.Id == Model.TypeId)
+       }), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.TypeId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, new { @class = "col-md-2 control-label" })
+    <div class="col-md-4">
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "help-block" })
+    </div>
+
+    <label class="col-md-2 control-label">Tên xuất hiện ở portal</label>
+    <div class="col-md-4">
+        @Html.TextBoxFor(model => model.Name2, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name2, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <div class="checkbox-nice">
+            <input type="checkbox" id="ShowInMenu" name="ShowInMenu" value="true" @(Model == null || Model.Id == default(int) ? "" : (Model.ShowInMenu ? "checked" : ""))>
+            <label for="ShowInMenu">@Html.DisplayNameFor(model => model.ShowInMenu)</label>
+            <input name="ShowInMenu" type="hidden" value="false" />
+            @Html.ValidationMessageFor(model => model.ShowInMenu, string.Empty, new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Description, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Description, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Introduction, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Introduction, new { @class = "form-control editable" })
+        @Html.ValidationMessageFor(model => model.Introduction, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.IntroductionBonus, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.IntroductionBonus, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IntroductionBonus, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+@*<div class="form-group">
+        @Html.HiddenFor(model => model.CategoryIntroId)
+        @Html.LabelFor(model => model.CategoryIntroId, "Video intro", htmlAttributes: new { @class = "control-label col-lg-2" })
+        <div class="col-lg-10">
+            <select class="form-control" id="introSelect">
+                <option value="0">Chọn intro</option>
+                @foreach (var intro in catIntroes)
+                {
+                    <option value="@intro.Id" data-imagesrc="@intro.Thumbnail" data-description="@intro.Description" @(intro.Id == Model.CategoryIntroId ? "selected" : "")>@intro.Title</option>
+                }
+            </select>
+        </div>
+        @Html.ValidationMessageFor(model => model.CategoryIntroId, string.Empty, new { @class = "help-block" })
+    </div>*@
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ProfilePhoto, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.ProfilePhoto)
+    <div class="col-lg-10">
+        <img id="photoView" src="@(Model != null && !String.IsNullOrEmpty(Model.ProfilePhoto) ? Model.ProfilePhoto : "")" />
+        <input class="form-control" id="catphotoinput" type="file" name="profileFile" accept="image/*">
+    </div>
+    @Html.ValidationMessageFor(model => model.ProfilePhoto, string.Empty, new { @class = "help-block" })
+</div>
+
+
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <button type="submit" class="btn btn-success">
+            <span class="fa fa-check"></span> Hoàn thành
+        </button>
+        <a href="/VideoCatGroups/Index?type=0">Quay về trang quản lý nhóm chuyên mục</a>
+    </div>
+</div>
+@*@Html.ActionLink("Quay về trang quản lý", "Details", "VideoCatGroups", new { id = Model.GroupId }, null)*@
+
+
+
+

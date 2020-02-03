@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+    @RenderSection("seo", false)
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Tinos:400,700,400italic,700italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="~/Content/normalize.css">
+    <link rel="stylesheet" href="~/Content/font-awesome.css">
+    <link rel="stylesheet" href="~/Content/bootstrap.css">
+    <link rel="stylesheet" href="/Content/main.css">
+    <link rel="stylesheet" href="~/Content/component.css">
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+
+    @RenderSection("styles", false)
+
+    <script>
+        (function (b, o, i, l, e, r) {
+            b.GoogleAnalyticsObject = l; b[l] || (b[l] =
+            function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
+            e = o.createElement(i); r = o.getElementsByTagName(i)[0];
+            e.src = '//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e, r)
+        }(window, document, 'script', 'ga'));
+        ga('create', 'UA-59106630-2');
+        ga('set', 'dimension1', '@(ViewBag.videoId)');
+        ga('set', 'dimension2', '@(ViewBag.videoCatId)');
+        ga('send', 'pageview');
+</script>
+
+    <script src="/Scripts/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body id="page-top">
+    @Html.Action("GetMenu", "Home")
+
+    @Html.Action("GetHoliday", "Home")
+
+    @RenderBody()
+
+    <footer class="row footer_area">
+        <div class="container">
+            <div class="col-md-6 footer_license">
+                <p>Bản quyền thuộc Công ty Cổ phần Công nghệ và Truyền thông VIT</p>
+                <p>Giấy phép số: 1240/GP-TTĐ cấp ngày 21/10/2011 SỞ THÔNG TIN VÀ TRUYỀN THÔNG HÀ NỘI</p>
+                <p>Ghi rõ nguồn "vitv.vn" khi bạn phát hành lại thông tin từ website này</p>
+            </div>
+            <div class="col-md-6 footer_img">
+                <img src="~/Content/Images/footer.png" />
+            </div>
+        </div>
+    </footer>
+
+    @*<footer class="row footer_area">
+            <img src="~/Content/Images/footer.png" />
+        </footer>*@
+
+    <div id="toTop" class="icon-up-open">
+        <i class="fa fa-angle-up"></i>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/cbpHorizontalMenu.js"></script>
+    <script src="~/Scripts/jquery.nicescroll.js"></script>
+    <script src="~/Scripts/jquery.easing.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+    <script src="~/Scripts/ua-parser.min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+
+    @RenderSection("scripts", false)
+
+    <script src="~/Scripts/searchreporter.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Add Smooth scroll Plugin to the page. Best effect is reached on Tablets & Smartphones.
+            if (!navigator.userAgent.match(/iemobile/i)) {
+                $("html").niceScroll({ cursorborder: "", cursorcolor: "#cccccc", scrollspeed: 45, cursorwidth: "10px", zindex: "9999" });
+            }
+
+            $('.datepicker').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('.datepicker').each(function () {
+                console.log(this);
+            });
+
+            $(function () {
+                cbpHorizontalMenu.init();
+            });
+
+            // Scroll to top button
+            $(window).scroll(function () { // hide/show button when page is scrolled
+                if ($(this).scrollTop() > 200) {
+                    $('#toTop').fadeIn();
+                } else {
+                    $('#toTop').fadeOut();
+                }
+            });
+
+            $('#toTop').click(function () {
+                $('body,html').animate({ scrollTop: 0 }, 800);
+            });
+
+            if ($('#is_vd_page').length > 0 && $('#is_vd_page').val() == "true")
+                analyticPage($("meta[property='og:image']").attr("content"), document.title, $('#anl_vd_id').data('value'), $('#anl_vd_cat_id').data('value'), null, null);
+            else
+                analyticPage($("meta[property='og:image']").attr("content"), document.title, null, null, null, null);
+        });
+    </script>
+</body>
+</html>

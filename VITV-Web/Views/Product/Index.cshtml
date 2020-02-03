@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Product>
+
+@{
+    Layout = "~/Views/Shared/_PagesLayout.cshtml";
+}
+
+@section Title {
+    <title>Sản phẩm | VITV</title>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <nav class="submenu" id="submenu">
+                @*<h3 class="submenu__heading"><a class="l3 submenu__link submenu__heading__link" href="#">@Model.Title</a></h3>*@
+                <div class="submenu__lists">
+                    <ul class="submenu__list">
+                        <li class="submenu__item">
+                            <a class="l3 submenu__link" href="/info/msg">Thông điệp gửi khách hàng</a>
+                        </li>
+                        <li class="submenu__item">
+                            <a class="l3 submenu__link" href="/info">Tổng quan về VIT Media</a>
+                        </li>
+                        <li class="submenu__item">
+                            <a class="l3 submenu__link" href="/info/partners">Đối tác</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-lg-9 pages-content">
+            <div class="m1 module">
+                <nav class="breadcrumb m4 show-lg">Giới thiệu&nbsp;&nbsp;›&nbsp;&nbsp;</nav>
+
+                @foreach (var item in Model)
+                {
+                    <h1 class="h1 h1--alt m2">@item.Title</h1>
+                    <div class="p2">
+                        @Html.Raw(HttpUtility.HtmlDecode(item.Content))
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

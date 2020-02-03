@@ -1,0 +1,921 @@
+﻿@model Video
+@{
+    ViewBag.Title = "Báo cáo theo video";
+    List<VITV.Portal.ViewModel.AgeReport> ages = ViewBag.Ages;
+    List<VITV.Portal.ViewModel.GenderReport> genders = ViewBag.Genders;
+    List<VITV.Portal.ViewModel.SocialNetworkReport> socialNetworks = ViewBag.SocialNetworks;
+    List<VITV.Portal.ViewModel.CountryIsoCodeReport> countries = ViewBag.Countries;
+    List<VITV.Portal.ViewModel.UserTypeReport> userTypes = ViewBag.UserTypes;
+    List<VITV.Portal.ViewModel.OSReport> OSs = ViewBag.OSs;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <a href="@Url.Action("AllDetailReports", "videoaccess", new { catId = @Model.CategoryId })" class="btn btn-primary pull-left">
+                            <i class="fa fa-arrow-left"></i> Quay về chuyên mục @Model.Category.Name
+                        </a>
+                    </div>
+                    <div class="col-lg-4">
+                        <h1><b>Video: @Model.Title</b></h1>
+                    </div>
+                    <div class="col-lg-4">
+                       
+                    </div>
+                </div>
+            </header>
+            <div class="main-box-body">
+                <div class="tabs-wrapper tabs-no-header">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" data-toggle="tab">Thông tin cơ bản</a></li>
+                        @if (!User.IsInRole("kinhdoanh"))
+                        {
+                            <li><a href="#tab-2" data-toggle="tab">Thử nghiệm GA</a></li>
+                        }
+                        <li><a href="#tab-3" data-toggle="tab">Lượt xem theo ngày</a></li>
+                        <li><a href="#tab-4" data-toggle="tab">So sánh cùng chương trình</a></li>
+                        <li><a href="#tab-5" data-toggle="tab">So sánh trong tuần</a></li>
+                        <li><a href="#tab-6" data-toggle="tab">...</a></li>
+                    </ul>
+                    <div class="tab-content tab-content-body clearfix">
+                        <div class="tab-pane fade in active" id="tab-1">
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Tên</span>
+                                        <span class="valueview" id="title"></span>
+
+                                        <span class="headlineview">Chuyên mục</span>
+                                        <span class="valueview" id="category"></span>
+
+                                        <span class="headlineview">Số hiện tại của video</span>
+                                        <span class="valueview" id="videono"></span>
+
+                                        <span class="headlineview">Số video theo lịch phát sóng</span>
+                                        <span class="valueview" id="weekno"></span>
+
+                                        <span class="headlineview">Số video theo khung chương trình</span>
+                                        <span class="valueview" id="weeknoprosched"></span>
+
+                                        <span class="headlineview">Chuyên đề</span>
+                                        <span class="valueview" id="type"></span>
+
+                                        <span class="headlineview">Người thực hiện</span>
+                                        <span class="valueview" id="editor"></span>
+
+                                        <span class="headlineview">Thời gian tải lên</span>
+                                        <span class="valueview" id="uploadtime"></span>
+
+                                        <span class="headlineview">Thời gian xuất hiện trên website</span>
+                                        <span class="valueview" id="publishtime"></span>
+
+                                        <span class="headlineview">Thời lượng</span>
+                                        <span class="valueview" id="duration"></span>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Tổng cộng tất cả trong năm @Model.DisplayTime.Year</span>
+                                        <span class="valueview" id="sumview"></span>
+
+                                        <span class="headlineview">Tổng cộng trong tuần đầu tiên</span>
+                                        <span class="valueview" id="sum7dayview"></span>
+
+                                        <span class="headlineview">Số lượt xem lại</span>
+                                        <span class="valueview" id="sumreview"></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Số ngày trong tuần đầu tiên</span>
+                                        <span class="valueview" id="amount7dayreview"></span>
+
+                                        <span class="headlineview">Số ngày xem lại</span>
+                                        <span class="valueview" id="amountdayreview"></span>
+
+                                        <span class="headlineview">Khoảng thời gian xem video</span>
+                                        <span class="valueview" id="periodoftimeview"></span>
+
+                                        <span class="headlineview">Khoảng thời gian phát video</span>
+                                        <span class="valueview" id="periodoftimenoview"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Trung bình trong tuần đầu tiên</span>
+                                        <span class="valueview" id="avg7dayview"></span>
+
+                                        <span class="headlineview">Trung bình tất cả</span>
+                                        <span class="valueview" id="avgview"></span>
+
+                                        <span class="headlineview">Trung vị trong tuần đầu tiên</span>
+                                        <span class="valueview" id="median7dayview"></span>
+
+                                        <span class="headlineview">Trung vị tất cả</span>
+                                        <span class="valueview" id="medianview"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Cao nhất tuần đầu</span>
+                                        <span class="valueview" id="max7dayview"></span>
+
+                                        <span class="headlineview">Số ngày đạt đến điểm cao nhất tuần đầu</span>
+                                        <span class="valueview" id="daymax7dayview"></span>
+
+                                        <span class="headlineview">Thấp nhất tuần đầu</span>
+                                        <span class="valueview" id="min7dayview"></span>
+
+                                        <span class="headlineview" id="maxheadview">Cao nhất</span>
+                                        <span class="valueview" id="maxview"></span>
+
+                                        <span class="headlineview">Số ngày đạt đến điểm cao nhất</span>
+                                        <span class="valueview" id="daymaxview"></span>
+
+                                        <span class="headlineview" id="minheadview">Thấp nhất</span>
+                                        <span class="valueview" id="minview"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (!User.IsInRole("kinhdoanh"))
+                        {
+                            <div class="tab-pane fade" id="tab-2">
+                                @*Google Analytic*@
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Độ tuổi</span>
+
+                                        <ul>
+                                            <li>Name - SessionCount - PageView</li>
+                                            @foreach (var age in ages)
+                                            {
+                                                <li>@age.Name - @age.SessionCount - @age.PageView</li>
+                                            }
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Giới tính</span>
+
+                                        <ul>
+                                            <li>Name - SessionCount - PageView</li>
+                                            @foreach (var gender in genders)
+                                            {
+                                                <li>@gender.Name - @gender.SessionCount - @gender.PageView</li>
+                                            }
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Mạng xã hội</span>
+
+                                        <ul>
+                                            <li>Name - SessionCount - PageView</li>
+                                            @foreach (var socialNetwork in socialNetworks)
+                                            {
+                                                <li>@socialNetwork.Name - @socialNetwork.SessionCount - @socialNetwork.PageView</li>
+                                            }
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">Người dùng</span>
+
+                                        <ul>
+                                            <li>Name - SessionCount - PageView</li>
+                                            @foreach (var userType in userTypes)
+                                            {
+                                                <li>@userType.Name - @userType.SessionCount - @userType.PageView</li>
+                                            }
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="main-box infographic-box">
+                                        <span class="headlineview">OS</span>
+
+                                        <ul>
+                                            <li>Name - SessionCount - PageView</li>
+                                            @foreach (var os in OSs)
+                                            {
+                                                <li>@os.Name - @os.SessionCount - @os.PageView</li>
+                                            }
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                                <div id="map"></div>
+                            </div>
+                        }
+                        <div class="tab-pane fade" id="tab-3">
+                            <div class="row">
+                                <div class="col-md-9 chart" id="container"></div>
+                                <div class="col-md-3">
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="radiocharttype" value="column">
+                                            <img src="~/Content/Images/bieudo-03.png" />
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="radiocharttype" value="line">
+                                            <img src="~/Content/Images/bieudo-01.png" />
+                                        </label>
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="radiocharttype" value="spline" checked>
+                                            <img src="~/Content/Images/bieudo-02.png" />
+                                        </label>
+                                    </div>
+                                    <div id="column_option">
+                                        <input type="checkbox" value="false" id="cb_stackcolumn" /> <label for="cb_stackcolumn">Gom cột</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table id="table-videoreport" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <td><b>Thời gian</b></td>
+                                                <td><b>Xem không trùng</b></td>
+                                                <td><b>Xem trùng</b></td>
+                                                <td><b>SecondaryTime</b></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-4">
+                            @Html.Action("CompareVideoReport", "VideoAccess", new { videoId = Model.Id })
+                        </div>
+                        <div class="tab-pane fade" id="tab-5">
+                            @Html.Action("CompareVideoSameWeekReport", "VideoAccess", new { videoId = Model.Id })
+                        </div>
+                        <div class="tab-pane fade" id="tab-6">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="main-box infographic-box">
+                <i class="fa fa-info emerald-bg"></i>
+                <span class="headline">Tổng cộng</span>
+                <span class="value" id="sumview">0</span>
+                <span class="value" id="sumview">0</span>
+                <span class="value" id="sumview">0</span>
+                <span class="value" id="sumview">0</span>
+    </div>
+        </div>*@
+
+
+@*Tabs*@
+
+
+
+
+@section styles
+{
+    <link href="~/Content/DataTable/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/DataTable/buttons.dataTables.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+}
+@section scripts
+{
+    <script src="~/Scripts/DataTable/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.buttons.js"></script>
+    <script src="~/Scripts/DataTable/jszip.min.js"></script>
+    <script src="~/Scripts/DataTable/buttons.html5.js"></script>
+    <script src="~/Scripts/DataTable/buttons.print.js"></script>
+    <script src="~/Scripts/DataTable/buttons.colVis.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jspdf/libs/base64.js"></script>
+
+    <script src="~/Scripts/bootstrap-table.js"></script>
+    <script src="~/Scripts/bootstrap-table-export.js"></script>
+    <script src="~/Scripts/export/tableExport.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.10/sorting/date-eu.js"></script>
+
+
+    @*Highchart*@
+    @*<script src="~/Content/HighStock/js/highstock.js"></script>*@
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+    <script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+    <script>
+        $(function () {
+
+            //Set chart width
+            $(".chart").each(function(i, element)
+            {
+                $(element).css("width", $(".tab-content-body").width()*0.75);
+            });
+
+
+            $("#column_option").hide();
+            var chartQuery = "/videoaccess/getvideoreport?videoId=@Model.Id";
+            var chartOptions =
+                {
+                    //chart: { type: 'StockChart', animation: false },
+                    chart: { type: 'spline', animation: false },
+                    xAxis:
+                   {
+                       type: 'datetime',
+                       dateTimeLabelFormats:
+                       {
+                           millisecond: '%H:%M:%S.%L',
+                           second: '%H:%M:%S',
+                           minute: '%H:%M',
+                           hour: '%H:%M',
+                           day: '%e/%b',
+                           week: '%e/%b',
+                           month: '%b/%y',
+                           year: '%Y'
+                       },
+                       tickInterval: 24 * 3600 * 1000
+                   },
+                    yAxis:
+                        {
+                            reversedStacks: false
+                        },
+                    plotOptions: {
+                        line: { animation: false },
+                        column: { animation: false },
+                        spline: { animation: false }
+                    }
+                };
+            function loadMainChart()
+            {
+                $.getJSON(chartQuery, function (accessdata) {
+                    var chartSeries = [{ name: "Xem không trùng", data: [] }, { name: "Tổng lượt xem", data: [] }, { name: "Trùng", data: [], visible: false }];
+                    $.each(accessdata.data, function (i, row) {
+                        chartSeries[0].data.push([row[0], row[1]]);
+                        chartSeries[1].data.push([row[0], row[2]]);
+                        chartSeries[2].data.push([row[0], row[2] - row[1]]);
+                    });
+
+                    var tabledata = [];
+                    var tabledata7day = [];
+                    var tempData = [];
+                    var tempData7Day = [];
+                    //dung để mếm số datapoint có view
+                    var datapoint = [];
+                    var datapoint7day = [];
+                    var datapointreview = [];
+                    var sum = 0;
+                    var sum7Day = 0;
+                    var count7Day = 0;
+
+                    //console.log("data: " + accessdata.data[count7Day][0], accessdata.data[0][1], accessdata.data[0][2]);
+                    //console.log(accessdata.data);
+                    if (accessdata.data.length > 0) {
+                        var end = moment(accessdata.data[0][0]).add(7, 'days');
+                        //console.log("end " + end.format('DD/MM'));
+                        for (var i = 0; i < accessdata.data.length; i++) {
+                            tabledata.push([accessdata.data[i][0], accessdata.data[i][1], accessdata.data[i][2], accessdata.data[i][0]]);
+                            tempData.push(accessdata.data[i][1]);
+                            if(accessdata.data[i][1] != 0)
+                                datapoint.push([accessdata.data[i][0], accessdata.data[i][1]]);
+                            sum += accessdata.data[i][1];
+                            if (accessdata.data[i][0] < end) {
+                                sum7Day += accessdata.data[i][1];
+                                tabledata7day.push([accessdata.data[i][0], accessdata.data[i][1], accessdata.data[i][2], accessdata.data[i][0]])
+                                tempData7Day.push(accessdata.data[i][1]);
+                                if(accessdata.data[i][1] != 0)
+                                    datapoint7day.push([accessdata.data[i][0], accessdata.data[i][1]]);
+                            }else
+                            {
+                                if(accessdata.data[i][1] != 0)
+                                    datapointreview.push([accessdata.data[i][0], accessdata.data[i][1]]);
+                            }
+
+                        }
+                    }
+                    var min = Math.min.apply(null, tempData);
+                    var max = Math.max.apply(null, tempData);
+
+                    ////4.Đánh giá độ biến thiên dữ liệu
+                    //Cao nhất
+                    if(Math.max.apply(null, tempData7Day) != max)
+                        $('#maxview').empty().html(max);
+                    else
+                        $('#maxheadview').empty();
+                    //Số ngày đạt đến điểm cao nhất
+                    $('#daymaxview').empty().html(GetComingMax(max, tempData, tabledata));
+                    //Thấp nhất
+                    if(Math.min.apply(null, tempData7Day) != min)
+                        $('#minview').empty().html(min);
+                    else
+                        $('#minheadview').empty();
+                    //Số ngày đạt đến điểm cao nhất
+                    //Cao nhất 7 ngay dau
+                    $('#max7dayview').empty().html(Math.max.apply(null, tempData7Day));
+                    //Số ngày đạt đến điểm cao nhất 7 ngay dau
+                    $('#daymax7dayview').empty().html(GetComingMax(max, tempData7Day, tabledata7day));
+                    //Thấp nhất 7 ngay dau
+                    $('#min7dayview').empty().html(Math.min.apply(null, tempData7Day));
+
+
+                    ////1.Thong tin chi tiet video
+                    $('#title').empty().html("<a href='http://vitv.vn" + accessdata.LinkVideo + "'>" + accessdata.name + "</a>");
+                    $('#videono').empty().html(accessdata.videoNo);
+                    $('#weekno').empty().html(accessdata.weekNo);
+                    $('#weeknoprosched').empty().html(accessdata.weekNoProSched);
+
+                    $('#publishtime').empty().html(accessdata.PublishedTime);
+                    $('#uploadtime').empty().html(accessdata.UploadTime);
+                    if(accessdata.IsPublishFail == true)
+                    {
+                        $('#publishtime').addClass('red');
+                    }
+                    $('#duration').empty().html(accessdata.Duration.Minutes + " phút");
+                    $('#category').empty().html("<a href='/VideoAccess/AllDetailReports?catId=" + accessdata.CategoryId + "'>" + accessdata.Category + "</a>");
+                    $('#type').empty().html(accessdata.TypeCat);
+                    $('#editor').empty().html(accessdata.Editor);
+
+                    ////2.Thong ke luot xem
+                    //Tong cong tat ca
+                    $('#sumview').empty().html(sum + " (100%)");
+                    //Tong cong trong tuan dau tien
+                    $('#sum7dayview').empty().html(sum7Day + " (" + ((sum7Day / sum) * 100).toFixed(2) + "%)");
+                    //so luot xem lai
+                    $('#sumreview').empty().html((sum - sum7Day) + " (" + ((sum - sum7Day) / sum * 100).toFixed(2) + "%)");
+                    //so ngay trong tuan dau tien
+                    var startAmount7dayreview = datapoint7day.length > 0 ? moment(datapoint7day[0][0]) : 0;
+                    var endAmount7dayreview = datapoint7day.length > 0 ?  moment(datapoint7day[datapoint7day.length - 1][0]) : 0;
+                    $('#amount7dayreview').empty().html(datapoint7day.length > 0 ? datapoint7day.length + " ngày (" + startAmount7dayreview.format('DD/MM/YYYY') + " - " + endAmount7dayreview.format('DD/MM/YYYY') + ") (" + endAmount7dayreview.add(1, 'days').diff(startAmount7dayreview, 'days') + ")" : "0");
+                    //so ngay xem lai
+                    var startAmountdayreview = datapointreview.length > 0 ? moment(datapointreview[0][0]) : 0;
+                    var endAmountdayreview = datapointreview.length > 0 ? moment(datapointreview[datapointreview.length - 1][0]) : 0;
+                    $('#amountdayreview').empty().html(datapointreview.length > 0 ? datapointreview.length + " ngày (" + startAmountdayreview.format('DD/MM/YYYY') + " - " + endAmountdayreview.format('DD/MM/YYYY') + ") (" + endAmountdayreview.add(1, 'days').diff(startAmountdayreview, 'days') + ")" : "0");
+
+                    ////Khoảng thời gian xem video
+                    //moment(new Date(tabledata[tabledata.length - 1][0])).diff(tabledata[0][0], 'days')
+                    var startPeriodOftimeview = datapoint.length > 0 ? moment(datapoint[0][0]) : 0;
+                    var endPeriodOftimeview = datapoint.length > 0 ? moment(datapoint[datapoint.length - 1][0]) : 0;
+                    $('#periodoftimeview').empty().html(datapoint.length + " ngày (" + startPeriodOftimeview.format('DD/MM/YYYY') + " - " + endPeriodOftimeview.format('DD/MM/YYYY') + ") (" + endPeriodOftimeview.add(1, 'days').diff(startPeriodOftimeview, 'days') + ")");
+                    //Khoảng thời gian phát video tren web
+                    //console.log("Khoảng thời gian phát video: " + new Date(moment()));
+                    $('#periodoftimenoview').empty().html(moment(new Date()).add(1, 'days').diff(tabledata[0][0], 'days') + " ngày");
+
+                    ////3.Đánh giá mức tập trung dữ liệu
+                    //Trung bình trong tuần đầu tiên
+                    $('#avg7dayview').empty().html(((sum7Day / 7).toFixed(2)));
+                    //Trung bình tất cả
+                    $('#avgview').empty().html((sum / tempData.length).toFixed(2));
+                    //Trung vị trong tuần đầu tiên
+                    $('#median7dayview').empty().html(GetMedian(tempData7Day.sort()));
+                    //Trung vị tất cả
+                    $('#medianview').empty().html(GetMedian(tempData.sort()));
+
+                    $("#table-videoreport").DataTable(
+                      {
+                          data: tabledata,
+                          paging: false,
+                          bFilter: false,
+                          columnDefs:
+                          [
+                              {
+                                  "targets": 0,
+                                  'orderable': true,
+                                  "orderData": [3],
+                                  "render": function (data, type, full, meta) {
+
+                                      //console.log(data, type, full, meta);
+
+                                      return '<b>' + convertToDate(data, "DD-MM-YYYY") + '</b> ';
+                                  },
+
+                              },
+                              {
+                                  "targets": 1,
+                                  'orderable': true,
+                                  "render": function (data, type, full, meta) {
+                                      var value = ((full[1] / sum) * 100).toFixed(2);
+                                      var bar = '<div class="progress progress-4x"><div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: ' + (value + 1) + '%"><span class="sr-only"></span></div></div>';
+                                      var frame = '<div class="row">' +
+                                                    '<div class="col-sm-1">' + full[1] + '</div>' +
+                                                    '<div class="col-sm-4">' + bar + '</div>' +
+                                                    '<div class="col-sm-4">' + value + '%</div></div>';
+                                      return frame;
+                                  },
+                              },
+                              {
+                                  "targets": 2,
+                                  'orderable': false,
+                                  "render": function (data, type, full, meta) {
+                                      var value = ((full[2] / sum) * 100).toFixed(2);
+                                      var bar = '<div class="progress progress-4x"><div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: ' + (value + 1) + '%"><span class="sr-only"></span></div></div>';
+                                      var frame = '<div class="row">' +
+                                                    '<div class="col-sm-1">' + full[2] + '</div>' +
+                                                    '<div class="col-sm-4">' + bar + '</div>' +
+                                                    '<div class="col-sm-4">' + value + '%</div></div>';
+                                      return frame;
+                                  },
+                              },
+                              {
+                                  "targets": 3,
+                                  'orderable': false,
+                                  'visible': false,
+                              },
+                          ]
+                      });
+
+
+
+                    chartOptions.series = chartSeries;
+                    chartOptions.title = { text: accessdata.name + " (" + accessdata.Category + ")" };
+                    if (moment(tabledata[tabledata.length - 1][0]).diff(moment(tabledata[0][0]),'days') > 7)
+                    {
+                        var datePlotLine = moment(new Date(tabledata[0][0])).add(6, 'days');
+                        chartOptions.xAxis.plotLines = [{
+                            id: 'plotline-sevenday',
+                            value: datePlotLine,
+                            color: 'red',
+                            width: 2,
+                            //label: {
+                            //    text: 'Ngày thứ 7',
+                            //    align: 'center',
+                            //    style: {
+                            //        color: 'gray'
+                            //    }
+                            //}
+                        }]
+                    }
+
+
+
+                    $("#container").highcharts(chartOptions);
+                });
+            }
+            loadMainChart();
+
+            var newChartOptions = {
+                chart: { type: 'column', animation: false },
+                title: { text: 'Biểu đồ thống kê lượng truy cập' },
+                legend: { enabled: true },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                xAxis:
+               {
+                   title: {
+                       text: 'Tuần'
+                   },
+                   tickInterval: 1, // one week
+                   crosshair: true
+               },
+                yAxis: {
+                    title: {
+                        text: 'Lượt xem'
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    formatter: function () {
+                        //console.log(this);
+                        var s = '';
+                        $.each(this.points, function () {
+                            s = '<span style="font-weight: bold; color:' + this.series.color + '">' + this.series.name + '</span>: ' + this.y + '<br/>' + s;
+                        });
+                        s = '<span>' + this.points[0].key + '</span><br/>' + s;
+                        return s;
+                    }
+                }
+            };
+            var chartOptions1 = newChartOptions;
+
+            //So sánh video cùng chương trình
+            var chartQuery1 = '/VideoAccess/GetAllCatAccessDetailType1ForChart?catid=@(Model.CategoryId)&year=@Model.DisplayTime.Year';
+            $.getJSON(chartQuery1, function (accessdata) {
+                if(accessdata.success == true)
+                {
+                    chartOptions1.series = accessdata.chartdata;
+                    $("#chart-1").highcharts(chartOptions1);
+                    $('#table-comparevideoreport').DataTable(
+                    {
+                        data: accessdata.tabledata.Videos,
+                        paging: false,
+                        bFilter: false,
+                        order: [[1, "asc"]],
+                        columns: [
+                            { "data": "Month" },
+                            { "data": "Week" },
+                            { "data": "Title" },
+                            { "data": "FirstWeek.PageView" },
+                            { "data": "FirstWeek.AverageChange" },
+                            { "data": "FirstWeek.Highest" },
+                            { "data": "FirstWeek.Lowest" },
+                            { "data": "AllTime.PageView" },
+                            { "data": "AllTime.AverageChange" },
+                            { "data": "AllTime.Highest" },
+                            { "data": "AllTime.ViewDateCount" },//10
+                            { "data": "ReviewReport.PageView" },
+                            { "data": "ReviewReport.ViewDateCount" },//12
+                            { "data": "VideoPeriod" },
+                            { "data": "VideoDuration" },
+                        ],
+                        columnDefs:
+                        [
+                            {
+                                "targets": 2,
+                                "render": function (data, type, full, meta) {
+                                    var href = '/VideoAccess/VideoReport?videoId=' + full.VideoId;
+                                    return '<a href="' + href + '">' + data + '</a>';
+                                },
+                            },
+                            {
+                                "targets": [4, 8],
+                                "createdCell": function (td, cellData, full, row, col) {
+                                    var className = cellData > 0 ? "increase" : (cellData == 0 ? "" : "decrease");
+                                    $(td).addClass(className);
+                                },
+                                "render": function (data, type, full, meta) {
+                                    return data.toFixed(2);
+                                }
+                            }
+                        ],
+                        footerCallback: function (row, data, start, end, display) {
+                            var api = this.api();
+                            // Update footer
+                            $("#table-comparevideoreport tfoot tr:nth-child(1) th:nth-child(4)").html(accessdata.tabledata.FirstWeekView);
+                            $("#table-comparevideoreport tfoot tr:nth-child(1) th:nth-child(8)").html(accessdata.tabledata.AllTimeView);
+
+                            $("#table-comparevideoreport tfoot tr:nth-child(2) th:nth-child(4)").html(accessdata.tabledata.FirstWeekAverage);
+                            $("#table-comparevideoreport tfoot tr:nth-child(2) th:nth-child(8)").html(accessdata.tabledata.AllTimeAverage);
+                        
+                        }
+                    });
+                }
+            });
+
+
+            //So sánh cùng tuần
+            var chart2Options = {
+                chart: { type: 'column', animation: false },
+                title: { text: 'Biểu đồ thống kê lượng truy cập' },
+                legend: { enabled: true },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                xAxis:
+               {
+                   title: {
+                       text: 'Tuần'
+                   },
+                   tickInterval: 1, // one week
+                   crosshair: true,
+
+               },
+                yAxis: {
+                    title: {
+                        text: 'Lượt xem'
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    formatter: function () {
+                        console.log(this);
+                        var s = '';
+                        $.each(this.points, function () {
+                            s = '<span style="font-weight: bold; color:' + this.series.color + '">' + this.series.name + '</span>: ' + this.y + '<br/>' + s;
+                        });
+                        s = '<span>' + this.points[0].key + '</span><br/>' + s;
+                        return s;
+                    }
+                }
+            };
+            var chartQuery2 = '/VideoAccess/AjaxCompareVideoSameWeekReport?videoId=@(Model.Id)';
+
+            $.getJSON(chartQuery2, function (accessdata) {
+                var chartdata = accessdata.chart;
+                var tabledata = accessdata.table;
+                var categories = accessdata.categories;
+               
+
+                $('#table-comparevideosameweekreport').DataTable(
+               {
+                   paging: false,
+                   bFilter: false,
+                   data : tabledata.Videos,
+                   columns: [
+                      { "data": "Title" },
+                      { "data": "CategoryName" },
+                      { "data": "FirstWeek.PageView" },
+                      { "data": "FirstWeek.AverageChange" },
+                      { "data": "FirstWeek.Highest" },
+                      { "data": "FirstWeek.Lowest" },
+                      { "data": "AllTime.PageView" },
+                      { "data": "AllTime.AverageChange" },
+                      { "data": "AllTime.Highest" },
+                      { "data": "AllTime.ViewDateCount" },
+                      { "data": "ReviewReport.PageView" },
+                      { "data": "ReviewReport.ViewDateCount" },
+                      { "data": "VideoPeriod" },
+                      { "data": "VideoDuration" },
+                   ],
+                   columnDefs:
+                   [
+                       {
+                           targets: 0,
+                           render: function (data, type, full, meta) {
+                               var href = '/VideoAccess/VideoReport?videoId=' + full.VideoId;
+                               return '<a href="' + href + '">' + data + '</a>';
+                           },
+                       },
+                        {
+                            targets: 2,
+                            orderData: [3],
+                        },
+                        {
+                            targets: [3,7],
+                            createdCell: function (td, cellData, full, row, col) {
+                                var className = cellData > 0 ? "increase" : (cellData == 0 ? "" : "decrease");
+                                $(td).addClass(className);
+                            }
+                        },
+                        {
+                           targets: 6,
+                           orderData: [7],
+                        }
+                   ]
+               });
+                chart2Options.xAxis.categories = categories;
+                chart2Options.series = chartdata;
+                $("#chart-2").highcharts(chart2Options);
+            });
+            
+            $('input:radio[name="radiocharttype"]').change(function () {
+                var charttype = $(this).val();
+                chartOptions.chart.type = charttype;
+                if (charttype == "column") {
+                    $("#column_option").show();
+                }
+                else
+                {
+                    $("#column_option").hide();
+                }
+                $('#container').highcharts(chartOptions);
+            });
+
+            $("#cb_stackcolumn").on("change", function (evt) {
+                var checked = this.checked;
+                if (checked == true && chartOptions.chart.type == "column") {
+                    chartOptions.series[1].visible = false;
+                    chartOptions.series[2].visible = true;
+                    chartOptions.legend = { reversed: false },
+                    chartOptions.plotOptions.series = { stacking: "normal" };
+                }
+                else {
+                    chartOptions.series[1].visible = true; 
+                    chartOptions.series[2].visible = false;
+                    chartOptions.plotOptions.series = { stacking: null };
+                }
+                $('#container').highcharts(chartOptions);
+            })
+        });
+
+        function GetComingMax(max, tempData, tabledata) {
+            var indexMax = tempData.indexOf(max);
+            console.log(indexMax);
+            if (indexMax > 0 && tabledata.length > 0) {
+                var newDate = tabledata[indexMax][0] - tabledata[0][0];
+                console.log(newDate); // Wrong result
+                var subDate = new Date(newDate);
+                console.log(subDate.getDate());
+                return subDate.getDate() - 1;
+            }
+            return 0;
+        }
+
+        function getIndexOf(a, v) {
+            var l = a.length;
+            for (var k = 0; k < l; k++) {
+                if (a[k][0] == v) {
+                    return k;
+                }
+            }
+            return -1;
+        }
+
+        function GetMedian(values) {
+
+            values.sort(function (a, b) { return a - b; });
+
+            var half = Math.floor(values.length / 2);
+
+            if (values.length % 2)
+                return values[half];
+            else
+                return (values[half - 1] + values[half]) / 2.0;
+        }
+
+
+
+        function convertToDate(unix_timestamp, format) {
+            var date = new Date(unix_timestamp);
+            var dateMM = moment(date);
+            return dateMM.format(format);
+        }
+
+
+        var countryData = [
+            @foreach(var country in countries)
+            {
+                <text>
+                {code: "@country.Name", z: @country.PageView, fullname: "@country.FullName"},
+                </text>
+            }
+        ];
+
+        var mapData = Highcharts.geojson(Highcharts.maps['custom/world']);
+
+        // Correct UK to GB in data
+        $.each(countryData, function () {
+            if (this.code === 'UK') {
+                this.code = 'GB';
+            }
+        });
+
+        $('#map').highcharts('Map', {
+            chart: {
+                borderWidth: 1
+            },
+
+            title: {
+                text: 'Lượt truy cập theo quốc gia'
+            },
+
+            subtitle: {
+                text: ''
+            },
+
+            legend: {
+                enabled: false
+            },
+
+            mapNavigation: {
+                enabled: true,
+                enableMouseWheelZoom: false,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+
+            series: [{
+                name: 'Countries',
+                mapData: mapData,
+                color: '#E0E0E0',
+                enableMouseTracking: false
+            }, {
+                type: 'mapbubble',
+                mapData: mapData,
+                name: 'Quốc gia',
+                joinBy: ['iso-a2', 'code'],
+                data: countryData,
+                minSize: 4,
+                maxSize: '12%',
+                tooltip: {
+                    pointFormat: '{point.fullname}: {point.z} lượt'
+                }
+            }]
+        });
+
+    </script>
+}
+

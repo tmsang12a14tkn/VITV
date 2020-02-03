@@ -1,0 +1,91 @@
+﻿@using System.Linq
+@model List<VideoCatGroup>
+
+<nav class="navbar navbar-default navbar-fixed-top header_area cbp-hrmenu" id="cbp-hrmenu" role="navigation">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-main">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img class="logo" src="~/Content/Images/logo.png" alt="logo" />
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-main">
+                <p class="header_slogan">Kênh truyền hình Kinh tế - Tài chính theo thời gian thực</p>
+                <ul class="nav navbar-nav">
+                    <li class="nonsubmenu"><a href="@Url.Action("Index", "Home")">TRANG CHỦ</a></li>
+                    <li>
+                        <a href="#">GIỚI THIỆU</a>
+                        <div class="cbp-hrsub">
+                            <div class="container">
+                                <div class="cbp-hrsub-inner">
+                                    <div>
+                                        <h4>Giới thiệu VITV</h4>
+                                        <ul>
+                                            <li><a href="@Url.Action("About", "Home")">Tổng quan - Tầm nhìn - Sứ mệnh</a></li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4>Cộng đồng VITV</h4>
+                                        <ul>
+                                            <li><a href="@Url.Action("Index", "Reporter")">Biên tập viên</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#">CHƯƠNG TRÌNH</a>
+                        <div class="cbp-hrsub">
+                            <div class="container">
+                                <div class="cbp-hrsub-inner">
+                                    <div>
+                                        <h4>Chương trình & Lịch phát sóng</h4>
+                                        <ul>
+                                            <li><a href="@Url.Action("Index", "VideoCategory")">Tổng hợp chương trình</a></li>
+                                            <li><a href="@Url.Action("Index", "ProgramScheduleDetails")">Lịch phát sóng</a></li>
+                                        </ul>
+                                    </div>
+                                    @foreach (var vcg in Model)
+                                    {
+                                        <div>
+                                            <h4>@vcg.Name</h4>
+                                            <ul>
+                                                @foreach (var vc in vcg.VideoCats.OrderBy(cat => cat.Order))
+                                                {
+                                                    if (vc.ShowInMenu)
+                                                    {
+                                                        <li><a href="@Url.Action("Details", "VideoCategory", new { title = vc.UniqueTitle })" class="vd-ctg"><span>@vc.Name</span></a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    @*<li class="nonsubmenu"><a href="@Url.Action("Index", "ExchangeRates")">TỶ GIÁ</a></li>
+                <li><a href="#">TIN TỨC</a></li>
+                <li><a href="#">TUYỂN DỤNG</a></li>*@
+                    <li class="nonsubmenu"><a href="@Url.Action("Index", "Contact")">LIÊN HỆ</a></li>
+                    @*<li class="nonsubmenu">
+                    <a href="#">
+                        <img class="search-icon" src="~/Content/Images/search_icon.png" />
+                        <input type="text" class="form-control search-field" placeholder="Nhập dữ liệu cần tìm...">
+                    </a>
+                </li>*@
+                    <li class="nonsubmenu">
+                        <a class="special_menu" href="http://startup.vitv.vn" target="_blank">CỔNG CÔNG NGHỆ VÀ KHỞI NGHIỆP</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

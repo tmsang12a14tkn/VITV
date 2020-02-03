@@ -1,0 +1,40 @@
+﻿@model VideoCategorySponsor
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel"><b>Chỉnh sửa đối tác/tài trợ</b></h4>
+</div>
+
+@using (Html.BeginForm("Edit", "VideoCatSponsor", new { returnUrl = Request.QueryString["returnUrl"] }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "sponsorForm" }))
+{
+    @Html.Partial("_CreateOrEdit", Model)
+}
+
+<script>
+    registerForm();
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#photoView').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $(document).ready(function () {
+        $("#photoinput").change(function () {
+            readURL(this);
+        });
+
+        $('#sidebar-nav #videoMng').toggleClass("active");
+        $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+        $('#sidebar-nav a#vd-li-5').toggleClass("active");
+        $('#sidebar-nav a#vd-li-5').parent().siblings().removeClass("active");
+    });
+</script>

@@ -1,0 +1,68 @@
+﻿@using System.Linq
+@model List<VITV.Data.Models.VideoCatGroup>
+
+<nav class="navbar navbar-default navbar-fixed-top top_header cbp-hrmenu" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand"><a href="http://vitv.vn/" target="_blank">Kênh truyền hình Kinh tế - Tài chính theo thời gian thực</a></div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-top">
+            <ul class="nav navbar-nav">
+                <li class="nonsubmenu"><a href="http://vitv.vn/" target="_blank">TRANG CHỦ</a></li>
+                <li>
+                    <a href="#">GIỚI THIỆU</a>
+                    <div class="cbp-hrsub">
+                        <div class="container">
+                            <div class="cbp-hrsub-inner">
+                                <div>
+                                    <h4>Giới thiệu VITV</h4>
+                                    <ul>
+                                        <li><a href="http://vitv.vn/gioi-thieu" target="_blank">Tổng quan - Tầm nhìn - Sứ mệnh</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4>Cộng đồng VITV</h4>
+                                    <ul>
+                                        <li><a href="http://vitv.vn/cong-dong-vitv" target="_blank">Biên tập viên</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">CHƯƠNG TRÌNH</a>
+                    <div class="cbp-hrsub">
+                        <div class="container">
+                            <div class="cbp-hrsub-inner">
+                                <div>
+                                    <h4>Chương trình &amp; Lịch phát sóng</h4>
+                                    <ul>
+                                        <li><a href="http://vitv.vn/tat-ca-chuong-trinh" target="_blank">Tổng hợp chương trình</a></li>
+                                        <li><a href="http://vitv.vn/lich-phat-song" target="_blank">Lịch phát sóng</a></li>
+                                    </ul>
+                                </div>
+                                @foreach (var vcg in Model)
+                                {
+                                    <div>
+                                        <h4>@vcg.Name</h4>
+                                        <ul>
+                                            @foreach (var vc in vcg.VideoCats.OrderBy(cat => cat.Order))
+                                            {
+                                                if (vc.ShowInMenu)
+                                                {
+                                                    <li><a href="http://vitv.vn/chuong-trinh/@vc.UniqueTitle" class="vd-ctg" target="_blank"><span>@vc.Name</span></a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nonsubmenu"><a href="http://vitv.vn/lien-he" target="_blank">LIÊN HỆ</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

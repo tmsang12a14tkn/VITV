@@ -1,0 +1,364 @@
+﻿@model IEnumerable<AllCatReport>
+
+@{
+    ViewBag.Title = "Report";
+    var totalIpView = 0;
+    var totalPageView = 0;
+    Dictionary<CatCombineView, List<PeriodVideoAccess>> data = (Dictionary<CatCombineView, List<PeriodVideoAccess>>)ViewBag.data;
+    List<PeriodVideoAccess> periodsNotCombine = (List<PeriodVideoAccess>)ViewBag.periodsNotCombine;
+
+    var d = DateTime.Now;
+    var today = d.ToString("dd/MM/yyyy");
+    var startDate = new DateTime(d.Year, d.Month, 1);
+    int year = DateTime.Now.Year;
+}
+
+@section styles {
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.6/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+    <link rel="stylesheet" href="~/Content/tooltipster.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/themes/tooltipster-shadow.css" type="text/css" />
+}
+
+@section scripts {
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+    <script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jquery.tooltipster.min.js"></script>
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+        $(document).ready(function () {
+            //$('.dataTable').DataTable({
+            //    "bPaginate": false,
+            //    "bSort": false
+            //});
+            $('.dataTable').DataTable({
+                paging: false,
+                searching: false,
+                "order": [],
+                "bSort": true,
+            });
+
+            //$(".dataTable").DataTable({
+                
+            //});
+
+            
+
+            $('#DataTables_Table_0_info').remove();
+
+            $('#daterange').daterangepicker({
+                format: 'DD-MM-YYYY',
+
+                opens: 'left',
+            });
+
+            $('#daterange').on('apply.daterangepicker', function (ev, picker) {
+                var from = picker.startDate.format('DD-MM-YYYY');
+                var to = picker.endDate.format('DD-MM-YYYY');
+                window.location = "/videoaccess/report?from=" + from + "&to=" + to + "&datetype=custom";
+            });
+
+            $('#sidebar-nav #videoAccessMng').toggleClass("active");
+            $('#sidebar-nav #videoAccessMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#vda-li-4').toggleClass("active");
+            $('#sidebar-nav a#vda-li-4').parent().siblings().removeClass("active");
+        });
+
+        $('.hoverchartpie').tooltipster({
+            contentCloning: false,
+            contentAsHTML: true,
+            interactive: true,
+            minWidth: 300,
+            maxHeight: 400,
+            positionTracker: true,
+            position: 'right',
+            theme: 'tooltipster-shadow',
+            trigger: 'hover',
+            functionInit: function (origin, content) {
+                $.get('/VideoAccess/GetItemCombineReport?id=' + $(this).data('pid') + "&from=" + $(this).data('from') + "&to=" + $(this).data('to') + "&dateType=" + $(this).data('datetype'), function (data, status) {
+                    origin.tooltipster('content', data);
+                });
+            }
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Báo cáo</h2>
+                <div class="pull-right">
+                    <div class="form-group vd-ctg-report">
+                        <div class="btn-group">
+                            <label>Tùy chọn: </label>
+                            <input type="text" name="daterange" id="daterange" value="@(ViewBag.fromDate) - @(ViewBag.toDate)" />
+                        </div>
+
+                        <a class="btn btn-primary @(ViewBag.dateType == "day" ? "active" : "")" href="/videoaccess/report?from=@today&to=@today&dateType=day">Ngày</a>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "week" ? "active" : "")" data-toggle="dropdown" aria-expanded="false">
+                                Tuần <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @for (int i = 0; i < 4; i++)
+                                {
+                                    //--Tuần tính từ T2 - CN--//
+                                    //int offset = d.DayOfWeek - DayOfWeek.Monday;
+                                    //DateTime monday = d.AddDays(-offset);
+                                    //var beginWeek = monday.ToString("dd/MM/yyyy");
+                                    //var endWeek = monday.AddDays(6).ToString("dd/MM/yyyy");
+                                    //d = monday.AddDays(-2);
+                                    
+                                    //--Tuần tính từ T7 tuần trước đển T6 tuần hiện tại--//
+                                    var currDay = d.DayOfWeek;
+                                    var prevSat = d.AddDays(((int)currDay + 1) * -1);
+                                    var beginWeek = prevSat.ToString("dd/MM/yyyy");
+                                    var endWeek = prevSat.AddDays(6).ToString("dd/MM/yyyy");
+                                    d = prevSat.AddDays(-1);
+                                    
+                                    <li><a href="/videoaccess/report?from=@beginWeek&to=@endWeek&dateType=week">Tuần từ @beginWeek - @endWeek</a></li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "month" ? "active" : "")" data-toggle="dropdown" aria-expanded="false">
+                                Tháng <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @for (int i = 0; i < 4; i++)
+                                {
+                                    var tempDate = new DateTime(startDate.Year, startDate.Month, 1);
+                                    var beginMonth = tempDate.ToString("dd/MM/yyyy");
+                                    var endMonth = tempDate.AddMonths(1).AddDays(-1).ToString("dd/MM/yyyy");                                    
+
+                                    <li><a href="/videoaccess/report?from=@beginMonth&to=@endMonth&dateType=month">Tháng @startDate.Month</a></li>
+                                    
+                                    startDate = tempDate.AddDays(-1);
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "year" ? "active" : "")" data-toggle="dropdown" aria-expanded="false">
+                                Năm <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @for (int i = 0; i < 4; i++)
+                                {
+                                    var beginYear = new DateTime(year, 1, 1).ToString("dd/MM/yyyy");
+                                    var endYear = new DateTime(year, 12, 31).ToString("dd/MM/yyyy");
+
+                                    <li><a href="/videoaccess/report?from=@beginYear&to=@endYear&dateType=year">Năm @year</a></li>
+
+                                    year -= 1;
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <h2>Tổng các chương trình</h2>
+                    <table class="table table-bordered dataTable" id="tablecombine">
+                        <thead>
+                            <tr class="text-center">
+                                <th rowspan="2">Tên chương trình</th>
+                                <th colspan="2">Lượt xem không trùng</th>
+                                <th colspan="2">Lượt xem trùng</th>
+                                <th rowspan="2">% Xem lại</th>
+                            </tr>
+                            <tr class="text-center">
+                                <th>Số lượng</th>
+                                <th>%</th>
+                                <th>Số lượng</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (AllCatReport p in Model)
+                            {
+                                totalIpView += p.IPViewCount;
+                                totalPageView += p.PageViewCount;
+                                //int index2 = p.Title.LastIndexOf("9H");
+                                //if (index2 != -1)
+                                //{
+                                //    p.Title = p.Title.Substring(0, index2).Trim();
+                                //}.ToString("0.00")ort
+                                //int index1 = p.Title.LastIndexOf("11H");
+                                //if (index1 != -1)
+                                //{
+                                //    p.Title = p.Title.Substring(0, index1).Trim();
+                                //}
+                                <tr>
+                                    @if (p.ParentId != null)
+                                    {
+                                        <td class="vd-ctg">
+                                            <a class="center-block hoverchartpie" data-pid="@p.ParentId" data-from="@(ViewBag.fromDate)" data-to="@(ViewBag.toDate)" data-datetype="@ViewBag.dateType" href="@(Url.Action("VideoReportByCat", "VideoAccess", new { catid = p.VideoCatId, from = ViewBag.fromDate, to = ViewBag.toDate }))">
+                                                <span>@p.Title.ToUpper()</span>
+                                            </a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="vd-ctg">
+                                            <a href="@(Url.Action("VideoReportByCat", "VideoAccess", new { catid = p.VideoCatId, from = ViewBag.fromDate, to = ViewBag.toDate }))">
+                                                <span>@(p.Title == null?"null":p.Title.ToUpper())</span>
+                                            </a>
+                                        </td>
+                                    }
+                                    <td>@p.IPViewCount</td>
+                                    <td>@p.PercentIPViewCount.ToString().Replace(",", ".")</td>
+                                    <td>@p.PageViewCount</td>
+                                    <td>@(p.PercentPageViewCount.ToString().Replace(",", "."))</td>
+                                    <td>@(((p.PageViewCount - p.IPViewCount)*100D/p.PageViewCount).ToString("0.00"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td>@totalIpView</td>
+                                <td></td>
+                                <td>@totalPageView</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="table-responsive">
+                    @foreach (KeyValuePair<CatCombineView, List<PeriodVideoAccess>> catCombine in data)
+                    {
+                        //int index2 = catCombine.Key.Title.LastIndexOf("9H");
+                        //if (index2 != -1)
+                        //{
+                        //    catCombine.Key.Title = catCombine.Key.Title.Substring(0, index2).Trim();
+                        //}
+                        //int index1 = catCombine.Key.Title.LastIndexOf("11H");
+                        //if (index1 != -1)
+                        //{
+                        //    catCombine.Key.Title = catCombine.Key.Title.Substring(0, index1).Trim();
+                        //}
+                        <table class="table table-bordered dataTable">
+                            <thead>
+                                <tr>
+                                    <td colspan='6'><strong>@catCombine.Key.Title.ToUpper()</strong></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td rowspan="2">Tên chương trình</td>
+                                    <td colspan="2">Lượt xem không trùng</td>
+                                    <td colspan="2">Lượt xem trùng</td>
+                                </tr>
+                                <tr class="text-center">
+                                    <th>Số lượng</th>
+                                    <th>%</th>
+                                    <th>Số lượng</th>
+                                    <th>%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="vd-ctg">
+                                        <span>@catCombine.Key.Title.ToUpper()</span>
+                                    </td>
+                                    <td class="text-right">
+                                        @catCombine.Key.IPViewCount
+                                    </td>
+                                    <td class="text-center">
+                                        @catCombine.Key.PercentIPViewCount.ToString("00.00", System.Globalization.CultureInfo.InvariantCulture)
+                                    </td>
+                                    <td class="text-center">
+                                        @catCombine.Key.PageViewCount
+                                    </td>
+                                    <td class="text-center">
+                                        @catCombine.Key.PercentPageViewCount.ToString("00.00", System.Globalization.CultureInfo.InvariantCulture)
+                                    </td>
+                                </tr>
+                                @foreach (PeriodVideoAccess pageAccess in catCombine.Value)
+                                {
+                                    <tr>
+                                        <td class="vd-ctg">
+                                            <a href="@(Url.Action("VideoReportByCat", "VideoAccess", new { catid = pageAccess.VideoCatId, from = ViewBag.fromDate, to = ViewBag.toDate }))">
+                                                <span>@pageAccess.Title.ToUpper()</span>
+                                            </a>
+                                        </td>
+                                        <td class="text-right">
+                                            @pageAccess.IPViewCount
+                                        </td>
+                                        <td class="text-center">
+                                            @pageAccess.PercentIPViewCount.ToString("00.00", System.Globalization.CultureInfo.InvariantCulture)
+                                        </td>
+                                        <td class="text-center">
+                                            @pageAccess.PageViewCount
+                                        </td>
+                                        <td class="text-center">
+                                            @pageAccess.PercentPageViewCount.ToString("00.00", System.Globalization.CultureInfo.InvariantCulture)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+
+                <div class="table-responsive">
+                    <h2>Tổng các chương trình tách rời</h2>
+                    <table class="table table-bordered dataTable" id="tablenotcombine">
+                        <thead>
+                            <tr class="text-center">
+                                <th rowspan="2">Tên chương trình</th>
+                                <th colspan="2">Lượt xem không trùng</th>
+                                <th colspan="2">Lượt xem trùng</th>
+                                <th rowspan="2">% Xem lại</th>
+                            </tr>
+                            <tr class="text-center">
+                                <th>Số lượng</th>
+                                <th>%</th>
+                                <th>Số lượng</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (PeriodVideoAccess p in periodsNotCombine)
+                            {
+                                <tr>
+                                    <td class="vd-ctg">
+                                        <a href="@(Url.Action("VideoReportByCat", "VideoAccess", new { catid = p.VideoCatId, from = ViewBag.fromDate, to = ViewBag.toDate }))">
+                                            <span>@p.Title</span>
+                                        </a>
+                                    </td>
+                                    <td>@p.IPViewCount</td>
+                                    <td>@p.PercentIPViewCount.ToString().Replace(",", ".")</td>
+                                    <td>@p.PageViewCount</td>
+                                    <td>@(p.PercentPageViewCount.ToString().Replace(",", "."))</td>
+                                    <td>@(p.PercentReViewCount.ToString().Replace(",", "."))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td>@totalIpView</td>
+                                <td></td>
+                                <td>@totalPageView</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@model VideoTVC
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel"><b>Chỉnh sửa TVC</b></h4>
+</div>
+@using (Html.BeginForm("Edit", "VideoTVC", new { returnUrl = Request.QueryString["returnUrl"] }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "tvcForm" }))
+{
+    @Html.Partial("_CreateOrEdit", Model)
+}
+
+
+<script src="~/Scripts/videoedit.js"></script>
+
+<script>
+    registerForm();
+    $("#CompanyId").on("change", function () {
+        var companyId = $(this).val();
+        var ddlProducts = $("#ProductId");
+        $.getJSON("/TVCProduct/FromCompany?id=" + companyId, function (data) {
+            ddlProducts.empty();
+            $.each(data, function (i, opt) {
+                ddlProducts[0].options.add(new Option(opt.text, opt.value));
+            });
+        });
+    })
+
+    $(document).ready(function () {
+        $('#sidebar-nav #videoMng').toggleClass("active");
+        $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+        $('#sidebar-nav a#vd-li-4').toggleClass("active");
+        $('#sidebar-nav a#vd-li-4').parent().siblings().removeClass("active");
+    });
+</script>
+

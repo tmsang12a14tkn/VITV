@@ -1,0 +1,839 @@
+﻿@model VideoCategory
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chỉnh sửa: " + Model.Name;
+    List<CategoryIntro> intros = ViewBag.catIntro as List<CategoryIntro>;
+    List<VideoTVC> tvcList = ViewBag.tvcList as List<VideoTVC>;
+    List<VideoCategorySponsor> sponsorList = ViewBag.sponsorList as List<VideoCategorySponsor>;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2>
+                    <b>@Model.Name</b>
+
+                    <a class="btn btn-primary" id="list-all" data-toggle="modal" href="#categoriesModal">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </h2>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation"><a href="/VideoCatGroups" class="glyphicon glyphicon-chevron-left"></a></li>
+                        <li role="presentation" class="active"><a href="#basicinfo" aria-controls="home" role="tab" data-toggle="tab">Thông tin cơ bản</a></li>
+                        <li role="presentation"><a href="#intro" aria-controls="profile" role="tab" data-toggle="tab">Clip giới thiệu</a></li>
+                        <li role="presentation"><a href="#tvc" aria-controls="profile" role="tab" data-toggle="tab">Quảng cáo</a></li>
+                        <li role="presentation"><a href="#sponsor" aria-controls="profile" role="tab" data-toggle="tab">Đối tác - tài trợ</a></li>
+                        <li role="presentation"><a href="#videos" aria-controls="profile" role="tab" data-toggle="tab">Danh sách Video</a></li>
+                        <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab">Nâng cao</a></li>
+                    </ul>
+                    <div class="tab-content tab-content-body clearfix">
+                        <div role="tabpanel" class="tab-pane fade in active" id="basicinfo">
+                            <div class="main-box">
+                                <div class="main-box-body">
+                                    <h2>&nbsp;</h2>
+                                    @using (Html.BeginForm("Edit", "VideoCategory", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+                                    {
+                                    @Html.ValidationSummary(true)
+                                    @Html.HiddenFor(model => model.Id)
+                                    @Html.HiddenFor(model => model.ParentId)
+                                    @Html.HiddenFor(model => model.HasTranscript)
+                                    @Html.HiddenFor(model => model.HasAds)
+                                    @Html.Partial("_CreateOrEdit", Model)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="intro">
+                            @Html.Action("ForCategory", "CategoryIntro", new { catId = Model.Id })
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="tvc">
+                            <h2>&nbsp;</h2>
+                            <div class="row">
+                                <div class="col-md-6 main-box-body">
+                                    <div class="main-box-header">
+                                        <h2>Danh sách tất cả quảng cáo</h2>
+                                    </div>
+
+                                    <table class="table user-list table-hover" id="all-tvc">
+                                        <tbody class="tbodyvideo">
+                                            @foreach (var tvc in tvcList)
+                                            {
+                                                if (Model.VideoTVCs.All(t => t.Id != tvc.Id))
+                                                {
+                                            <tr class="clearfix tvc-item" data-id="@tvc.Id">
+                                                <td>
+                                                    <img src="@tvc.Thumbnail" alt="">
+                                                    <p>@tvc.Title</p>
+                                                    <span class="user-subhead">
+                                                        @(tvc.Product != null ? tvc.Product.Company.Name + " - " + tvc.Product.Name : "")
+                                                    </span>
+                                                </td>
+                                                <td style="width: 20%;">
+                                                    <a class="table-link" data-toggle="modal" href="#videoModal" data-video="@tvc.Url" title="Xem video">
+                                                        <span class="fa-stack">
+                                                            <i class="fa fa-square fa-stack-2x"></i>
+                                                            <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary pull-right tvc-choose-btn">
+                                                        <i class="fa fa-arrow-right"></i>
+                                                    </button>
+                                                </td>
+
+
+                                            </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 main-box-body">
+                                    <div class="main-box-header clearfix">
+                                        <h2>Danh sách quảng cáo cho chương trình</h2>
+                                    </div>
+
+                                    <table class="table user-list table-hover" id="chosen-tvc">
+                                        <tbody class="tbodyvideo">
+                                            @foreach (var tvc in Model.VideoTVCs)
+                                            {
+                                            <tr class="clearfix tvc-item" data-id="@tvc.Id">
+                                                <td>
+                                                    <img src="@tvc.Thumbnail" alt="">
+                                                    <p>@tvc.Title</p>
+                                                    <span class="user-subhead">
+                                                        @(tvc.Product != null ? tvc.Product.Company.Name + " - " + tvc.Product.Name : "")
+                                                    </span>
+                                                </td>
+                                                <td style="width: 20%;">
+                                                    <a class="table-link" data-toggle="modal" href="#videoModal" data-video="@tvc.Url" title="Xem video">
+                                                        <span class="fa-stack">
+                                                            <i class="fa fa-square fa-stack-2x"></i>
+                                                            <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary pull-right tvc-reject-btn">
+                                                        <i class="fa fa-arrow-left"></i>
+                                                    </button>
+                                                </td>
+
+
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="navbar-form navbar-right">
+                                        <div class="form-group">
+                                            <form action="/VideoCategory/EditTvc" method="post">
+                                                <div class="form-group">
+                                                    <select class="hidden" name="tvcList" multiple id="tvcSelect">
+                                                        @foreach (var tvc in tvcList)
+                                                        {
+                                                        <option value="@tvc.Id" @(Model.VideoTVCs.All(t => t.Id != tvc.Id) ? "" : "selected")></option>
+                                                        }
+                                                    </select>
+                                                    <input type="hidden" name="catId" value="@Model.Id" />
+                                                    <button type="submit" class="btn btn-success"><span class="fa fa-save"></span> Lưu thay đổi</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-danger pull-right" id="deleteAll">
+                                                <i class="fa fa-trash"></i>  Xóa tất cả
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="sponsor">
+                            <h2>&nbsp;</h2>
+                            <div class="row">
+                                <div class="col-md-6 main-box-body">
+                                    <div class="main-box-header">
+                                        <h2>Danh sách đối tác - tài trợ</h2>
+                                    </div>
+
+                                    <table class="table user-list table-hover" id="all-sponsor">
+                                        <tbody class="tbodyvideo">
+                                            @foreach (var spn in sponsorList)
+                                            {
+                                                if (Model.Sponsors.All(s => s.Id != spn.Id))
+                                                {
+                                            <tr class="clearfix sponsor-item" data-id="@spn.Id">
+                                                <td>
+                                                    <img src="@spn.Thumbnail" alt="">
+                                                    <p>@spn.Name</p>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary pull-right sponsor-choose-btn">
+                                                                <i class="fa fa-arrow-right"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 main-box-body">
+                                    <div class="main-box-header clearfix">
+                                        <h2>Danh sách đối tác/tài trợ cho chương trình</h2>
+                                    </div>
+                                    <table class="table user-list table-hover" id="chosen-sponsor">
+                                        <tbody class="tbodyvideo">
+                                            @foreach (var spn in Model.Sponsors)
+                                            {
+                                            <tr class="clearfix sponsor-item" data-id="@spn.Id">
+                                                <td>
+                                                    <img src="@spn.Thumbnail" alt="">
+                                                    <p>@spn.Name</p>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary pull-right sponsor-reject-btn">
+                                                            <i class="fa fa-arrow-left"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="navbar-form navbar-right">
+                                        <div class="form-group">
+                                            <form action="/VideoCategory/EditSponsor" method="post">
+                                                <div class="form-group">
+                                                    <select class="hidden" name="sponsorList" multiple id="sponsorSelect">
+                                                        @foreach (var spn in sponsorList)
+                                                        {
+                                                        <option value="@spn.Id" @(Model.Sponsors.All(s => s.Id != spn.Id) ? "" : "selected")></option>
+                                                        }
+                                                    </select>
+                                                    <input type="hidden" name="catId" value="@Model.Id" />
+                                                    <button type="submit" class="btn btn-success"><span class="fa fa-save"></span> Lưu thay đổi</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-danger pull-right" id="deleteAllSpn">
+                                                <i class="fa fa-trash"></i>  Xóa tất cả
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" id="videos" class="tab-pane fade">
+                            @Html.Action("ForCategory", "Video", new { catId = @Model.Id })
+                        </div>
+
+                        <div role="tabpanel" id="advanced" class="tab-pane fade">
+                            <h2>&nbsp;</h2>
+                            <div class="row">
+                                <div class="col-md-2">Có/không sử dụng vỏ bản tin</div>
+                                <div class="col-md-10">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-transcript" data-catid="@Model.Id" @(Model.HasTranscript ? "checked" : "")>
+                                        <label class="onoffswitch-label" for="switch-transcript">
+                                            <div class="onoffswitch-inner"></div>
+                                            <div class="onoffswitch-switch"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">Có/không sử dụng youtube</div>
+                                <div class="col-md-10">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-youtube" data-catid="@Model.Id" @(Model.HasYoutube ? "checked" : "")>
+                                        <label class="onoffswitch-label" for="switch-youtube">
+                                            <div class="onoffswitch-inner"></div>
+                                            <div class="onoffswitch-switch"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">Tắt/mở quảng cáo</div>
+                                <div class="col-md-10">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-ads" data-catid="@Model.Id" @(Model.HasAds ? "checked" : "")>
+                                        <label class="onoffswitch-label" for="switch-ads">
+                                            <div class="onoffswitch-inner"></div>
+                                            <div class="onoffswitch-switch"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <video src="" controls preload="auto" width="100%" height="100%" id="videotvcstop"></video>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="categoriesModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Các chuyên mục</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Action("ModalAll", "VideoCatGroups")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="listvideoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="listvideoModalContent"></div>
+    </div>
+</div>
+
+@section styles {
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/datepicker3/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/tooltipster/tooltipster.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/tooltipster/themes/tooltipster-shadow.css">
+}
+
+@section Scripts {
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+    <script type="text/javascript" src="~/Scripts/datepicker3/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/tooltipster/jquery.tooltipster.min.js"></script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#photoView').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#catphotoinput").change(function () {
+            readURL(this);
+        });
+
+        //Sccript cho Tab TVC
+        $("#all-tvc").on("click", ".tvc-choose-btn", function () {
+            var $tvc = $(this).closest(".tvc-item");
+            $tvc.detach().appendTo('#chosen-tvc');
+            $tvc.find(".tvc-choose-btn i").removeClass("fa-arrow-right").addClass("fa-arrow-left");
+            $tvc.find(".tvc-choose-btn").removeClass("tvc-choose-btn").addClass("tvc-reject-btn");
+            var id = $($tvc).data("id");
+            $("#tvcSelect option[value=" + id + "]").attr("selected", "selected");
+        });
+
+        $("#chosen-tvc").on("click", ".tvc-reject-btn",function () {
+            var $tvc = $(this).closest(".tvc-item");
+            $tvc.detach().appendTo('#all-tvc');
+            $tvc.find(".tvc-reject-btn i").removeClass("fa-arrow-left").addClass("fa-arrow-right");
+            $tvc.find(".tvc-reject-btn").removeClass("tvc-reject-btn").addClass("tvc-choose-btn");
+
+            var id = $($tvc).data("id");
+            $("#tvcSelect option[value=" + id + "]").removeAttr("selected");
+        });
+
+        $('#videoModal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget)
+            var videoUrl = button.data('video');
+            $(this).find('video').attr('src', videoUrl);
+            $("video").each(function () { this.play() });
+            // do something...
+        });
+
+        $('#videoModal').on('hide.bs.modal', function (e) {
+            $("video").each(function () { this.pause() });
+        });
+
+        $('#deleteAll').on('click', function ()
+        {
+            $("#chosen-tvc .tvc-item").each(function (i, tvc)
+            {
+                var $tvc = $(tvc);
+                $tvc.detach().appendTo('#all-tvc');
+                $tvc.find(".tvc-reject-btn i").removeClass("fa-arrow-left").addClass("fa-arrow-right");
+                $tvc.find(".tvc-reject-btn").removeClass("tvc-reject-btn").addClass("tvc-choose-btn");
+
+                var id = $($tvc).data("id");
+                $("#tvcSelect option[value=" + id + "]").removeAttr("selected");
+            })
+        });
+
+        //Sccript cho Tab Sponsor
+        $("#all-sponsor").on("click", ".sponsor-choose-btn", function () {
+            var $sponsor = $(this).closest(".sponsor-item");
+            $sponsor.detach().appendTo('#chosen-sponsor');
+            $sponsor.find(".sponsor-choose-btn i").removeClass("fa-arrow-right").addClass("fa-arrow-left");
+            $sponsor.find(".sponsor-choose-btn").removeClass("sponsor-choose-btn").addClass("sponsor-reject-btn");
+            var id = $($sponsor).data("id");
+            $("#sponsorSelect option[value=" + id + "]").attr("selected", "selected");
+        });
+
+        $("#chosen-sponsor").on("click", ".sponsor-reject-btn",function () {
+            var $sponsor = $(this).closest(".sponsor-item");
+            $sponsor.detach().appendTo('#all-sponsor');
+            $sponsor.find(".sponsor-reject-btn i").removeClass("fa-arrow-left").addClass("fa-arrow-right");
+            $sponsor.find(".sponsor-reject-btn").removeClass("sponsor-reject-btn").addClass("sponsor-choose-btn");
+
+            var id = $($sponsor).data("id");
+            $("#sponsorSelect option[value=" + id + "]").removeAttr("selected");
+        });
+
+        $('#deleteAllSpn').on('click', function ()
+        {
+            $("#chosen-sponsor .sponsor-item").each(function (i, sponsor)
+            {
+                var $sponsor = $(sponsor);
+                $sponsor.detach().appendTo('#all-sponsor');
+                $sponsor.find(".sponsor-reject-btn i").removeClass("fa-arrow-left").addClass("fa-arrow-right");
+                $sponsor.find(".sponsor-reject-btn").removeClass("sponsor-reject-btn").addClass("sponsor-choose-btn");
+
+                var id = $($sponsor).data("id");
+                $("#sponsorSelect option[value=" + id + "]").removeAttr("selected");
+            })
+        });
+
+        //Script Dành Cho Tab Intro
+        $('#introModal').on("show.bs.modal", function (e) {
+            $(this).find(".modal-content").load($(e.relatedTarget).attr('href'));
+        });
+
+        $('#introModal').on("hidden.bs.modal", function (e) {
+            $(this).find(".modal-content").empty();
+        });
+
+        function registerForm() {
+            $('#videoForm').ajaxForm(function (data) {
+                console.log(data);
+                if (data.success == true) {
+                    $("#introModal").modal("hide");
+                    reloadIntros(data.catid);
+                }
+                else {
+                    $("#introModal").find(".modal-content").html(data.view);
+                    //run javascript
+                    $("#introModal").find("script").each(function(i) {
+                        if($(this).attr("src")!="")
+                        {
+                            $.getScript($(this).attr("src"));
+                        }
+                        else
+                        {
+                            eval($(this).text());
+                        }
+                    });
+                    registerForm();
+                }
+            });
+        }
+
+        function reloadIntros(catid)
+        {
+            $("#tbodyintro_" + catid).load('/CategoryIntro/PartialForCategory?catId=' + catid);
+        }
+
+        $(".intro-list").on('change', 'input[type=checkbox]',function ()
+        {
+            if (this.checked == true) {
+                //$(".intro-item").removeClass("green-bg").addClass("emerald-bg");
+                //$(this).closest(".intro-item").removeClass("emerald-bg").addClass("green-bg");
+                $("input[type=checkbox]").not(this).attr("checked", false);
+                var introId = $(this).data('id');
+                $.post('/VideoCategory/EditIntro', {introId : introId, catId: @Model.Id, select: true}, function(result)
+                {
+                    console.log(result);
+                })
+            }
+            else
+            {
+                //$(this).closest(".intro-item").removeClass("green-bg").addClass("emerald-bg");
+                var introId = $(this).data('id');
+                $.post('/VideoCategory/EditIntro', {introId : introId, catId: @Model.Id,select: false}, function(result)
+                {
+                    console.log(result);
+                })
+            }
+        })
+
+        //Tab Danh sách Videos
+        function registerVideosTab()
+        {
+            $("#videos a[data-toggle='tab']").on("click", function()
+            {
+                $(this).parent().siblings().removeClass("active");
+                $(this).parent().addClass("active");
+            });
+
+            $('#dateselect').datepicker({
+                format: 'dd/MM/yyyy',
+                todayHighlight: true,
+            });
+
+            $('#dateselect').datepicker()
+            .on('changeDate', function (e) {
+                date = $(this).val();
+                $(this).datepicker("hide");
+                $("#videos").load("/Video/ForCategory?catId=@Model.Id&date="+date+"&groupBy="+groupBy, registerVideosTab);
+            });
+
+            $('#settingForCategory').tooltipster({
+                theme: 'tooltipster-shadow',
+                contentAsHTML: true,
+                autoClose: true,
+                trigger: 'click',
+                interactive: true,
+                animation: 'fade',
+                delay: 0,
+                maxWidth: 400,
+                speed: 100,
+                functionBefore: function (origin, continueTooltip) {
+
+                    // we'll make this function asynchronous and allow the tooltip to go ahead and show the loading notification while fetching our data
+                    continueTooltip();
+
+                    //parent = $(this).parent().parent();
+                    //var videoid = parent.data('videoid');
+                    //var youtubeurl = parent.data('youtubeurl');
+                    var type = $(this).data('type');
+                    var content =
+                        '<div class="col-lg-12">' +
+                            '<div class="btn-group" data-toggle="buttons">' +
+                                '<label class="btn btn-primary optionsforcategory ' + (type == 2 ? 'active' : '') + '" data-type="year">' +
+                                    '<input type="radio" name="options" id="option1"> Năm' +
+                                '</label>' +
+                                '<label class="btn btn-primary optionsforcategory ' + (type == 1 ? 'active' : '') + '" data-type="month">'+
+                                    '<input type="radio" name="options" id="option2"> Tháng'+
+                                '</label>'+
+                                '<label class="btn btn-primary optionsforcategory ' + (type == 0 ? 'active' : '') + '" data-type="week">'+
+                                    '<input type="radio" name="options" id="option3"> Tuần'+
+                                '</label>'+
+                            '</div>'+
+                        '</div>';
+                    origin.tooltipster('content', content);
+
+                },
+                functionReady: function (origin, tooltipEl) {
+                    $(tooltipEl).on('click', '.optionsforcategory', function () {
+                        var groupBy = $(this).data('type');
+                        console.log(groupBy);
+                        $("#videos").load("/Video/ForCategory?catId=@Model.Id&date="+date+"&groupBy="+groupBy, registerVideosTab);
+                    });
+                }
+            });
+
+            registerVideosTabContent();
+        }
+
+        function registerVideosTabContent()
+        {
+            $('.youtubeplay').tooltipster({
+                theme: 'tooltipster-shadow',
+                contentAsHTML: true,
+                autoClose: true,
+                trigger: 'click',
+                interactive: true,
+                animation: 'fade',
+                delay: 0,
+                maxWidth: 400,
+                speed: 100,
+                functionBefore: function (origin, continueTooltip) {
+
+                    // we'll make this function asynchronous and allow the tooltip to go ahead and show the loading notification while fetching our data
+                    continueTooltip();
+
+                    parent = $(this).parent().parent();
+                    var videoid = parent.data('videoid');
+                    var youtubeurl = parent.data('youtubeurl');
+                    var videopiority = parent.data('videopiority');
+
+                    var content =
+                        '<div class="col-lg-12">' +
+                                '<form role="form">' +
+                                    '<div class="row">' +
+                                        '<div class="input-group">' +
+                                            '<span class="input-group-btn">' +
+                                                '<button class="btn btn-primary" id="emptyyoutubeurl" type="button">Xoá</button>' +
+                                            '</span>' +
+                                            '<input type="text" class="form-control" id="youtubeurl" placeholder="Đường dẫn youtube" value="' + youtubeurl + '"/>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="row">' +
+                                        '<div class="radio">' +
+                                            '<input type="radio" name="optionsRadios" id="optionsRadios1" value="0" ' + (videopiority == 0 ? "checked" : "") + '/>' +
+                                            '<label for="optionsRadios1">Từ youtube</label>' +
+                                        '</div>' +
+                                        '<div class="radio">' +
+                                            '<input type="radio" name="optionsRadios" id="optionsRadios2" value="1" ' + (videopiority == 1 ? "checked" : "") + '/>' +
+                                            '<label for="optionsRadios2">Từ lưu trữ VITV</label>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="row" id="containeryoutube">' +
+                                        '<div class="col-lg-4">' +
+                                            '<input type="button" id="saveyoutubeplay" name="saveyoutubeplay" class="btn btn-primary" data-videoid="' + videoid + '" value="Lưu thay đổi">' +
+                                        '</div>' +
+                                        '<div class="col-lg-4">' +
+                                            '<input type="button" id="viewvideo" class="btn btn-primary" value="Xem video">' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</form>' +
+                        '</div>';
+                    origin.tooltipster('content', content);
+                },
+                functionReady: function (origin, tooltipEl) {
+                    $(tooltipEl).on('click', '#saveyoutubeplay', function () {
+                        var youtubeurl = $('#youtubeurl').val();
+                        var videopiority = $('input[name=optionsRadios]:checked').val();
+                        var videoid = $(this).data('videoid');
+
+                        $.post("/Video/UpdateYoutubePlay", { videoid: videoid, youtubeurl: youtubeurl, videopiority: videopiority }, function (result) {
+                            if (result.code == 0) {
+                                alert("Không tồn tại video này !");
+                            } else if (result.code == 1) {
+                                $("#youtubeplay" + videoid).removeClass("red").addClass("green");
+                                $("#youtubeplay" + videoid + " span").attr("title", "Xem video từ youtube");
+                                parent.data('youtubeurl', result.YoutubeUrl);
+                                parent.data('videopiority', result.VideoPiority);
+                            } else if (result.code == 2) {
+                                $("#youtubeplay" + videoid).removeClass("red").removeClass("green");
+                                $("#youtubeplay" + videoid + " span").attr("title", "Xem video từ lưu trữ VITV");
+                                parent.data('youtubeurl', result.YoutubeUrl);
+                                parent.data('videopiority', result.VideoPiority);
+                            }
+                            else if (result.code == 3) {
+                                $("#youtubeplay" + videoid).removeClass("green").addClass("red");
+                                $("#youtubeplay" + videoid + " span").attr("title", "Không có đường dẫn youtube");
+                                parent.data('youtubeurl', result.YoutubeUrl);
+                                parent.data('videopiority', result.VideoPiority);
+                            }
+                            origin.tooltipster("hide");
+                        });
+                    });
+
+                    $(tooltipEl).on('click', '#emptyyoutubeurl', function () {
+                        $('#youtubeurl').val("");
+                    });
+
+                    $(tooltipEl).on('click', '#viewvideo', function () {
+                        if ($('#youtubeurl').val() != "")
+                            window.open($('#youtubeurl').val(), "_blank");
+                    });
+                }
+            });
+
+            $('.youtubeplay, #settingForCategory, .ispublished').click(function (e) {
+                e.preventDefault();
+            });
+
+            $('.ispublished').click(function () {
+                var videoid = $(this).data('videoid');
+                $.post("/Video/ShowOrHideVideo", { videoid: videoid }, function (result) {
+                    $('#listvideoModalContent').empty().html(result);
+                    $('#listvideoModal').modal("show");
+                })
+            })
+
+            $('#listvideoModal').on("click", '#closeshowhidevideo', function () {
+                var videoid = $(this).data('videoid');
+                $.post("/Video/UpdateIsPublishedVideo", { videoid: videoid }, function (result) {
+                    $('#listvideoModal').modal("hide");
+                    if (result.success) {
+                        if (result.ispublished) {
+                            $('#ispublished' + videoid).removeClass('danger').addClass('gray');
+                        } else {
+                            $('#ispublished' + videoid).removeClass('gray').addClass('danger');
+                        }
+                    } else {
+                        alert(result.content);
+                    }
+                })
+            });
+
+            $('.vtooltip').each(function () {
+                var highest = $(this).data("highest");
+                var lowest = $(this).data("lowest");
+                var content =
+                            '<div>'
+                                + 'Cao nhất: ' + highest
+                                + '</br>' + 'Thấp nhất: ' + lowest
+                            + '</div>';
+                $(this).tooltipster(
+                {
+                    contentAsHTML: true,
+                    theme: 'tooltipster-shadow',
+                    content: content
+                });
+            });
+
+            $('.videouploadtime').tooltipster({
+                theme: 'tooltipster-shadow',
+                contentAsHTML: true,
+                autoClose: true,
+                trigger: 'click',
+                interactive: true,
+                animation: 'fade',
+                delay: 0,
+                fixedWidth: 200,
+                maxWidth: 800,
+                speed: 100,
+                functionBefore: function (origin, continueTooltip) {
+
+                    // we'll make this function asynchronous and allow the tooltip to go ahead and show the loading notification while fetching our data
+                    continueTooltip();
+
+                    var uploadtime = $(this).data('uploadtime');
+                    var publishtime = $(this).data('publishtime');
+                    var displaytime = $(this).data('displaytime');
+                    var uploader = $(this).data('uploader');
+                    var difference = $(this).data('difference');
+                    var type = $(this).data('type');
+                    var result = "";
+                    //vuot qua 60ph
+                    if (type == 1) {
+
+                        result = '<hr>' +
+                            '<div class="row"  style="margin-bottom:15px">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Chênh lệch</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>Sau thời gian phát sóng là ' + difference + '</span>' +
+                                '</div>' +
+                            '</div>';
+                        //upload truoc thoi han
+                    } else if (type == 2) {
+                        result = '<hr>' +
+                            '<div class="row"  style="margin-bottom:15px">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Chênh lệch</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>Trước thời gian phát sóng là ' + difference + '</span>' +
+                                '</div>' +
+                            '</div>';
+                    } else//upload dung gio
+                    {
+                        result = '<hr>' +
+                            '<div class="row"  style="margin-bottom:15px">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Chênh lệch</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>' + difference + ' (đúng giờ)</span>' +
+                                '</div>' +
+                            '</div>';
+                    }
+
+                    var content =
+                        '<div class="col-lg-12">' +
+                            '<div class="row"  style="margin-top:15px">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Người tải lên</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>' + uploader + '</span>' +
+                                '</div>' +
+                            '</div>' +
+                            '<hr>' +
+                            '<div class="row">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Thời điểm hẹn giờ đăng</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>' + publishtime + '</span>' +
+                                '</div>' +
+                            '</div>' +
+                            '<hr>' +
+                            '<div class="row">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Thời điểm tải lên</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>' + uploadtime + '</span>' +
+                                '</div>' +
+                            '</div>' +
+                            '<hr>' +
+                            '<div class="row"  style="margin-bottom:15px">' +
+                                '<div class="col-lg-6">' +
+                                    '<span><b>Thời điểm phát sóng</b></span>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<span>' + displaytime + '</span>' +
+                                '</div>' +
+                            '</div>' + result +
+                        '</div>';
+                    origin.tooltipster('content', content);
+
+                },
+            });
+        }
+
+        registerVideosTab();
+
+
+        //TAB Nâng cao
+        $('#switch-transcript').on("change", function () {
+            var value = $(this).is(':checked');
+
+            $.post("/VideoCategory/EditHasTranscript", { catId: @Model.Id, value: value }, function (data) {
+                console.log(data);
+            })
+        });
+
+        $('#switch-youtube').on("change", function () {
+            var value = $(this).is(':checked');
+
+            $.post("/VideoCategory/EditHasYoutube", { catId: @Model.Id, value: value }, function (data) {
+                console.log(data);
+            })
+        });
+
+        $('#switch-ads').on("change", function () {
+            var value = $(this).is(':checked');
+            $.post("/VideoCategory/EditHasAds", { catId: @Model.Id, value: value }, function (data) {
+                console.log(data);
+            })
+        });
+    </script>
+}

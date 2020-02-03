@@ -1,0 +1,41 @@
+﻿@model List<IntroByCategory>
+
+@*@foreach (var introByCat in Model)
+{
+    <h2><a href="/VideoCategory/Edit/@introByCat.Category.Id">@introByCat.Category.Name</a></h2>
+
+    <div class="row">
+        @Html.Partial("_List", introByCat.Intros)
+    </div>
+}*@
+
+@{
+    
+    List<VideoCategory> lstVideoCategories = ((List<VideoCategory>)ViewBag.videocategories).Where(c => c.GroupId == ViewBag.groupid).OrderByDescending(i => i.Intros.Count()).ToList();
+}
+
+@foreach (var category in lstVideoCategories)
+{
+    IntroByCategory introCate = Model.Where(i => i.Category.Id == category.Id).FirstOrDefault();
+    <thead class="theadvideo" id="theadintro_@category.Id">
+        <tr>
+            <th>
+                <h2><b>@category.Name</b></h2>
+            </th>
+            <th><span></span></th>
+        </tr>
+    </thead>
+
+    
+
+    if (introCate != null && introCate.Intros.Count() > 0)
+    {
+        <tbody id="tbodyintro_@category.Id">
+            @Html.Partial("_List", introCate.Intros)
+        </tbody>
+    }
+
+}
+
+
+

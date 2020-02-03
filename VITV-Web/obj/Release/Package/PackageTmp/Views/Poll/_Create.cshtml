@@ -1,0 +1,276 @@
+﻿@model PollQuestion
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">Tạo câu hỏi</h4>
+</div>
+@using (Html.BeginForm("Create", "Poll", FormMethod.Post, new { enctype = "multipart/form-data", id = "createPollForm" }))
+{
+    <div class="modal-body">
+        @Html.HiddenFor(model => model.VideoId)
+        <div class="tabs-wrapper">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-mainpoll" data-toggle="tab">Câu hỏi</a></li>
+                <li><a href="#tab-pollconfig" data-toggle="tab">Tùy chọn</a></li>
+            </ul>
+            <div class="tab-content tab-content-body clearfix">
+                <div id="tab-mainpoll" class="tab-pane fade in active">
+                    <div class="media">
+                        <div class="pull-left">
+                            @Html.HiddenFor(model => model.Image)
+                            <div class="col-lg-10">
+                                <label for="question-photo-input">
+                                    <img id="question-photo-view" width=100 height=100 src="@Model.Image" />
+                                </label>
+                                <input class="hidden" id="question-photo-input" type="file" name="questionImage" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Tiêu đề" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextAreaFor(model => model.Question, new { @class = "form-control poll-editable", placeholder = "Câu hỏi" })
+                            </div>
+
+                            <div class="form-group form-inline">
+                                <div class="form-group">
+                                    <input class="form-control datepicker" data-format="dd/MM/yyyy" id="FromDate" name="FromDate" type="text" placeholder="Ngày bắt đầu" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control datepicker" data-format="dd/MM/yyyy" id="EndDate" name="EndDate" type="text" placeholder="Ngày kết thúc" value="">
+                                </div>
+                            </div>
+
+
+                            <h3>Câu trả lời</h3>
+                            <ul id="answer-list" class="list-unstyled">
+                                @if (Model.Answers != null && Model.Answers.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.Answers.Count; i++)
+                                    {
+                                        var answer = Model.Answers.ElementAt(i);
+                                        @Html.Partial("_AdminAnswer", answer, new ViewDataDictionary { { "index", i } })
+                                    }
+                                }
+                                else
+                                {
+                                    @Html.Partial("_AdminAnswer", new PollAnswer(), new ViewDataDictionary { { "index", 0 } })
+                                    @Html.Partial("_AdminAnswer", new PollAnswer(), new ViewDataDictionary { { "index", 1 } })
+                                }
+                            </ul>
+                            <input type="button" id="add-pollanswer" value="+" title="+" />
+
+                        </div>
+
+                    </div>
+                </div>
+                <div id="tab-pollconfig" class="tab-pane fade">
+                    <div class="form-group form-inline">
+                        <div class="pull-left">
+                            <div class="onoffswitch">
+                                <input @(Model.MultipleChoice ? "checked" : "") class="onoffswitch-checkbox check-box" data-val="true" id="MultipleChoice" name="MultipleChoice" type="checkbox" value="true">
+                                <label class="onoffswitch-label" for="MultipleChoice">
+                                    <div class="onoffswitch-inner"></div>
+                                    <div class="onoffswitch-switch"></div>
+                                </label>
+                                <input name="MultipleChoice" type="hidden" value="false">
+                            </div>
+                        </div>
+                        <label for="MultipleChoice">Cho phép chọn nhiều câu trả lời</label>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="pull-left">
+                            <div class="onoffswitch">
+                                <input @(Model.Displayed ? "checked" : "") class="onoffswitch-checkbox check-box" data-val="true" id="Displayed" name="Displayed" type="checkbox" value="true">
+                                <label class="onoffswitch-label" for="Displayed">
+                                    <div class="onoffswitch-inner"></div>
+                                    <div class="onoffswitch-switch"></div>
+                                </label>
+                                <input name="Displayed" type="hidden" value="false">
+                            </div>
+                        </div>
+                        <label for="Displayed">Cho phép hiển thị trên web</label>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="pull-left">
+                            <div class="onoffswitch">
+                                <input @(Model.ViewTotal ? "checked" : "") class="onoffswitch-checkbox check-box" data-val="true" id="ViewTotal" name="ViewTotal" type="checkbox" value="true">
+                                <label class="onoffswitch-label" for="ViewTotal">
+                                    <div class="onoffswitch-inner"></div>
+                                    <div class="onoffswitch-switch"></div>
+                                </label>
+                                <input name="ViewTotal" type="hidden" value="false">
+                            </div>
+                        </div>
+                        <label for="ViewTotal">Cho phép hiển thị tổng số bầu chọn</label>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="pull-left">
+                            <div class="onoffswitch">
+                                <input @(Model.Published ? "checked" : "") class="onoffswitch-checkbox check-box" data-val="true" id="Published" name="Published" type="checkbox" value="true">
+                                <label class="onoffswitch-label" for="Published">
+                                    <div class="onoffswitch-inner"></div>
+                                    <div class="onoffswitch-switch"></div>
+                                </label>
+                                <input name="Published" type="hidden" value="false">
+                            </div>
+                        </div>
+                        <label for="Published">Cho phép xem kết quả</label>
+                    </div>
+                    
+                    <div class="form-group">
+
+                        <div class="pull-left">
+                            <div class="onoffswitch">
+                                <input @(Model.Done ? "checked" : "") class="onoffswitch-checkbox check-box" data-val="true" id="Done" name="Done" type="checkbox" value="true">
+                                <label class="onoffswitch-label" for="Done">
+                                    <div class="onoffswitch-inner"></div>
+                                    <div class="onoffswitch-switch"></div>
+                                </label>
+                                <input name="Done" type="hidden" value="false">
+                            </div>
+                        </div>
+                        <label for="Done">Kết thúc quá trình bầu chọn</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </div>
+}
+
+<script>
+    $('#createPollForm').ajaxForm({
+        beforeSubmit: function(arr, $form, options) { 
+            //console.log(arr, options, $form);
+            if($form.find("textarea.poll-editable").val()=="")
+            {
+                alert("Câu hỏi chưa có nội dung");
+                return false;
+            }
+            var count =0;
+            $form.find('textarea.answer-editable').each(function(i, answer)
+            {
+                
+                if($(answer).val() != "")
+                    count++;
+            });
+            if(count < 2)
+            {
+                alert("Tối thiểu phải có 2 lựa chọn");
+                return false;
+            }
+            if (confirm('Bạn muốn lưu câu hỏi này?')) {
+                $form.ajaxSubmit({
+                    success: OnSuccessCreatePoll
+                });
+            }
+            return false;
+        },
+        success: OnSuccessCreatePoll
+    });
+    var index = @(Model.Answers != null && Model.Answers.Count > 0?(Model.Answers.Count):2);
+    function readURL(input, $imageToRender) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $imageToRender.attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#question-photo-input").change(function () {
+        readURL(this, $('#question-photo-view'));
+    });
+    $(".answer-photo-input").on("change", function () {
+        var answerId = $(this).data("answerid");
+        readURL(this, $('#answer-photo-view-' + answerId));
+    });
+    $("#add-pollanswer").on("click", function ()
+    {
+        var curId = index;
+        $.get("/Poll/AdminAnswer", {index : curId}, function(data)
+        {
+            $("#answer-list").append(data);
+
+            $("#answer-photo-input-"+curId).on("change", function () {
+                readURL(this, $('#answer-photo-view-' + curId));
+            });
+
+            $('.answer-editable').froalaEditor({
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+                pluginsEnabled: null,
+                imageUploadParam: 'files',
+                imageUploadURL: '/Home/FroalaUploadImage',
+                inlineMode: false,
+                preloaderSrc: "/Content/assets/ajax-loader.gif",
+                imagesLoadURL: '/Home/FroalaMediaManager',
+                imageDeleteURL: "/Home/FroalaDelete",
+                emptytext: '',
+                height: 100,
+                maxHeight: 100
+            });
+        });
+      
+        index ++;
+    })
+    function delPollAnswer(btn)
+    {
+        if($("li.poll-answer").not(".hidden").length < 2)
+        {
+            alert("Tối thiểu phải có 2 lựa chọn");
+        }
+        else
+        {
+            $(btn).closest("li.poll-answer").addClass("hidden");
+            //$(btn).closest("li.poll-answer").find("textarea.answer-editable").empty();
+            $(btn).closest("li.poll-answer").find("textarea.answer-editable").editable('setHTML', '');
+        }
+
+    };
+    $('.poll-editable').froalaEditor({
+        toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+        pluginsEnabled: null,
+        imageUploadParam: 'files',
+        imageUploadURL: '/Home/FroalaUploadImage',
+        inlineMode: false,
+        preloaderSrc: "/Content/assets/ajax-loader.gif",
+        imagesLoadURL: '/Home/FroalaMediaManager',
+        imageDeleteURL: "/Home/FroalaDelete",
+        emptytext: '',
+        height: 200,
+        maxHeight: 500
+    });
+    $('.answer-editable').froalaEditor({
+        toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+        pluginsEnabled: null,
+        imageUploadParam: 'files',
+        imageUploadURL: '/Home/FroalaUploadImage',
+        inlineMode: false,
+        preloaderSrc: "/Content/assets/ajax-loader.gif",
+        imagesLoadURL: '/Home/FroalaMediaManager',
+        imageDeleteURL: "/Home/FroalaDelete",
+        emptytext: '',
+        height: 100,
+        maxHeight: 100
+    });
+    $(function() {
+        $( ".datepicker" ).datetimepicker(
+            {
+                format: 'd/m/Y',
+                timepicker: false
+            });
+    });
+</script>

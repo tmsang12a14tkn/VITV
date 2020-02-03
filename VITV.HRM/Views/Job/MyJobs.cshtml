@@ -1,0 +1,60 @@
+﻿@model MyJobs
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="header smaller lighter green">Danh sách công việc</h3>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#current">
+                        <i class="green ace-icon fa fa-home bigger-120"></i>
+                        Đang làm
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#done">
+                        <i class="green ace-icon fa fa-home bigger-120"></i>
+                        Đã làm
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="current" class="tab-pane fade in active">
+                    @foreach (var job in Model.OnProgress)
+                    {
+                        <div>
+                            <i class="message-star ace-icon fa fa-star orange2"></i>
+                            @*<span class="sender" title="Người gửi">@job.RequestedEmployee.Name </span>*@
+                            @*<span class="time">@job.CreatedTime.PassTimeString()</span>*@
+
+                            <span class="summary">
+                                <span class="text">
+                                    @job.Title
+                                </span>
+                            </span>
+                        </div>
+                    }  
+                </div>
+                <div id="done" class="tab-pane fade">
+                    @foreach (var job in Model.Done)
+                    {
+                        <div>
+                            <i class="message-star ace-icon fa fa-star orange2"></i>
+                            @*<span class="sender" title="Người gửi">@job.RequestedEmployee.Name </span>*@
+                            @*<span class="time">@job.CreatedTime.PassTimeString()</span>*@
+
+                            <span class="summary">
+                                <span class="text">
+                                    @job.Title
+                                </span>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

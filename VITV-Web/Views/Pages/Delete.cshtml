@@ -1,0 +1,73 @@
+﻿@model VITV.Data.Models.Page
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_PagesLayout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Page</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Article.UniqueTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Article.UniqueTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ArticleCat.UniqueTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArticleCat.UniqueTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Video.UniqueTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Video.UniqueTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VideoCat.UniqueTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VideoCat.UniqueTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Thumbnail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Thumbnail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,264 @@
+﻿@using System.Globalization
+@model VITV.Data.ViewModels.HomeModel
+
+@{
+    ViewBag.Title = "StartUp VITV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var articles = Model.HotArticles;
+    IEnumerable<VITV.Data.Models.ArticleCategory> categories = ViewBag.artCategory;
+    List<VITV.Data.Models.ArticleHighlightAll> highlights = ViewBag.Highlights;
+}
+
+<!--Videos Area-->
+@if (Model.VideoCatGroups.Sum(v => v.NewestVideos.Count) > 0)
+{
+    <div class="row video_news_area">
+        <div class="row hr_line">
+            <h4>VIDEO</h4>
+        </div>
+        <div class="row">
+            <div class="related_video_content">
+                <div class="row single_related">
+                    @foreach (var videoCatGroup in Model.VideoCatGroups)
+                    {
+                        var videos = videoCatGroup.NewestVideos;
+                        if (videos.Count > 0)
+                        {
+                            <div class="single_video">
+                                <div class="col col-md-4">
+                                    <div class="video_image">
+                                        <a href="http://vitv.vn/tin-video/@(videos[0].PublishedTime.ToString("dd-MM-yyyy"))/@(videos[0].UniqueTitle)/@(videos[0].Id)" target="_blank">
+                                            <div class="poster" style="background:url('@(videos[0].Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;">
+                                                <span class="slide" style="background: url(@videos[0].Category.ProfilePhoto) no-repeat;background-size:cover !important;background-position: 50% 50%;"></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col col-md-8">
+                                    <div class="video_info">
+                                        <h3>
+                                            <a href="http://vitv.vn/tin-video/@(videos[0].PublishedTime.ToString("dd-MM-yyyy"))/@(videos[0].UniqueTitle)/@(videos[0].Id)" target="_blank">
+                                                @(videos[0].Title)
+                                            </a>
+                                        </h3>
+                                        <div class="cn">@Html.Raw(videos[0].Content)</div>
+                                        <p class="tm">Phát sóng @videos[0].DisplayTime.ToString("HH:mm") ngày @videos[0].DisplayTime.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!--News Area-->
+<div class="row text_news_area @(Model.VideoCatGroups.Sum(v => v.NewestVideos.Count) <= 0 ? "non-video" : "")">
+    <div class="row hr_line">
+        <h4>TIN TỨC - BÀI VIẾT</h4>
+    </div>
+    <div class="row m7" id="filter_area">
+        @if (highlights.Count > 0)
+        {
+            <div class="row recent_news">
+                <div class="col-md-8 lg_news">
+                    <a href="@Url.Action("Details", "Article", new { id = highlights[0].Article.Id, title = highlights[0].Article.UniqueTitle, date = highlights[0].Article.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                        <div style="background:url('@(highlights[0].Article.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;">
+                            <span>
+                                @(highlights[0].Article.Title)
+                                <p class="tm">@(String.Join(", ", highlights[0].Article.Reporters.Select(r => r.Name))) - @(highlights[0].Article.PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 sm_news">
+                    @for (int i = 1; i < highlights.Count(); i++)
+                    {
+                        VITV.Data.Models.Article hl = highlights.ElementAt(i).Article;
+                        <div class="sm" data-order="@i">
+                            <a href="@Url.Action("Details", "Article", new { id = hl.Id, title = hl.UniqueTitle, date = hl.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                <div class="article_bigest_thumb" style="background:url('@(hl.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;">
+                                    <span>
+                                        @(hl.Title)
+                                        <p class="tm">@(String.Join(", ", hl.Reporters.Select(r => r.Name))) - @(hl.PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="row hr_line cats">
+            <div class="col-xs-12 catdropdown">
+                <div class="form-group dropdown">
+                    <button id="catLabel" class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        <span class="text-value">Tất cả</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="catLabel">
+                        <li role="presentation" class="active" onclick='filter(0)'>Tất cả</li>
+
+                        @foreach (var catlg in categories)
+                        {
+                            <li role="presentation" onclick="filter(@(catlg.Id))">@(catlg.Name)</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="row catlg">
+                <div class="col-xs-6 col-md-4 all left current" data-id="0" onclick="filter(0)"><h5><span>Tất cả</span></h5></div>
+                <div class="col-xs-12 col-sm-6 col-md-8 right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Lọc theo <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        @foreach (var catsm in categories)
+                        {
+                            <li onclick="filter(@(catsm.Id))">@(catsm.Name)</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="related_article_content">
+            @if (highlights.Count > 0)
+            {
+                <div class="non_pc_hl_area">
+                    @for (int j = 0; j < highlights.Count(); j++)
+                    {
+                        <div class="row single_related">
+                            <div class="single_article">
+                                <div class="col col-xs-4">
+                                    <div class="article_image">
+                                        <a href="@Url.Action("Details", "Article", new { id = highlights[j].Article.Id, title = highlights[j].Article.UniqueTitle, date = highlights[j].Article.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                            <div class="poster" style="background:url('@(highlights[j].Article.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col col-xs-8">
+                                    <div class="article_info">
+                                        <h3><a href="@Url.Action("Details", "Article", new { id = highlights[j].Article.Id, title = highlights[j].Article.UniqueTitle, date = highlights[j].Article.PublishedTime.Value.ToString("dd-MM-yyyy") })">@(highlights[j].Article.Title)</a></h3>
+                                        <p class="cn">@(highlights[j].Article.ShortBrief)</p>
+                                        <p class="tm">
+                                            @(String.Join(", ", highlights[j].Article.Reporters.Select(r => r.Name))) - @(highlights[j].Article.PublishedTime.Value.ToString("dd/MM/yyyy"))
+                                        </p>
+                                        <p class="rp">
+                                            @foreach (var rp in highlights[j].Article.Reporters)
+                                            {
+                                                <img class="sm_reporter" src="@rp.ProfilePicture" />
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            @for (int i = 0; i < 10; i++)
+            {
+                <div class="row single_related" data-groupid="@(string.Join<string>(",", articles.ElementAt(i).Categories.Select(a => a.Id.ToString())))">
+                    <div class="single_article">
+                        <div class="col col-xs-4">
+                            <div class="article_image">
+                                <a href="@Url.Action("Details", "Article", new { id = articles.ElementAt(i).Id, title = articles.ElementAt(i).UniqueTitle, date = articles.ElementAt(i).PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                    <div class="poster" style="background:url('@(articles.ElementAt(i).Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col col-xs-8">
+                            <div class="article_info">
+                                <h3><a href="@Url.Action("Details", "Article", new { id = articles.ElementAt(i).Id, title = articles.ElementAt(i).UniqueTitle, date = articles.ElementAt(i).PublishedTime.Value.ToString("dd-MM-yyyy") })">@(articles.ElementAt(i).Title)</a></h3>
+                                <p class="cn">@(articles.ElementAt(i).ShortBrief)</p>
+                                <p class="tm">
+                                    @(String.Join(", ", articles.ElementAt(i).Reporters.Select(r => r.Name))) - @(articles.ElementAt(i).PublishedTime.Value.ToString("dd/MM/yyyy"))
+                                </p>
+                                <p class="rp">
+                                    @foreach (var rp in articles.ElementAt(i).Reporters)
+                                    {
+                                        <img class="sm_reporter" src="@rp.ProfilePicture" />
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (articles.Count() > 10)
+        {
+            <div class="row news_viewmore">
+                <p class="divine_line">
+                    <a href="" class="btn btn-default vm">Xem thêm</a>
+                    <input type="hidden" id="current_record" value="10" />
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+@section styles {
+
+}
+
+@section scripts {
+    <script>
+        curGroupId = 0;
+        function filter(groupId) {
+            if (groupId >= 0) {
+                if (curGroupId != groupId) {
+                    var targetDiv = $("div#filter_area");
+                    $.get('/Article/GetArticleByGroup?id=' + groupId, function (data) {
+                        targetDiv.hide();
+                        targetDiv.empty();
+                        targetDiv.append(data);
+                        $('#filter_area').find('.hr_line').addClass('cats');
+                        targetDiv.fadeIn(200);
+                        curGroupId = groupId;
+                    });
+                }
+            }
+        }
+        filter();
+
+        $('body').on('click', '.sideCat a', function (e) {
+            e.preventDefault();
+
+            var id = $(this).parent().data('id');
+            filter(id);
+        });
+
+        $('body').on('click', '.vm', function (e) {
+            e.preventDefault();
+            var targetDiv = $("div.related_article_content");
+            var curNumRecord = $('#current_record').val();
+            $.get('/Article/GetMoreArticles?groupId=' + curGroupId + '&numrecord=' + curNumRecord, function (data) {
+                targetDiv.append(data);
+                $('#current_record').val($('#tmp_cur_num_record').val());
+                if ($('#tmp_has_more_article').val() == 0) {
+                    $('.news_viewmore').remove();
+                }
+                $('#tmp_cur_num_record').remove();
+                $('#tmp_has_more_article').remove();
+            });
+        });
+
+        var timer = setInterval(SwitchHighlights, 6000);
+        function SwitchHighlights() {
+            var rnd = Math.floor(Math.random() * 3 + 1);
+            var fromDiv = $('.sm[data-order="' + rnd + '"]').html();
+            var toDiv = $('.lg_news').html();
+                        
+            $('.lg_news').fadeTo('slow', 0.6, function() {
+                $(this).html(fromDiv);
+                $(this).fadeTo('slow', 1);
+            });   
+            $('.sm[data-order="' + rnd + '"]').html(toDiv);
+        }
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿@model List<ListNotiChatModel>
+
+
+  @foreach (var m in Model)
+  {
+    <li class="chat_user_noti_message" 
+        data-userid="@m.id" data-displayname="@m.Name" @(!m.Own && !m.IsView ? "style=background:#ecf2f7" : "")>
+        <a href="#" class="clearfix">
+            <img src="@m.Avatar" class="msg-photo" alt="Alex's Avatar" />
+            <span class="msg-body">
+                <span class="msg-title">
+                    <span class="blue">@m.Name</span>
+                    @m.MessageContent
+                </span>
+
+                <span class="msg-time">
+                    <i class="ace-icon fa fa-clock-o"></i>
+                    <span>@m.CreatedTime</span>
+                </span>
+            </span>
+        </a>
+    </li>
+  }

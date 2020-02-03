@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section styles {
+<link href="~/Content/bootstrap-table.css" rel="stylesheet" type="text/css" />
+}
+
+@section scripts {
+    <script src="~/Scripts/export/tableExport.js"></script>
+    <script src="~/Scripts/export/jquery.base64.js"></script>
+    <script src="~/Scripts/export/html2canvas.js"></script>
+     
+    <script src="~/Scripts/bootstrap-table.js"></script>  
+    <script src="~/Scripts/bootstrap-table-export.js"></script>  
+
+    <script type="text/javascript" src="~/Scripts/jspdf/libs/sprintf.js"></script>  
+    <script type="text/javascript" src="~/Scripts/jspdf/jspdf.js"></script>  
+    <script type="text/javascript" src="~/Scripts/jspdf/libs/base64.js"></script>  
+
+    <script>
+            function nameFormatter(value, row) {
+                var icon = row.id % 2 === 0 ? 'glyphicon-star' : 'glyphicon-star-empty'
+
+                return '<i class="glyphicon ' + icon + '"></i> ' + value;
+            }
+
+    function priceFormatter(value) {
+        // 16777215 == ffffff in decimal
+        var color = '#' + Math.floor(Math.random() * 6777215).toString(16);
+        return '<div  style="color: ' + color + '">' +
+                '<i class="glyphicon glyphicon-usd"></i>' +
+                value.substring(1) +
+                '</div>';
+    }
+    function priceSorter(a, b) {
+        a = +a.substring(1); // remove $
+        b = +b.substring(1);
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+    }
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="like" href="javascript:void(0)" title="Like">',
+                '<i class="glyphicon glyphicon-heart"></i>',
+            '</a>',
+            '<a class="edit ml10" href="javascript:void(0)" title="Edit">',
+                '<i class="glyphicon glyphicon-edit"></i>',
+            '</a>',
+            '<a class="remove ml10" href="javascript:void(0)" title="Remove">',
+                '<i class="glyphicon glyphicon-remove"></i>',
+            '</a>'
+        ].join('');
+    }
+    window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like icon, row: ' + JSON.stringify(row));
+            console.log(value, row, index);
+        },
+        'click .edit': function (e, value, row, index) {
+            alert('You click edit icon, row: ' + JSON.stringify(row));
+            console.log(value, row, index);
+        },
+        'click .remove': function (e, value, row, index) {
+            alert('You click remove icon, row: ' + JSON.stringify(row));
+            console.log(value, row, index);
+        }
+    };
+
+    $(document).ready(function () {
+        var $result = $('#events-result');
+        $('#table-javascript').bootstrapTable({
+            method: 'get',
+            url: '/ReportVideoAccess/GetData',
+            cache: false,
+            height: 400,
+            striped: true,
+            pagination: true,
+            pageSize: 50,
+            pageList: [10, 25, 50, 100, 200],
+            search: true,
+            showColumns: false,
+            showRefresh: true,
+            minimumCountColumns: 2,
+            clickToSelect: true,
+            showExport: true,
+            //['json', 'xml', 'csv', 'txt', 'sql', 'excel']
+            exportTypes: ['excel']
+        }).on('all.bs.table', function (e, name, args) {
+            console.log('Event:', name, ', data:', args);
+        }).on('click-row.bs.table', function (e, row, $element) {
+            $result.text('Event: click-row.bs.table, data: ' + JSON.stringify(row));
+            e.preventDefault();
+        }).on('dbl-click-row.bs.table', function (e, row, $element) {
+            $result.text('Event: dbl-click-row.bs.table, data: ' + JSON.stringify(row));
+        }).on('sort.bs.table', function (e, name, order) {
+            $result.text('Event: sort.bs.table, data: ' + name + ', ' + order);
+        //}).on('check.bs.table', function (e, row) {
+        //    $result.text('Event: check.bs.table, data: ' + JSON.stringify(row));
+        //}).on('uncheck.bs.table', function (e, row) {
+        //    $result.text('Event: uncheck.bs.table, data: ' + JSON.stringify(row));
+        //}).on('check-all.bs.table', function (e) {
+        //    $result.text('Event: check-all.bs.table');
+            })
+            .on('uncheck-all.bs.table', function (e) {
+            $result.text('Event: uncheck-all.bs.table');
+        }).on('load-success.bs.table', function (e, data) {
+            $result.text('Event: load-success.bs.table');
+        }).on('load-error.bs.table', function (e, status) {
+            $result.text('Event: load-error.bs.table, data: ' + status);
+        }).on('column-switch.bs.table', function (e, field, checked) {
+            $result.text('Event: column-switch.bs.table, data: ' +
+                field + ', ' + checked);
+        }).on('page-change.bs.table', function (e, size, number) {
+            $result.text('Event: page-change.bs.table, data: ' + number + ', ' + size);
+        }).on('search.bs.table', function (e, text) {
+            $result.text('Event: search.bs.table, data: ' + text);
+        });
+    });
+</script>
+  
+}
+<div class="alert alert-success" id="events-result" data-es="Aquí se muestra el resultado del evento">
+    Here is the result of event.
+</div>
+<table id="table-javascript" data-show-export="true" data-export-types="excel">
+    <thead>
+        <tr>
+            <th data-field="state" data-checkbox="true" rowspan="2"></th>
+            <th data-field="Id" data-align="center" rowspan="2">Item ID</th>
+            <th data-align="center" colspan="2">Test</th>
+        </tr>
+        <tr>
+            <th data-field="Name" data-align="center">Item Name 1</th>
+            <th data-field="Price" data-align="center">Item Price</th>
+        </tr>
+    </thead>
+</table>
+
+
+
+

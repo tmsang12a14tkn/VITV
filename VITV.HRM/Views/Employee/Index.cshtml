@@ -1,0 +1,277 @@
+﻿@model DepartmentArrangeView
+@{
+    ViewBag.Title = "Index";
+}
+@section styles
+{
+    <style>
+        .dragdrop {
+            border: 1px dashed #ccc;
+            position: relative;
+        }
+
+        .unarranged > div {
+            /*background: #CCC;*/
+            height: 80px;
+            position: absolute;
+            width: 80px;
+        }
+
+        .department > div {
+            /*background: #CCC;*/
+            height: 40px;
+            position: absolute;
+            width: 40px;
+        }
+
+        .rightbottom {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+        }
+
+        .dragdrop .ss-placeholder-child {
+            background: transparent;
+            border: 1px dashed red;
+        }
+        .department-item
+        {
+            margin-bottom: 1em;
+        }
+        .department-item .header
+        {
+            font-style: oblique;
+        }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+    <script src="~/Scripts/shapeshift/vendor/jquery.touch-punch.min.js"></script>
+    <script src="~/Scripts/shapeshift/jquery.shapeshift.min.js"></script>
+
+    <script>
+        $(".unarranged").shapeshift({
+            minColumns: 1,
+            colWidth: 100
+        });
+        $(".department").shapeshift({
+            minColumns: 1,
+            colWidth: 50,
+            //enableTrash: true
+        });
+       
+        $(".unarranged").on("ss-added", function (e, selected) {
+
+            var employeeId = $(selected).data("employeeid");
+            $.post("/Employee/UnarrangedGroup", { employeeId: employeeId }, function (data) {
+
+            }, "json")
+        });
+
+        $(".department").on("ss-added", function (e, selected) {
+
+            var employeeId = $(selected).data("employeeid");
+            var groupId = $(this).data("groupid");
+            var positionId = $(this).data("positionid");
+            console.log(employeeId);
+            console.log(groupId);
+            console.log(positionId);
+            $.post("/Employee/ChangeGroup", { employeeId: employeeId, groupId: groupId, positionId: positionId }, function (data) {
+
+            }, "json")
+        });
+
+        $(".btn-expand").on('click', function () {
+            var groupid = $(this).data("groupid");
+            if ($(this).parent().hasClass("col-sm-3")) {
+                $(this).parent().removeClass("col-sm-3");
+                $(this).parent().addClass("col-sm-12");
+            }
+            else if ($(this).parent().hasClass("col-sm-12")) {
+                $(this).parent().removeClass("col-sm-12");
+                $(this).parent().addClass("col-sm-3");
+            }
+        });
+        $(".btn-edit").on('click', function () {
+            var groupid = $(this).data("groupid");
+            $('#groupModal modal-body').load('/Group/GetPositionLevels');
+        });
+
+        function OnEditPositionGroupSuccess(data) {
+            $("#groupModal").modal("hide");
+            $('#groupInsertRow').append(data.viewposition);
+            $(".department").shapeshift({
+                minColumns: 1,
+                colWidth: 50,
+                //enableTrash: true
+            });
+            //if (data.success == true) {
+            //    $("#deleteVideoModal").modal("hide");
+            //    $("#video_" + data.id).remove();
+            //}
+            //else {
+            //    alert(data.error);
+            //}
+        }
+        function OnAddGroupSuccess(data)
+        {
+            $("#departmentModal").modal("hide");
+            if (data.success == true) {
+
+            }
+            else {
+                alert("Lỗi");
+            }
+        }
+        function OnRemovePositionLevelSuccess(data)
+        {
+            $("#groupModal").modal("hide");
+        }
+        function OnDeleteGroupSuccess(data)
+        {
+            $("#groupModal").modal("hide");
+        }
+        
+        function OnDeleteDepartmentSuccess(data) {
+            $("#departmentModal").modal("hide");
+        }
+    </script>
+}
+<div class="row department-item">
+    <div class="col-sm-2">Chưa sắp sếp</div>
+    <div class="col-sm-10">
+        <div class="unarranged dragdrop" data-departmentid="">
+            @foreach (var employee in Model.UnassignEmployees)
+            {
+                <div data-employeeid="@employee.Id">
+                    <img src="@employee.ProfilePicture" class="img-responsive img-circle img-thumbnail" />
+                    <a href="#">@employee.Name</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div>
+    @foreach (var department in Model.Departments)
+    {
+        <div class="widget-container-col">
+            <div class="widget-box department-item">
+                <div class ="widget-header">
+                    <h4 class="widget-title">@department.Name</h4>
+                    <div class="widget-toolbar">
+                        <div class="widget-menu">
+                            <a href="#" data-action="settings" data-toggle="dropdown" aria-expanded="false">
+                                <i class="ace-icon fa fa-bars"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer">
+                                <li>
+                                    <a data-toggle="tab" href="#dropdown1">Option#1</a>
+                                </li>
+
+                                <li>
+                                    <a data-toggle="tab" href="#dropdown2">Option#2</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <a href="#" data-action="fullscreen" class="orange2">
+                            <i class="ace-icon fa fa-expand"></i>
+                        </a>
+
+                        <a href="#" data-action="reload">
+                            <i class="ace-icon fa fa-refresh"></i>
+                        </a>
+
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+
+                        <a href="#" data-action="close">
+                            <i class="ace-icon fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body" id="department-@department.Id">
+                    <div class="widget-main">
+                        @foreach (var group in department.Groups)
+                        {
+                            <h5 class="row header blue">
+                                <span class="col-sm-8">@group.Name</span>
+                                
+                                <span class="col-sm-4">
+                                    <a class="btn btn-xs pull-right" title="Thêm vị trí" href="/Employee/EditPositionGroup/@group.Id" data-toggle="modal" data-target="#groupModal"
+                                       data-ajax="true"
+                                       data-ajax-complete=""
+                                       data-ajax-mode="replace"
+                                       data-ajax-update="#groupContent">
+                                        <i class="ace-icon fa fa-wrench  bigger-110 icon-only"></i>
+                                    </a>
+                                </span>
+                               
+                            </h5>
+
+                            <div class="" id="groupInsertRow">
+                                <div class="row">
+                                    @foreach (var positionLevel in group.PositionLevels)
+                                    {
+                                        <div class="col-md-4">
+                                            <div>
+                                                @positionLevel.Name
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa fa-edit"></i> <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a title="Xóa vị trí" href="/Group/RemovePositionLevel?groupId=@group.Id&positionLevelId=@positionLevel.Id" data-toggle="modal" data-target="#groupModal"
+                                                               data-ajax="true"
+                                                               data-ajax-complete=""
+                                                               data-ajax-mode="replace"
+                                                               data-ajax-update="#groupContent">
+                                                                Xóa <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                            <div class="department dragdrop" data-positionid="@positionLevel.Id" data-groupid="@group.Id">
+                                                @foreach (var ewInfo in group.EmployeeWorkInfos)
+                                                {
+                                                    if (ewInfo.GroupId == group.Id && ewInfo.PositionLevelId == positionLevel.Id)
+                                                    {
+                                                        <div data-employeeid="@ewInfo.EmployeeId">
+                                                            <img src="@ewInfo.Employee.ProfilePicture" class="img-responsive img-circle img-thumbnail" />
+                                                            <a href="#">@ewInfo.Employee.Name</a>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="groupModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="groupContent">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="departmentModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="departmentContent">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,316 @@
+﻿@model VideoModel
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chỉnh sửa video";
+    var reporters = ViewBag.Reporters;
+    ViewBag.PassingReporters = reporters;
+}
+
+<div class="row">
+    <div class="main-box clearfix">
+    <div class="tabs-wrapper">
+        <ul class="nav nav-tabs">
+            <li>
+                    <a href="@ViewBag.returnUrl">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </li>
+            <li class="@(ViewBag.tab=="edit"?"active":"")"><a href="#tab-edit" data-toggle="tab">Chỉnh sửa video</a></li>
+            <li class="@(ViewBag.tab=="polls"?"active":"")"><a href="#tab-polls" data-toggle="tab">Bình chọn</a></li>
+        </ul>
+        <div class="tab-content tab-content-body clearfix">
+            <div id="tab-edit" class="tab-pane fade @(ViewBag.tab=="edit"?"in active":"")">
+                <h2>Chỉnh sửa video trong chuyên mục @ViewBag.catname</h2>
+                    @using (Html.BeginForm("Edit", "Video", new { returnUrl = ViewBag.returnUrl }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "videoForm" }))
+                {
+                    @Html.Partial("_CreateOrEdit", Model)
+                }
+            </div>
+            <div id="tab-polls" class="tab-pane fade @(ViewBag.tab=="polls"?"in active":"")">
+                    <div class="col-lg-12">
+                        <header class="main-box-header clearfix">
+                            <h2 class="pull-left">Quản lý bình chọn</h2>
+                            <div class="navbar-form navbar-right" role="search" id="formsearch">
+                                <div class="form-group">
+                                    <a class="btn btn-success" data-ajax="true" data-ajax-complete="" data-ajax-mode="replace" data-ajax-update="#pollModalContent" data-target="#pollModal" data-toggle="modal" href="/Poll/Create?videoId=@(Model.Id)">
+                                        @*  </a>/Poll/Create?videoId=31270">*@
+                                        <i class="fa fa-plus fa-lg"></i>
+                                        Tạo mới bình chọn
+                                    </a>
+                                    <a target="_blank" href="@Url.Action("Details", "Video", new { id = Model.Id, title = Model.UniqueTitle, date = Model.PublishedTime.ToString("dd-MM-yyyy") })" class="btn btn-success" title="Xem video">
+                                        <i class="fa fa-eye fa-lg"></i>
+                                        Xem video
+                                    </a>
+                                    @*@Ajax.ActionLink("Tạo mới bình chọn", "Create", "Poll", new { videoId = Model.Id }, new AjaxOptions
+                               {
+                                   OnComplete= "showPollModal",
+                                   UpdateTargetId  = "pollModalContent",
+                                   InsertionMode = InsertionMode.Replace
+                               },
+                                         new { @class = "btn btn-success fa-plus-circle", data_toggle = "modal", data_target = "#pollModal" })*@
+                                </div>
+                            </div>
+                        </header>
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table user-list table-hover table_poll" id="manage_video">
+                                        <thead>
+                                            <tr>
+                                                <th><span>Tên</span></th>
+                                                <th><span>Số câu trả lời</span></th>
+                                                <th><span>Số phản hồi</span></th>
+                                                <th><span>Bắt đầu</span></th>
+                                                <th><span>Kết thúc</span></th>
+                                                <th><span>Tình trạng</span></th>
+                                                <th><span></span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodypoll">
+                                            @Html.Action("AdminVideoPolls", "Poll", new { videoId = Model.Id })
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+@section styles {
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+    <script src="~/Scripts/videoedit.js"></script>
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/ImageSelect.jquery.js"></script>
+    <script src="~/Scripts/jquery.form.min.js"></script>
+
+    <script type="text/javascript">
+        
+
+        function getURLParameter(name) {
+            return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+        }
+
+        function changeUrlParam(param, value) {
+            var currentURL = window.location.href + '&';
+            var change = new RegExp('(' + param + ')=(.*)&', 'g');
+            var newURL = currentURL.replace(change, '$1=' + value + '&');
+
+            if (getURLParameter(param) !== null) {
+                try {
+                    window.history.replaceState('', '', newURL.slice(0, -1));
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                var currURL = window.location.href;
+                if (currURL.indexOf("?") !== -1) {
+                    window.history.replaceState('', '', currentURL.slice(0, -1) + '&' + param + '=' + value);
+                } else {
+                    window.history.replaceState('', '', currentURL.slice(0, -1) + '?' + param + '=' + value);
+                }
+            }
+        }
+        $("#video").bind("loadedmetadata", function () {
+            var width = this.videoWidth;
+            var height = this.videoHeight;
+            console.log(width + '-' + height);
+            $('#VideoWidth').val(width);
+            $('#VideoHeight').val(height);
+        });
+
+        var OnSuccessCreatePoll = function (data) {
+            
+            if (data.success == true) {
+
+                $('#tbodypoll').append(data.data);
+                $("#pollModal").modal('hide');
+            } else
+                alert(data.data);
+        }
+
+       
+
+        function OnSuccessDeletePoll(data) {
+            if (data.success == true) {
+                $('#infopoll' + data.questionid).remove();
+                $('#resultpoll' + data.questionid).remove();
+                $("#pollModal").modal('hide');
+            } else
+                alert(data.content);
+        }
+
+        function OnSuccessEditPoll(data) {
+            if (data.success == true) {
+                $('#resultpoll' + data.questionid).remove();
+                $('#infopoll' + data.questionid).replaceWith(data.data);
+                $("#pollModal").modal('hide');
+            } else
+                alert(data.data);
+        }
+
+        $(document).ready(function () {
+           
+            $('a[href="#tab-polls"]').on('shown.bs.tab', function (e) {
+                changeUrlParam("tab", "polls");
+            });
+            $('a[href="#tab-edit"]').on('shown.bs.tab', function (e) {
+                changeUrlParam("tab", "edit");
+            });
+
+
+            $("#tbodypoll").on('click', '.viewresultpoll', function (e) {
+                e.preventDefault();
+                var questionid = $(this).data('questionid');
+                $("#resultpoll" + questionid).slideToggle();
+            });
+
+
+            //Published Time
+            $("#changePublishedTime-btn").click(function () {
+                $("#PublishImmediately").val("False");
+                var publishedTimeVal = $("#PublishedTime-txt").val();
+                $("#PublishedTime-label").html(publishedTimeVal);
+                $("#PublishedTime").val(publishedTimeVal);
+                $("#published-time-edit").collapse('hide');
+            });
+
+            //Save Draft
+            $("#saveDraft-btn").click(function () {
+                saveDraft();
+
+            });
+            //setInterval(function () {
+            //    saveDraft();
+            //}, 30000);
+
+            $('#SecondSkip').spinner({
+                spin: function (event, ui) {
+                    if (ui.value >= 60) {
+                        $(this).spinner('value', ui.value - 60);
+                        $('#MinuteSkip').spinner('stepUp');
+                        return false;
+                    } else if (ui.value < 0) {
+                        $(this).spinner('value', ui.value + 60);
+                        $('#MinuteSkip').spinner('stepDown');
+                        return false;
+                    }
+                }
+            });
+
+            $('#MinuteSkip').spinner({
+                spin: function (event, ui) {
+                    if (ui.value >= 60) {
+                        $(this).spinner('value', ui.value - 60);
+                        $('#HourSkip').spinner('stepUp');
+                        return false;
+                    } else if (ui.value < 0) {
+                        $(this).spinner('value', ui.value + 60);
+                        $('#HourSkip').spinner('stepDown');
+                        return false;
+                    }
+                }
+            });
+
+            $('#HourSkip').spinner({
+                min: 0
+            });
+
+            function saveDraft() {
+                var form = document.forms.namedItem("videoForm");
+                var oReq = new XMLHttpRequest();
+                var formData = new FormData(form);
+                formData.append("IsPublished", "False");
+                oReq.open("post", form.action);
+                oReq.send(formData);
+                oReq.addEventListener("load", saveDraftComplete, false);
+            }
+
+            function saveDraftComplete(evt) {
+                var response = JSON.parse(evt.target.responseText);
+                if (response.success == true) {
+                    //document.getElementById("draftSaveTime").innerHTML = "Đã lưu nháp lúc " + response.time;
+                    alert("Đã lưu nháp lúc " + response.time);
+                    document.getElementById("Id").value = response.id;
+                }
+                else {
+                    alert('Chưa điền đầy đủ thông tin');
+                }
+            }
+
+
+            var availableKeywords = [
+                   @foreach(VITV.Data.Models.Keyword keyword in ViewBag.PossibleKeywords)
+                   {
+                       <text>"@Html.Raw(keyword.Value)",</text>
+            }
+
+            ];
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $("#Keywords")
+              // don't navigate away from the field on tab when selecting an item
+              .bind("keydown", function (event) {
+                  if (event.keyCode === $.ui.keyCode.TAB &&
+                      $(this).data("ui-autocomplete").menu.active) {
+                      event.preventDefault();
+                  }
+              })
+              .autocomplete({
+                  minLength: 0,
+                  source: function (request, response) {
+                      // delegate back to autocomplete, but extract the last term
+                      response($.ui.autocomplete.filter(
+                        availableKeywords, extractLast(request.term)));
+                  },
+                  focus: function () {
+                      // prevent value inserted on focus
+                      return false;
+                  },
+                  select: function (event, ui) {
+                      var terms = split(this.value);
+                      // remove the current input
+                      terms.pop();
+                      // add the selected item
+                      terms.push(ui.item.value);
+                      // add placeholder to get the comma-and-space at the end
+                      terms.push("");
+                      this.value = terms.join(", ");
+                      return false;
+                  }
+              });
+
+            $("#tbReporters").chosen({
+                width: "100%",
+                no_results_text: "Không có kết quả nào!"
+            });
+
+            $('#tbReporters').on('change', function (evt, params) {
+                var ids = "";
+                var selectedIds = $("#tbReporters").chosen().val();
+
+                if (selectedIds != null) {
+                    $.each(selectedIds, function (index, value) {
+                        ids = ids + ", " + value;
+                    });
+                }
+                $("#ReporterIds").val(ids);
+            });
+
+            
+        });
+        
+    </script>
+}

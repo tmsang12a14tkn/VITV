@@ -1,0 +1,46 @@
+﻿@model PersonalDayoffModel
+
+
+<div class="modal-body">
+    @Html.HiddenFor(model => model.UserId)
+    <div class="form-group">
+        <label class="col-sm-2">Lý do</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="Title" type="text" value="@(string.IsNullOrEmpty(Model.Title) ? "" : Model.Title)"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2">Thời gian</label>
+        <div class="col-sm-10">
+            <select class="form-control" onchange="onchangeSelectAbsentTime(this)" name="TimeOption">
+                @foreach (var lst in (List<DropDownListsModel>)ViewBag.lstTimeOption)
+                {
+                    if(!string.IsNullOrEmpty(Model.TimeOption) && Model.TimeOption == lst.Value)
+                    {
+                        <option value="@lst.Value" selected>@lst.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@lst.Value">@lst.Text</option>
+                    }
+                }
+                
+            </select>
+        </div>
+    </div>
+    <div class="@(string.is)" id="absent-custom-time">
+        <div class="form-group">
+            @Html.HiddenFor(model => model.Date)
+            <label class="col-sm-2">Từ</label>
+            <div class="col-sm-4">
+                <input type="text" name="StartTime" value="09:00" class="form-control timepicker" />
+            </div>
+            <label class="col-sm-2">Đến</label>
+            <div class="col-sm-4">
+                <input type="text" name="EndTime" value="18:00" class="form-control timepicker" />
+            </div>
+        </div>
+
+    </div>
+
+</div>

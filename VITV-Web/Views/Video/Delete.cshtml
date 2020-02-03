@@ -1,0 +1,43 @@
+﻿@model Video
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">Bạn có chắc chắn muốn xóa video này không?</h4>
+</div>
+@using (Ajax.BeginForm("Delete", "Video", new { id = Model.Id}, new AjaxOptions
+{
+    OnSuccess = "OnDeleteSuccess",
+    HttpMethod = "Post"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="form-field-display">
+                @Html.DisplayFor(model => model.Title)
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.PublishedTime, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10">
+                @String.Format("{0:g}", Model.PublishedTime)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryId, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10 form-field-display">
+                @(Model.Category == null ? "None" : Model.Category.Name.ToString())
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="confirmText" placeholder="Nhập 'Đồng ý'"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+        <input type="submit" class="btn btn-primary btn-ok" value="Xóa"/>
+    </div>
+}

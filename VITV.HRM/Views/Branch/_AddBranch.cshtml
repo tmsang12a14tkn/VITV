@@ -1,0 +1,23 @@
+﻿@model Branch
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Thêm chi nhánh</h4>
+</div>
+@using (Ajax.BeginForm("Create", "Branch", new { }, new AjaxOptions
+{
+    OnSuccess = "OnAddBranchSuccess",
+    HttpMethod = "Post"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Tên chi nhánh</label>
+            <input type="text" class="form-control" name="Name" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </div>
+}

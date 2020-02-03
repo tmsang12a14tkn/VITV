@@ -1,0 +1,98 @@
+﻿@model ExchangeRateView
+@{
+    ViewBag.Title = "Tỷ giá ngoại tệ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="market_main_page row">
+    <div class="container">
+        <div class="row">
+            <div id="view_chart" class='with-transitions'>
+                <svg></svg>
+            </div>
+        </div>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th>Mã</th>
+                                <th>Tỷ giá VND</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var er in Model.vndExchangeRates)
+                            {
+                                //string updown = er.Buy > er.YesterdayBuy ? "up" : (er.Buy < er.YesterdayBuy ? "down" : "");
+                                string updown = "";
+                                <tr>
+                                    <td class="left">@er.Code</td>
+                                    <td class="left">@er.Name</td>
+                                    <td class="@updown">@er.Buy<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@er.Sell<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th>Tỷ giá USD</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var er in Model.usdExchangeRates)
+                            {
+                                //string updown = er.Buy > er.YesterdayBuy ? "up" : (er.Buy < er.YesterdayBuy ? "down" : "");
+                                string updown = "";
+                                <tr>
+                                    <td class="left">@er.Name</td>
+                                    <td class="@updown">@er.Value<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@er.Change<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/Content/nv.d3.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/Scripts/chart/d3.v3.js"></script>
+    <script src="~/Scripts/chart/nv.d3.js"></script>
+    <script src="~/Scripts/chart/tooltip.js"></script>
+    <script src="~/Scripts/chart/utils.js"></script>
+    <script src="~/Scripts/chart/legend.js"></script>
+    <script src="~/Scripts/chart/axis.js"></script>
+    <script src="~/Scripts/chart/scatter.js"></script>
+    <script src="~/Scripts/chart/line.js"></script>
+    <script src="~/Scripts/chart/lineChart.js"></script>
+    <script src="~/Scripts/chart/chart_exchangerate.js"></script>
+}

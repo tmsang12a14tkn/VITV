@@ -1,0 +1,174 @@
+﻿@using System.Data.Entity
+@model DashboardView
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý";
+}
+
+<div class="row" style="opacity: 1;">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li><a href="#">Admin</a></li>
+                    <li class="active"><span>Dashboard</span></li>
+                </ol>
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="main-box infographic-box">
+                    <i class="fa fa-book emerald-bg"></i>
+                    <span class="headline">Bài viết</span>
+                    <span class="value">
+                        <span class="timer" data-from="30" data-to="658" data-speed="800" data-refresh-interval="30">@Model.ArticleCount</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="main-box infographic-box">
+                    <i class="fa fa-video-camera red-bg"></i>
+                    <span class="headline">Video</span>
+                    <span class="value">
+                        <span>@Model.VideoCount</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="main-box infographic-box">
+                    <i class="fa fa-user green-bg"></i>
+                    <span class="headline">Biên tập viên</span>
+                    <span class="value">
+                        <span class="timer" data-from="83" data-to="8400" data-speed="900" data-refresh-interval="60">@Model.ReporterCount</span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        @if (!string.IsNullOrEmpty(Model.ModNotification))
+        {
+            <div class="row alert alert-warning fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-warning fa-fw fa-lg"></i>
+                <strong>Thông báo từ admin: </strong> @Html.Raw(HttpUtility.HtmlDecode(Model.ModNotification))
+            </div>
+        }
+
+        @if (!Model.HasSchedule)
+        {
+            <div class="row alert alert-warning fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-warning fa-fw fa-lg"></i>
+                <strong>Lưu ý!</strong> Chưa tạo lịch phát sóng cho ngày hôm nay.
+                <p>
+                    @Html.ActionLink("Tạo lịch", "Create", "ProgramScheduleDetails", new { date = DateTime.Now.ToShortDateString() }, new { @class = "btn btn-warning" })
+                </p>
+            </div>
+        }
+        
+        @if (Model.HLAlls.Count() < 4)
+        {
+            <div class="row alert alert-warning fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-warning fa-fw fa-lg"></i>
+                <strong>Lưu ý!</strong> Tin nổi bật chung có ít hơn 4 bài
+                <p>
+                    @Html.ActionLink("Danh sách bài viết", "Management", "Article", null, new { @class = "btn btn-warning" })
+                </p>
+            </div>
+        }
+        
+        @if (Model.HLCats.Count() < 4)
+        {
+            <div class="row alert alert-warning fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-warning fa-fw fa-lg"></i>
+                <strong>Lưu ý!</strong> Tin nổi bật chung có ít hơn 4 bài
+                <p>
+                    @Html.ActionLink("Danh sách bài viết", "Management", "Article", null, new { @class = "btn btn-warning" })
+                </p>
+            </div>
+        }
+
+        <div class="row">
+            @{
+                var now = DateTime.Now.Date;
+                var hlAllCount = Model.HLAlls.Count();
+                var hlAllExpire = hlAllCount - Model.HLAlls.Where(hl => hl.StartDate.Date <= now && hl.EndDate.Date >= now).Count();
+
+                var hlCatCount = Model.HLCats.Count();
+                var hlCatExpire = hlCatCount - Model.HLCats.Where(hl => hl.StartDate.Date <= now && hl.EndDate.Date >= now).Count();
+            }
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="main-box">
+                        <div class="clearfix">
+                            <div class="infographic-box merged merged-top pull-left">
+                                <i class="fa fa-book green-bg"></i>
+                                <span class="value green">@hlAllCount</span>
+                                <span class="headline">TIN NỔI BẬT CHUNG</span>
+                            </div>
+                            <div class="infographic-box merged merged-top merged-right pull-left">
+                                <i class="fa fa-book red-bg"></i>
+                                <span class="value red">@hlAllExpire</span>
+                                <span class="headline">TIN NỔI BẬT CHUNG - HẾT HẠN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="main-box">
+                        <div class="clearfix">
+                            <div class="infographic-box merged merged-top pull-left">
+                                <i class="fa fa-book green-bg"></i>
+                                <span class="value green">@hlCatCount</span>
+                                <span class="headline">TIN NỔI BẬT THEO CHUYÊN MỤC</span>
+                            </div>
+                            <div class="infographic-box merged merged-top merged-right pull-left">
+                                <i class="fa fa-book red-bg"></i>
+                                <span class="value red">@hlCatExpire</span>
+                                <span class="headline">TIN NỔI BẬT THEO CHUYÊN MỤC - HẾT HẠN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-lg-6">
+                <div class="alert alert-danger fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <i class="fa fa-times-circle fa-fw fa-lg"></i>
+                    <strong>Tin video lỗi - Không có video!</strong>
+                    <ul class="widget-todo">
+                        @foreach (var video in Model.ErrorVideos)
+                        {
+                            <li class="clearfix">
+                                <div class="name">
+                                    <label for="todo-1">
+                                        @video.Title
+                                    </label>
+                                </div>
+                                <div class="actions">
+                                    <a href="@Url.Action("Details", "Video", new { id = video.Id, title = video.UniqueTitle, date = video.PublishedTime.ToString("dd-MM-yyyy") })" class="table-link" target="_blank">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a href="/Video/Edit/@video.Id" class="table-link">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="#" class="table-link alert-link danger">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿@model CategoryIntro
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel"><b>Chỉnh sửa video hình hiệu</b></h4>
+</div>
+@using (Html.BeginForm("Edit", "CategoryIntro", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "videoForm" }))
+{
+    @Html.HiddenFor(model=>model.Selected)
+    @Html.Partial("_CreateOrEdit", Model)
+}
+<div id="scripts">
+    <script src="~/Scripts/videoedit.js"></script>
+    <script>
+        registerForm();
+    </script>
+</div>
+
+ 

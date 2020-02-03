@@ -1,0 +1,32 @@
+﻿@model UserNotification
+
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Thông báo
+    </div>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            @Model.Notification.Content
+        </div>
+        
+        <div class="col-xs-12">
+            <blockquote>
+                <small class="blockquote-content">
+                </small>
+            </blockquote>
+        </div>
+    </div>
+   
+</div>
+<div class="modal-footer no-margin-top">
+    <a href="@Model.Notification.Url" class="btn btn-sm btn-danger pull-right">
+        <i class="ace-icon fa fa-times"></i>
+        Xem thêm
+    </a>
+
+</div>

@@ -1,0 +1,207 @@
+﻿@model GoldPriceView
+@{
+    ViewBag.Title = "Tỷ giá";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="market_main_page row">
+    <div class="container">
+        <div class="row">
+            <div id="view_chart" class='with-transitions'>
+                <svg></svg>
+            </div>
+        </div>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th rowspan="2">Giá vàng SJC</th>
+                                <th colspan="2" class="center">Hôm nay</th>
+                                <th colspan="2" class="center">Hôm qua</th>
+                            </tr>
+                            <tr class="table-col-name">
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(VITV.Web.Models.StoreInfo.GoldPriceVietNam gold in Model.SJCs)
+                            {
+                                string updown = gold.Buy > gold.YesterdayBuy ? "up" : (gold.Buy < gold.YesterdayBuy?"down":"");
+                                <tr>
+                                    <td class="left">@gold.Name</td>
+                                    <td class="@updown">@gold.Buy.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@gold.Sell.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td>@gold.YesterdayBuy.ToString("0,0.###")</td>
+                                    <td>@gold.YesterdaySell.ToString("0,0.###")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th rowspan="2">Giá vàng PNJ</th>
+                                <th colspan="2" class="center">Hôm nay</th>
+                                <th colspan="2" class="center">Hôm qua</th>
+                            </tr>
+                            <tr class="table-col-name">
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (VITV.Web.Models.StoreInfo.GoldPriceVietNam gold in Model.PNJs)
+                            {
+                                string updown = gold.Buy > gold.YesterdayBuy ? "up" : (gold.Buy < gold.YesterdayBuy ? "down" : "");
+                                <tr>
+                                    <td class="left">@gold.Name</td>
+                                    <td class="@updown">@gold.Buy.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@gold.Sell.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td>@gold.YesterdayBuy.ToString("0,0.###")</td>
+                                    <td>@gold.YesterdaySell.ToString("0,0.###")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th rowspan="2">Giá vàng DOJI</th>
+                                <th colspan="2" class="center">Hôm nay</th>
+                                <th colspan="2" class="center">Hôm qua</th>
+                            </tr>
+                            <tr class="table-col-name">
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (VITV.Web.Models.StoreInfo.GoldPriceVietNam gold in Model.DOJIs)
+                            {
+                                string updown = gold.Buy > gold.YesterdayBuy ? "up" : (gold.Buy < gold.YesterdayBuy ? "down" : "");
+                                <tr>
+                                    <td class="left">@gold.Name</td>
+                                    <td class="@updown">@gold.Buy.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@gold.Sell.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td>@gold.YesterdayBuy.ToString("0,0.###")</td>
+                                    <td>@gold.YesterdaySell.ToString("0,0.###")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th rowspan="2">Giá vàng sjc tại các ngân hàng</th>
+                                <th colspan="2" class="center">Hôm nay</th>
+                                <th colspan="2" class="center">Hôm qua</th>
+                            </tr>
+                            <tr class="table-col-name">
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (VITV.Web.Models.StoreInfo.GoldPriceVietNam gold in Model.Banks)
+                            {
+                                string updown = gold.Buy > gold.YesterdayBuy ? "up" : (gold.Buy < gold.YesterdayBuy ? "down" : "");
+                                <tr>
+                                    <td class="left">@gold.Name</td>
+                                    <td class="@updown">@gold.Buy.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@gold.Sell.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td>@gold.YesterdayBuy.ToString("0,0.###")</td>
+                                    <td>@gold.YesterdaySell.ToString("0,0.###")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel single_market">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr class="table-col-name">
+                                <th rowspan="2">Giá vàng tại các tổ chức khác - 02/02/2015</th>
+                                <th colspan="2" class="center">Hôm nay</th>
+                                <th colspan="2" class="center">Hôm qua</th>
+                            </tr>
+                            <tr class="table-col-name">
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                                <th class="center" width="15%">Mua vào</th>
+                                <th class="center" width="15%">Bán ra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (VITV.Web.Models.StoreInfo.GoldPriceVietNam gold in Model.Others)
+                            {
+                                string updown = gold.Buy > gold.YesterdayBuy ? "up" : (gold.Buy < gold.YesterdayBuy ? "down" : "");
+                                <tr>
+                                    <td class="left">@gold.Name</td>
+                                    <td class="@updown">@gold.Buy.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td class="@updown">@gold.Sell.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></td>
+                                    <td>@gold.YesterdayBuy.ToString("0,0.###")</td>
+                                    <td>@gold.YesterdaySell.ToString("0,0.###")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/Content/nv.d3.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/Scripts/chart/d3.v3.js"></script>
+    <script src="~/Scripts/chart/nv.d3.js"></script>
+    <script src="~/Scripts/chart/tooltip.js"></script>
+    <script src="~/Scripts/chart/utils.js"></script>
+    <script src="~/Scripts/chart/legend.js"></script>
+    <script src="~/Scripts/chart/axis.js"></script>
+    <script src="~/Scripts/chart/scatter.js"></script>
+    <script src="~/Scripts/chart/line.js"></script>
+    <script src="~/Scripts/chart/lineChart.js"></script>
+    <script src="~/Scripts/chart/chart_custom.js"></script>
+}

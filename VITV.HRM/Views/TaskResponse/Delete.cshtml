@@ -1,0 +1,29 @@
+﻿@model TaskResponse
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Xóa phản hồi
+    </div>
+</div>
+@using (Html.BeginForm("Delete", "TaskResponse", FormMethod.Post,
+            new { @class = "form-horizontal response-form", id = "delete-response-form" }))
+{
+    @Html.Hidden("id", Model.Id)
+    <div class="modal-body">
+        <p>Bạn có muốn xóa phản hồi này?</p>
+    </div>
+
+    <div class="modal-footer no-margin-top">
+        <button type="submit" name="permanent" value="false" class="btn btn-sm btn-danger pull-right">
+            <i class="ace-icon fa fa-times"></i>
+            Xóa
+        </button>
+        <button type="submit" name="permanent" value="true" class="btn btn-sm btn-danger pull-left">
+            <i class="ace-icon fa fa-times"></i>
+            Xóa vĩnh viễn
+        </button>
+    </div>
+}
+

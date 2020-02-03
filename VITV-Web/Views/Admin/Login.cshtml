@@ -1,0 +1,84 @@
+﻿@model LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+
+    <title>Đăng nhập</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Froala/font-awesome.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    @*<link href="~/Content/login.css" rel="stylesheet" type="text/css" />*@
+
+    <link href="~/Content/layout.css" rel="stylesheet" />
+    <link href="~/Content/elements.css" rel="stylesheet" />
+  </head>
+
+<body id="login-page" class="theme-whbl">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="col-xs-6">
+                <div id="login-box">
+                    <div id="login-box-holder">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <header id="login-header">
+                                    <div id="login-logo">
+                                        <img src="~/Content/assets/LogoVIT3.png" alt="">
+                                    </div>
+                                </header>
+                                <div id="login-box-inner">
+                                    <form role="form" action="/Admin/Login?returnUrl=@Request.QueryString["returnurl"]" method="post">
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true)
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input class="form-control" type="text" name="Email" placeholder="Email address">
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                            <input type="password" class="form-control" name="Password" placeholder="Password">
+                                        </div>
+                                        <div id="remember-me-wrapper">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="checkbox-nice">
+                                                        <input type="checkbox" id="remember-me" name="RememberMe" checked="checked" value="true">
+                                                        @*@Html.CheckBoxFor(m => m.RememberMe)*@
+                                                        <label for="remember-me">
+                                                            Nhớ đăng nhập
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 text-center">
+                                                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

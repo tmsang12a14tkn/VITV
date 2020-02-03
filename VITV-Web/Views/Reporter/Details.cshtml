@@ -1,0 +1,131 @@
+﻿@model Employee
+
+@{
+    ViewBag.Title = "BTV " + Model.Name;
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+    var videoCat = Model.Videos.GroupBy(v => v.Category).OrderBy(vg => vg.Count()).Select(vg => vg.Key).ToList();
+    var meta = "";
+    var kw_meta = "";
+}
+
+<div class="row reporter_page">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <h3 class="navbar-brand">THÀNH VIÊN VITV</h3>
+                    </div>
+                    <div class="collapse navbar-collapse" id="reporter_page_filter"></div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row m15">
+        <div class="container">
+            <div class="reporter-img wow fadeInLeft"><img class="img-responsive" src="@Model.ProfilePicture"></div>
+            <div class="reporter-contact wow fadeInRight">
+                <h4>@Model.Name</h4>
+                <h6>
+                    Biên tập viên
+                    @for (int i = 0; i < Model.SpecialCategories.Count; i++)
+                    {
+                        var cat = Model.SpecialCategories[i];
+                        if (i == 0)
+                        {
+                            @Html.ActionLink(cat.Name.ToLower(), "Details", "VideoCategory", new { title = cat.UniqueTitle }, null)
+                        }
+                        else
+                        {
+                            <text>,</text> @Html.ActionLink(cat.Name.ToLower(), "Details", "VideoCategory", new { title = cat.UniqueTitle }, null)
+                        }
+                        meta = meta + ", " + cat.Name.ToLower();
+                        kw_meta = kw_meta + cat.Name;
+                        if (i != Model.SpecialCategories.Count - 1) 
+                        {
+                            kw_meta = kw_meta + ", ";
+                        }                        
+                    }
+                </h6>
+                @if(Model.EmployeePersonalInfo != null)
+                { 
+                    if (!String.IsNullOrWhiteSpace(Model.EmployeePersonalInfo.Phone))
+                    {
+                        <p><span class="tel"><img src="/Content/Images/tel.png"></span>@Model.EmployeePersonalInfo.Phone</p>
+                    }
+                    if (!String.IsNullOrWhiteSpace(Model.EmployeePersonalInfo.Email))
+                    {
+                        <p><span class="email"><img src="/Content/Images/email.png"></span>@Model.EmployeePersonalInfo.Email</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row related_video">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#related_video_filter">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                        <h3 class="navbar-brand">VIDEO DO BTV THỰC HIỆN</h3>
+                    </div>
+                    <div class="collapse navbar-collapse" id="related_video_filter">
+                        @using (Ajax.BeginForm("Videos", "Reporter", new { repId = Model.Id }, new AjaxOptions
+                        {
+                            HttpMethod = "Post",
+                            OnSuccess = "OnCompleteFilter",
+                        }, new { @class = "navbar-form navbar-right" }))
+                        {
+                            <div class="form-group">
+                                <select class="form-control" name="videocat">
+                                    <option value="all">Loại chương trình</option>
+                                    @foreach (var cat in videoCat)
+                                    {
+                                        <option value="@cat.Id">@cat.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="month">
+                                    <option value="0" selected>Chọn tháng</option>
+                                    @for (int i = 1; i <= 12; i++)
+                                    {
+                                        <option value="@i">Tháng @i</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger" id="buttonfilter">Xem</button>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="related_video_content">
+        <div class="container" id="result_container">
+            @Html.Action("Videos", "Reporter", new { repId = Model.Id })
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/toggle.js"></script>
+    <script>
+        function OnCompleteFilter(data) {
+            $("#result_container").empty().append(data);
+        }
+    </script>
+}
+
+@section seo{
+    <meta name="description" content="Biên tập viên @Model.Name@meta">
+    <meta name="keywords" content="@Model.Name - VITV @kw_meta">
+    <meta property="og:image" content="@Model.ProfilePicture" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="800" />
+}

@@ -1,0 +1,36 @@
+﻿@model ScheduleDetailFilterView
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Lịch phát sóng ngày @Model.DateTime.ToShortDateString()</h2>
+                @if (Model.ScheduleDetails.Count > 0)
+                {
+                    <div class="filter-block pull-right">
+                        <a href="#form@(Model.DateTime.ToString("dd-MM-yyyy"))" class="btn btn-success pull-right">
+                            <i class="fa fa-plus fa-lg"></i> Thêm
+                        </a>
+                    </div>
+                }                
+            </header>
+            <div class="main-box-body clearfix">
+                @if (Model.ScheduleDetails.Count == 0)
+                {
+                    <p>Chưa tạo lịch phát sóng cho ngày hôm nay</p>
+    <a href="/ProgramScheduleDetails/Create?date=@Model.DateTime.Date.ToShortDateString()" class="btn btn-success">
+        <span class="fa fa-plus"></span> Tạo lịch
+    </a>
+                    //@Html.ActionLink("Tạo lịch", "Create", "ProgramScheduleDetails", new { date = Model.DateTime.Date.ToShortDateString() }, null)
+                }
+                else
+                {
+                    <div id="tableDetail@(Model.DateTime.ToString("dd-MM-yyyy"))">
+                        @Html.Partial("_ListEdit", Model.ScheduleDetails)
+                    </div>
+                    @Html.Action("Insert", "ProgramScheduleDetails", new { date = Model.DateTime.ToShortDateString() })
+                }
+            </div>
+        </div>
+    </div>
+</div>

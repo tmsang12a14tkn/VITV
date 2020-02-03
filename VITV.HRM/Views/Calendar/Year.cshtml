@@ -1,0 +1,241 @@
+﻿@using Microsoft.AspNet.Identity;
+
+@model CalendarYearModel
+@{
+    ViewBag.Title = "Lịch làm việc";
+    var year = Model.Year;
+    var notPass = year < DateTime.Now.Year;
+    var userId = User.Identity.GetUserId();
+    var canEdit = Model.Employee.Id == userId || User.IsInRole("Admin");
+}
+<div class="page-header">
+    <h1>
+        Lịch làm việc
+        <small>
+            <a href="/Employee/ProfilePage/@Model.Employee.Id">
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                @Model.Employee.Name
+            </a>
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="space"></div>
+
+                @*<div id="calendar"></div>*@
+                <div class="calendar" id="cal-year-@year">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class=" input-group pull-left">
+                                <a class="btn btn-sm" href="/Calendar/Year?id=@Model.Employee.Id&y=@(year-1)"><</a>
+                                
+                                <a class="btn btn-sm @(notPass?"":"disabled")" href="/Calendar/Year?id=@Model.Employee.Id&y=@(year+1)">></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6"><h3 class="text-center">@year</h3></div>
+                        <div class="col-sm-3">
+                            <div class=" input-group pull-right">
+                                <a class="btn btn-sm disabled" href="#">Năm</a>
+                                <a class="btn btn-sm" href="/Calendar/Month?id=@Model.Employee.Id">Tháng</a>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        @for (int month = 1; month <= 12; month++)
+                        {
+                            var monthLength = DateTime.DaysInMonth(year, month);
+                            var startingDay = (int)(new DateTime(year, month, 1).DayOfWeek);
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 cal-month" id="cal-month-@month">
+                                <h4><a href="/Calendar/Month?id=@Model.Employee.Id&y=@year&m=@month">Tháng @month</a></h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Su</th>
+                                            <th>Mo</th>
+                                            <th>Tu</th>
+                                            <th>We</th>
+                                            <th>Th</th>
+                                            <th>Fr</th>
+                                            <th>Sa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                        var day = 1;
+                                        }
+                                        @for (int j = 0; j < 6; j++)
+                                        {
+                                            <tr>
+                                                @for (int k = 0; k < 7; k++)
+                                                {
+                                                    var cellNo = j * 7 + k;
+                                                    if (cellNo >= startingDay && day <= monthLength)
+                                                    {
+                                                        <td class="day-cell pos-rel" data-dayoffid="0" data-date="@day.ToString("00")/@month.ToString("00")/@year">
+                                                            <div>@day</div>
+                                                        </td>
+                                                        day++;
+                                                    }
+                                                    else
+                                                    {
+                                                        <th>&nbsp;</th>
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+<div class="modal fade" id="modal-choose-action">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Chọn</h4>
+            </div>
+            <div class="modal-body">
+                <p><input type="button" class="btn btn-default" value="Làm bù" /></p>
+                <p><input type="button" class="btn btn-default" value="Nghỉ" /></p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modal-create-absent">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modal-create-compensating">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Làm bù</h4>
+            </div>
+            <div class="modal-body">
+                <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary">Xong</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@if(User.IsInRole("Admin"))
+{ 
+    <div class="row">
+        <div class="col-sm-12">
+            <a class="btn btn-sm" href="/Calendar/All">Quản lý</a>
+        </div>
+    </div>
+}
+@section scripts
+{
+    <script type="text/javascript">
+        function onchangeSelectAbsentTime(select)
+        {
+            switch(select.value)
+            {
+                case 'all':
+                case 'afternoon':
+                case 'morning':
+                    $("#absent-custom-time").addClass("hide");
+                    break;
+                default:
+                    $("#absent-custom-time").removeClass("hide");
+            };
+
+        }
+        $(document).ready(function () {
+            $(".day-cell[data-date='@DateTime.Now.ToShortDateString()']").addClass("red");
+            $.get('/Calendar/AttendanceSheet?userId=@Model.Employee.Id&year=@Model.Year', function(result)
+            {
+                result.dayoffs.forEach(function (dayoff, index) {
+                    var cell = $(".day-cell[data-date='" + dayoff.date + "']");
+                    cell.addClass(dayoff.allDay == "true" ? "absent-allday":"absent");
+                    $(".day-cell[data-date='"+dayoff.date+"']").find("div").popover({
+                        title: 'Nghỉ',
+                        content: "<p>" + (dayoff.title == null ? "" : dayoff.title) + "</p><p>" + (dayoff.allDay == "true" ? "Cả ngày" : dayoff.start + " - " + dayoff.end) + "</p>",
+                        trigger: 'hover',
+                        container: 'body',
+                        html:true
+                    });
+                    cell.attr('data-dayoffid', dayoff.id);
+                });
+            })
+            @if(canEdit)
+            {
+                <text>
+                $(".day-cell").on('click', function () {
+                    var date = $(this).data("date");
+                    var dayoffid = $(this).data('dayoffid');
+                    if (dayoffid == 0)
+                    {
+                        $("#modal-create-absent .modal-content").load("/PersonalDayoff/Create?date=" + date + "&userid=@Model.Employee.Id", function () {
+                            $("#modal-create-absent .timepicker").datetimepicker({
+                                datepicker: false,
+                                format: 'H:i'
+                            })
+                            $("#modal-create-absent form").ajaxForm({
+                                success: function (response, statusText, xhr, $form) {
+                                    if (response.success == true) {
+                                        location.reload();
+                                    }
+                                    else {
+                                        $("#modal-create-absent").modal("hide");
+                                        alert(response.error);
+                                    }
+                                }
+                            })
+                            $("#modal-create-absent").modal("show");
+                        });
+                    } else
+                    {
+                        $("#modal-create-absent .modal-content").load("/PersonalDayoff/Edit?date=" + date + "&userid=@Model.Employee.Id&dayoffid=" + dayoffid, function () {
+                            $("#modal-create-absent .timepicker").datetimepicker({
+                                datepicker: false,
+                                format: 'H:i'
+                            })
+                            $("#modal-create-absent form").ajaxForm({
+                                success: function (response, statusText, xhr, $form) {
+                                    if (response.success == true) {
+                                        location.reload();
+                                    }
+                                    else {
+                                        $("#modal-create-absent").modal("hide");
+                                        alert(response.error);
+                                    }
+                                }
+                            })
+                            $("#modal-create-absent").modal("show");
+                        });
+                    }
+                    
+                });
+                </text>
+            }
+        });
+        
+    </script>
+}

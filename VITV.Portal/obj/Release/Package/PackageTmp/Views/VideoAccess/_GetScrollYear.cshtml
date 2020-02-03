@@ -1,0 +1,14 @@
+﻿@model DateTime
+@{
+    DateTime d = Model;
+}
+
+@for (int i = 0; i < 10; i++)
+{
+    var yr = d.AddYears(i * -1);
+    var dateTemp = new DateTime(yr.Year, 1, 1);
+    var firstDayOfYear = dateTemp.ToString("dd/MM/yyyy");
+    var lastDayOfYear = dateTemp.AddYears(1).AddDays(-1).ToString("dd/MM/yyyy");
+    <p data-date="@firstDayOfYear"><a href="#" class="selectpicker" data-display="@yr.Year" data-start="@firstDayOfYear" data-end="@lastDayOfYear">@yr.Year</a></p>
+}
+

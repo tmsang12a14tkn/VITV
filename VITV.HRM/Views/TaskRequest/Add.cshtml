@@ -1,0 +1,140 @@
+﻿@model TaskRequest
+@{
+    List<Employee> employees = ViewBag.Employees;
+    List<Project> projects = ViewBag.Projects;
+    List<Equipment> equipments = ViewBag.Equipments;
+}
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Thêm công việc @(Model.Project!=null? "cho project: " + Model.Project.Title:"")
+    </div>
+</div>
+@using (Html.BeginForm("Add", "TaskRequest", FormMethod.Post,
+            new { enctype = "multipart/form-data", @class = "form-horizontal request-form" , id = "add-request-form"}))
+    {
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-title"> Tiêu đề </label>
+
+            <div class="col-sm-10">
+                <input type="text" id="form-title" placeholder="Title" name="Title" class="col-xs-12 col-sm-12">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-content"> Nội dung </label>
+
+            <div class="col-sm-10">
+                <div class="wysiwyg-editor" id="editor-content"></div>
+                <input type="hidden" id="form-content" name="Content" placeholder="Content"/>
+            </div>
+        </div>
+        @if(!Model.ProjectId.HasValue)
+        { 
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-project"> Dự án </label>
+
+            <div class="col-sm-10">
+                <select class="form-control" id="form-project" name="ProjectId" placeholder="Dự án">
+                    @foreach(var project in projects)
+                    {
+                        <option value="">Chọn một project</option>
+                        <option value="@project.Id">@project.Title</option>
+                    }
+                </select>
+            </div>
+        </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model=>model.ProjectId) 
+        }
+        <div class="form-group">
+            @Html.HiddenFor(model => model.ReceivedEmployeeIds)
+            <label class="col-sm-2 control-label no-padding-right" for="tbEmployees">Quản lý</label>
+
+            <div class="col-sm-10">
+                <select data-placeholder="..." multiple="multiple" id="tbEmployees" name="tbEmployees" class="form-control">
+                    @foreach (var ep in employees)
+                    {
+                        <option value="@ep.Id" data-img-src="@ep.ProfilePicture">@ep.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="col-sm-2 control-label no-padding-right">Ưu tiên</label>
+            <div class="col-sm-10 form-inline">
+                <div class="row">
+                    <div class="col-sm-4 radio">
+                        <label>
+                            <input name="Piority" value="0" type="radio" class="ace" />
+                            <span class="lbl">Không quan trọng</span>
+                        </label>
+                    </div>
+
+                    <div class="col-sm-4 radio">
+                        <label>
+                            <input name="Piority" value="1" type="radio" checked class="ace" />
+                            <span class="lbl">Bình thường</span>
+                        </label>
+                    </div>
+
+                    <div class="col-sm-4 radio">
+                        <label>
+                            <input name="Piority" value="2" type="radio" class="ace" />
+                            <span class="lbl">Quan trọng</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right">Thời gian</label>
+            <div class="col-sm-10 form-inline">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="RequestFrom" id="request-from"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="RequestTo" id="request-to" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<h4>Liên quan</h4>
+        <div class="hr hr-18 dotted hr-double"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="tbDevice">Thiết bị</label>
+            <div class="col-sm-10">
+                <select data-placeholder="Chọn thiết bị" id="tbDevice" name="EquipmentId" class="form-control">
+                    @foreach (var eq in equipments)
+                    {
+                        <option value="@eq.Id" data-img-src="@eq.EquipPicture">@eq.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="attachments">Tệp đính kèm</label>
+            <div class="col-sm-10">
+                <input multiple type="file" id="attachments" name="attachments" />
+            </div>
+        </div>*@
+
+
+    </div>
+
+    <div class="modal-footer no-margin-top">
+        <button type="submit" class="btn btn-sm btn-danger pull-right">
+            <i class="ace-icon fa fa-times"></i>
+            OK
+        </button>
+
+    </div>
+}
+
+

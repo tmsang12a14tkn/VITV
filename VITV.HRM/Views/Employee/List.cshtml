@@ -1,0 +1,88 @@
+﻿@model List<Employee>
+@*<a href="/Employee/ProfilePage/@employee.Id">
+        <i class=" fa fa-pencil"></i>
+    </a>*@
+<div class="row">
+    <div class="col-sm-12">
+        <a href="/Employee/Add" class="pull-left btn btn-danger">Thêm nhân viên</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <table id="simple-table" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Ngày sinh</th>
+            <th class="hidden-480">Ngày vào làm</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        { 
+            <tr id="emp_@employee.Id">
+                <td><a href="/Canlendar/Index/@employee.Id">
+                    @employee.Name
+                </a></td>
+                <td>@employee.BirthDay.ToShortDateString()</td>
+                <td>@(employee.WorkInfo != null && employee.WorkInfo.StartDate != null ? employee.WorkInfo.StartDate.Value.ToShortDateString() : "")</td>
+
+                <td>
+                    <div class="hidden-sm hidden-xs btn-group">
+
+                        <a href="/Employee/EditEmp/@employee.Id" class="btn btn-xs btn-info">
+                            <i class="ace-icon fa fa-pencil bigger-120"></i>
+                        </a>
+                        <a href="/Employee/Delete/@employee.Id" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deleteModal"
+                           data-ajax="true"
+                           data-ajax-complete=""
+                           data-ajax-mode="replace"
+                           data-ajax-update="#deleteContent">
+                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                        </a>
+                        @*<button class="btn btn-xs btn-danger">
+                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                        </button>*@
+                    </div>
+
+
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+    </div>
+</div>
+
+<div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="deleteContent">
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.dataTables.bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#employees-table").DataTable();
+    });
+
+    function OnDeleteEmployeeSuccess(result)
+    {
+        if (result.success == true)
+            $('#emp_' + result.id).remove();
+        else
+        {
+            alert(result.error);
+        }
+        $("#deleteModal").modal("hide");
+    }
+</script>
+ }

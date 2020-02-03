@@ -1,0 +1,9 @@
+﻿@model Keyword
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Value, "Tên từ khóa", new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Value, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Value, string.Empty, new { @class = "help-block" })
+    </div>
+</div>

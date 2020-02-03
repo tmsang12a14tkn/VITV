@@ -1,0 +1,22 @@
+﻿@model List<Video>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <div class="main-box-body clearfix">
+                @if (Model.ScheduleDetails.Count == 0)
+                {
+                    <p>Chưa tạo lịch phát sóng cho ngày hôm nay</p>
+                    @Html.ActionLink("Tạo lịch", "Create", "ProgramScheduleDetails", new { date = Model.DateTime.Date.ToShortDateString() }, null)
+                }
+                else
+                {
+                    <div id="tableDetail@(Model.DateTime.ToString("dd-MM-yyyy"))">
+                        @Html.Partial("_ListEdit", Model.ScheduleDetails)
+                    </div>
+                    @Html.Action("Insert", "ProgramScheduleDetails", new { date = Model.DateTime.ToShortDateString() })
+                }
+            </div>
+        </div>
+    </div>
+</div>

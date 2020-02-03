@@ -1,0 +1,103 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV.HRM", "VITV.HRM\VITV.HRM.csproj", "{D1C8DDEF-9955-49D6-8D63-0EADA09D044D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV-WebService", "VITV-WebService\VITV-WebService.csproj", "{02C4067F-8977-49A5-9B55-4F0168DF0664}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV.Web", "VITV-Web\VITV.Web.csproj", "{30EF42EA-65BB-4127-BDD1-2D8050A8A25A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITVDataFeed", "VITVDataFeed\VITVDataFeed.csproj", "{202E7F8D-3350-4D1B-9844-B715B7D48522}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV.Data", "VITV.Data\VITV.Data.csproj", "{191E8273-21C4-43D4-A1D4-1393F5FABF13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteUnusedFiles", "DeleteUnusedFiles\DeleteUnusedFiles.csproj", "{58F0F460-FB8B-4C4A-B535-81F11E0C5E4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV.Portal", "VITV.Portal\VITV.Portal.csproj", "{F8CF0783-F041-45AE-9110-AB143B689EF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV.Startup", "VITV.Startup\VITV.Startup.csproj", "{941575B9-EAB4-40FA-9284-5084220E62C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VITV.WebApi", "VITV.WebApi\VITV.WebApi.csproj", "{F95121F7-8855-40E9-86CA-81AAA38116F1}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.0.240:8080/tfs/vitcorp
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = VITV-WebService\\VITV-WebService.csproj
+		SccProjectName1 = VITV-WebService
+		SccLocalPath1 = VITV-WebService
+		SccProjectUniqueName2 = VITV-Web\\VITV.Web.csproj
+		SccProjectName2 = VITV-Web
+		SccLocalPath2 = VITV-Web
+		SccProjectUniqueName3 = VITVDataFeed\\VITVDataFeed.csproj
+		SccProjectName3 = VITVDataFeed
+		SccLocalPath3 = VITVDataFeed
+		SccProjectUniqueName4 = VITV.Data\\VITV.Data.csproj
+		SccProjectName4 = VITV.Data
+		SccLocalPath4 = VITV.Data
+		SccProjectUniqueName5 = DeleteUnusedFiles\\DeleteUnusedFiles.csproj
+		SccProjectName5 = DeleteUnusedFiles
+		SccLocalPath5 = DeleteUnusedFiles
+		SccProjectUniqueName6 = VITV.HRM\\VITV.HRM.csproj
+		SccProjectName6 = VITV.HRM
+		SccLocalPath6 = VITV.HRM
+		SccProjectUniqueName7 = VITV.Portal\\VITV.Portal.csproj
+		SccProjectName7 = VITV.Portal
+		SccLocalPath7 = VITV.Portal
+		SccProjectUniqueName8 = VITV.Startup\\VITV.Startup.csproj
+		SccProjectName8 = VITV.Startup
+		SccLocalPath8 = VITV.Startup
+		SccProjectUniqueName9 = VITV.WebApi\\VITV.WebApi.csproj
+		SccProjectName9 = VITV.WebApi
+		SccLocalPath9 = VITV.WebApi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1C8DDEF-9955-49D6-8D63-0EADA09D044D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C8DDEF-9955-49D6-8D63-0EADA09D044D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C8DDEF-9955-49D6-8D63-0EADA09D044D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C8DDEF-9955-49D6-8D63-0EADA09D044D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C4067F-8977-49A5-9B55-4F0168DF0664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C4067F-8977-49A5-9B55-4F0168DF0664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C4067F-8977-49A5-9B55-4F0168DF0664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C4067F-8977-49A5-9B55-4F0168DF0664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30EF42EA-65BB-4127-BDD1-2D8050A8A25A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30EF42EA-65BB-4127-BDD1-2D8050A8A25A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30EF42EA-65BB-4127-BDD1-2D8050A8A25A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30EF42EA-65BB-4127-BDD1-2D8050A8A25A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202E7F8D-3350-4D1B-9844-B715B7D48522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202E7F8D-3350-4D1B-9844-B715B7D48522}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202E7F8D-3350-4D1B-9844-B715B7D48522}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202E7F8D-3350-4D1B-9844-B715B7D48522}.Release|Any CPU.Build.0 = Release|Any CPU
+		{191E8273-21C4-43D4-A1D4-1393F5FABF13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{191E8273-21C4-43D4-A1D4-1393F5FABF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{191E8273-21C4-43D4-A1D4-1393F5FABF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{191E8273-21C4-43D4-A1D4-1393F5FABF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F0F460-FB8B-4C4A-B535-81F11E0C5E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F0F460-FB8B-4C4A-B535-81F11E0C5E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F0F460-FB8B-4C4A-B535-81F11E0C5E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F0F460-FB8B-4C4A-B535-81F11E0C5E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8CF0783-F041-45AE-9110-AB143B689EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8CF0783-F041-45AE-9110-AB143B689EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8CF0783-F041-45AE-9110-AB143B689EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8CF0783-F041-45AE-9110-AB143B689EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{941575B9-EAB4-40FA-9284-5084220E62C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941575B9-EAB4-40FA-9284-5084220E62C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941575B9-EAB4-40FA-9284-5084220E62C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941575B9-EAB4-40FA-9284-5084220E62C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F95121F7-8855-40E9-86CA-81AAA38116F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F95121F7-8855-40E9-86CA-81AAA38116F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F95121F7-8855-40E9-86CA-81AAA38116F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F95121F7-8855-40E9-86CA-81AAA38116F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

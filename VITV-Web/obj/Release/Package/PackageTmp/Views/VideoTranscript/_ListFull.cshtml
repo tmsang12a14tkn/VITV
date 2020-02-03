@@ -1,0 +1,49 @@
+﻿@model List<VideoTranscript>
+
+@foreach (var vt in Model)
+{
+    <div class="row transcript-single-row" data-seektime="@vt.ConvertedToSeconds">
+        <div class="col-xs-1 time">
+            @((vt.HourSeek > 0) ? vt.HourSeek + ":" : "")@((vt.MinuteSeek < 10) ? "0" + vt.MinuteSeek : vt.MinuteSeek.ToString()):@((vt.SecondSeek < 10) ? "0" + vt.SecondSeek : vt.SecondSeek.ToString())
+        </div>
+        <div class="col-xs-7 content">
+            <p><a href="@Url.Action("Details", "Video", new { id = vt.Video.Id, title = vt.Video.UniqueTitle, date = vt.Video.PublishedTime.ToString("dd-MM-yyyy"), t = vt.ConvertedToSeconds })">@Html.Raw(vt.Title)</a></p>
+            <p style="font-size:13px;">@Html.Raw(vt.Content)</p>
+        </div>
+        <div class="col-xs-4 reporter">
+            @if (vt.Reporters != null && vt.Reporters.Count > 0)
+            {
+                <div class="transcript-reporter">
+                    @foreach (var rp in vt.Reporters)
+                    {
+                        <div class="col-xs-2 single-reporter">
+                            <div class="single_person">
+                                <div class="person_image">
+                                    <a href="@Url.Action("Details", "Reporter", new { title = rp.UniqueTitle })">
+                                        <span class="thumb">
+                                            <span class="thumb_sizer">
+                                                <span class="thumb_tugger vid_repoter_img">
+                                                    <img src="@rp.ProfilePicture" title="Biên tập viên: @(rp.Name)">
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+    </div>
+}
+
+@if (Convert.ToBoolean(ViewBag.hasContent) == true)
+{
+    <div class="row transcript_summary-return">
+        <div id="transcript-return-btn">
+            <i class="fa fa-angle-double-up"></i>
+        </div>
+    </div>
+}

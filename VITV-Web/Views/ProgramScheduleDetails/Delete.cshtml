@@ -1,0 +1,42 @@
+﻿@model ProgramScheduleDetail
+
+@using (Ajax.BeginForm("Delete", "ProgramScheduleDetails", new{id= Model.Id}, new AjaxOptions{ 
+    HttpMethod = "post",
+    OnSuccess = "onSuccessDelete"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Đóng</span></button>
+        <h4 class="modal-title">Xóa chương trình?</h4>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VideoCategoryId, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10 form-field-display">@Model.VideoCategory.Name</div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10 form-field-display">@Html.DisplayFor(model => model.Name)</div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateTime, new { @class = "col-lg-2 control-label" })
+            <div class="col-lg-10 form-field-display">@Html.DisplayFor(model => model.DateTime)</div>
+        </div>
+
+        <div class="alert alert-warning fade in">
+            <i class="fa fa-warning fa-fw fa-lg"></i>
+            <strong>Lưu ý!</strong> Xóa chương trình sẽ xóa cả dữ liệu video trong chương trình. Bạn có muốn tiếp tục?
+        </div>
+        <div class="form-group">
+            <input type="text" placeholder="Nhập 'Đồng ý' vào ô này" name="confirmText" class="form-control"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-primary">Xóa</button>
+    </div>
+                  
+}
+            

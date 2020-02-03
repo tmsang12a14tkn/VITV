@@ -1,0 +1,11 @@
+﻿@model IEnumerable<ArticleCategory>
+
+<ul class="artcat_list">
+    @foreach (var p in Model)
+    {
+        <li>
+            <input type="checkbox" class="artItem" data-id="@p.Id" data-name="@p.Name" data-parent="@(p.ParentId == null ? 0 : p.ParentId)" /> @p.Name
+            @Html.Action("DrawChildCheckNode", new { pId = p.Id })
+        </li>
+    }
+</ul>

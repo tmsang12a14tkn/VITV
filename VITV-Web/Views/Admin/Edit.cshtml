@@ -1,0 +1,78 @@
+﻿@model EditUserModel
+@using Microsoft.AspNet.Identity.EntityFramework
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chỉnh sửa người dùng";
+    List<IdentityRole> lstRoles = (List<IdentityRole>)ViewBag.PossibleRoles;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2>Chỉnh sửa người dùng</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.ValidationSummary(true)
+                    @Html.AntiForgeryToken()
+                    if(Model.OldRoles!=null)
+                    { 
+                        foreach (var name in Model.OldRoles)
+                        {
+                            <input type="hidden" name="OldRoles" value="@name"/>
+                        }
+                    }
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <div class="col-md-2 control-label">
+                            <label> Vai trò</label>
+                        </div>
+                        <div class="col-lg-10">
+                                
+                            @foreach (var role in lstRoles)
+                            {
+                                    <div class="checkbox-nice">
+                                        <input type="checkbox" id="checkbox_@role.Name" name="Roles" value="@role.Name" @(Model.OldRoles!=null && Model.OldRoles.Contains(role.Name) ? "checked" : "")>
+                                        <label for="checkbox_@role.Name">
+                                            @role.Name
+                                        </label>
+                                    </div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 control-label">
+                            <label>Khóa</label>
+                        </div>
+                        <div class="col-lg-10">
+                            <div class="checkbox checkbox-nice">
+                                @*@Html.EditorFor(model=>model.Locked)*@
+                                <input type="checkbox" name="Locked" id="Locked" @(Model.Locked?"checked":"") value="true">
+                                <label for="Locked"></label>
+                                <input type="hidden" name="Locked" value="false">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-success">Hoàn thành</button>
+                            @Html.ActionLink("Quay về trang quản lý", "Management")
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

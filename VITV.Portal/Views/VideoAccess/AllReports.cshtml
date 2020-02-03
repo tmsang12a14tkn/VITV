@@ -1,0 +1,1270 @@
+﻿@{
+    ViewBag.Title = "So sánh giữa các Chuyên mục";
+    List<VideoCatType> catTypes = ViewBag.CategoryTypes;
+    var d = DateTime.Now;
+    var today = d.ToString("dd/MM/yyyy");
+    var startDate = new DateTime(d.Year, d.Month, 1);
+    int year = DateTime.Now.Year;
+    System.Globalization.DateTimeFormatInfo dfi = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+    System.Globalization.Calendar cal = dfi.Calendar;
+    int num = cal.GetWeekOfYear(new DateTime(2016,1, 1), dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h1>Báo cáo tổng quát theo <span id="periodtypetitle"></span></h1><h2>Từ <span id="rangetitle"></span></h2>
+                <div class="filter-block">
+                    <div class="form-group col-md-4 pull-left">
+                        <div class="btn-group">
+                            <button type="button" id="selectDate" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "month" ? "active" : "") active" data-toggle="dropdown" aria-expanded="false">
+                                Chọn lựa <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a id="btnday" data-value="day">Theo Ngày</a></li>
+                                <li><a id="btnweek" data-value="week">Theo Tuần</a></li>
+                                <li><a id="btnmonth" data-value="month">Theo Tháng</a></li>
+                                <li><a id="btnquarter" data-value="quarter">Theo Quý</a></li>
+                                <li><a id="btnyear" data-value="year">Theo Năm</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-md-3 pull-right">
+                            <input type="text" class="form-control" name="daterange" id="daterange"/>
+                    </div>
+
+                    <div class="form-group pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle selectparent @(ViewBag.dateType == "week" ? "active" : "")" data-default="Tuần" data-toggle="dropdown" aria-expanded="false">
+                                Tuần <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu" role="menu" id="week" style="height:150px; overflow: auto">
+                                <div id="wrapperDivWeek" class="dropdownchild">
+                                    
+                                    @for (int i = 0; i < 10; i++)
+                                    {
+                                        //--Tuần tính từ T7 tuần trước đển T6 tuần hiện tại--//
+                                        var currDay = d.DayOfWeek;
+                                        DateTime prevSat = DateTime.Now;
+                                        //cn
+                                        if(currDay == 0)
+                                        {
+                                            prevSat = d.AddDays(-6);
+                                        }
+                                        else
+                                        {
+                                            int delta = DayOfWeek.Monday - d.DayOfWeek;
+                                            prevSat = d.AddDays(delta);
+                                        }                                        
+                                        var beginWeek = prevSat.ToString("dd/MM/yyyy");
+                                        var endWeek = prevSat.AddDays(6).ToString("dd/MM/yyyy");
+                                        d = prevSat.AddDays(-1);
+                                        int numweek = 0;
+                                        if(DateTime.Now.Year == prevSat.Year)
+                                        {
+                                            numweek = cal.GetWeekOfYear(prevSat.AddDays(-1), dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+                                        }else
+                                        {
+                                            numweek = cal.GetWeekOfYear(prevSat, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+                                        }
+                                            
+                                        <p data-date="@d.AddDays(+1)"><a href="#" class="selectpicker" data-display="Tuần @numweek / @prevSat.Year" data-start="@beginWeek" data-end="@endWeek" data-my="@prevSat.AddDays(6)">Tuần từ @beginWeek - @endWeek ( @numweek )</a></p>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle selectparent @(ViewBag.dateType == "month" ? "active" : "")" id="initMonth" data-default="Tháng" data-toggle="dropdown" aria-expanded="false">
+                                Tháng <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu" role="menu" id="month" style="height:150px; overflow: auto">
+                                <div id="wrapperDivMonth" class="dropdownchild">
+                                    @{
+                                    d = DateTime.Now;
+                                    }
+                                    @for (int i = 0; i < 10; i++)
+                                    {
+                                    var month = d.AddMonths(i * -1);
+                                    var dateTemp = new DateTime(month.Year, month.Month, 1);
+                                    var firstDayOfMonth = dateTemp.ToString("dd/MM/yyyy");
+                                    var lastDayOfMonth = dateTemp.AddMonths(1).AddDays(-1).ToString("dd/MM/yyyy");
+                                    <p data-date="@dateTemp.AddMonths(-1)"><a href="#" class="selectpicker" data-display="@month.Month / @month.Year" data-start="@firstDayOfMonth" data-end="@lastDayOfMonth">@month.Month / @month.Year</a></p>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle selectparent @(ViewBag.dateType == "quarter" ? "active" : "")" data-default="Quý" data-toggle="dropdown" aria-expanded="false">
+                                Quý <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu" role="menu" id="quarter" style="height:100px; overflow: auto">
+                                <div id="wrapperDivQuarter" class="dropdownchild">
+                                    @{
+                                     DateTime dateQuarter = DateTime.Now;
+                                    //DateTime d = (d.Month - 1) / 3 + 1;
+                                    }
+                                    @for (int i = 0; i < 4; i++)
+                                    {
+                                        int quarter = (dateQuarter.Month - 1) / 3 + 1;
+                                        Tuple<DateTime, DateTime> date = Extensions.SetLastQuarterDates(quarter, dateQuarter.Year);
+                                        <p data-date="@date.Item1.ToString("dd/MM/yyyy")"><a href="#" class="selectpicker" data-display="Quý @quarter / @dateQuarter.Year" data-start="@date.Item1.ToString("dd/MM/yyyy")" data-end="@date.Item2.ToString("dd/MM/yyyy")">Quý @quarter / @dateQuarter.Year</a></p>
+                                        dateQuarter = dateQuarter.AddMonths(-3);
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle selectparent @(ViewBag.dateType == "year" ? "active" : "")" data-default="Năm" data-toggle="dropdown" aria-expanded="false">
+                                Năm <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu" role="menu" id="year" style="height:150px; overflow: auto">
+                                <div id="wrapperDivYear" class="dropdownchild">
+                                    @{
+                                    d = DateTime.Now;
+                                    }
+                                    @for (int i = 0; i < 10; i++)
+                                    {
+                                    var yr = d.AddYears(i * -1);
+                                    var dateTemp = new DateTime(yr.Year, 1, 1);
+                                    var firstDayOfYear = dateTemp.ToString("dd/MM/yyyy");
+                                    var lastDayOfYear = dateTemp.AddYears(1).AddDays(-1).ToString("dd/MM/yyyy");
+                                    <p data-date="@firstDayOfYear"><a href="#" class="selectpicker" data-display="@yr.Year" data-start="@firstDayOfYear" data-end="@lastDayOfYear">@yr.Year</a></p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div id="container" style="height: 600px; min-width: 310px;">Loading</div>
+                        <ul class="list-unstyled">
+                            @foreach (var catType in catTypes)
+                            {
+                                <li class="">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <input type="checkbox" id="cb_cattype_@(catType.Id==0?"null":catType.Id.ToString())" data-id="@(catType.Id==0?"null":catType.Id.ToString())" class="cb_cattype" />
+                                            <label for="cb_cattype_@catType.Id">@catType.Name</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            @foreach (var cat in catType.VideoCategories)
+                                            {
+                                                <span class="highcharts-legend-item toggle-cat" data-id="@cat.Id" data-checked=false data-typeid="@(cat.TypeId==null?"null":cat.TypeId.ToString())" data-parentid="@cat.ParentId">- @cat.Name2</span>
+                                            }
+                                            @if(catType.Id != 0)
+                                            { 
+                                                <span class="highcharts-legend-item toggle-cat" data-checked=false data-id="@("tb_" + catType.Id.ToString())" data-typeid="@(catType.Id.ToString())">- TRUNG BÌNH</span>
+                                            }
+                                        </div>
+                                    </div>
+                                   
+                                </li>
+                            }
+                        </ul>
+
+                    </div>
+                    <div class="col-md-2">
+                        
+                        @*<ul class="list-unstyled">
+                            <li class="checkbox-nice">
+                                <input type="checkbox" />
+                                <label>Lượt xem không trùng</label>
+                            </li>
+                            <li class="checkbox-nice">
+                                <input type="checkbox" />
+                                <label>Lượt xem trùng</label>
+                            </li>
+                        </ul>*@
+                        <div class="row">
+                            <div class="col-md-12 checkbox-nice">
+                                <input type="checkbox" id="cbToggleMarker" />
+                                <label for="cbToggleMarker">Hiển thị điểm</label>
+                            </div>
+                                    
+                            
+                            @*<input type="radio" name="radiocharttype" value="column" >Column
+                            <input type="radio" name="radiocharttype" value="line">Line
+                            <input type="radio" name="radiocharttype" value="spline" checked>Spline*@
+                            <div class="col-md-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="radiocharttype" value="column">
+                                        <img src="~/Content/Images/bieudo-03.png" />
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="radiocharttype" value="line">
+                                        <img src="~/Content/Images/bieudo-01.png" />
+                                    </label>
+                                    <label class="btn btn-primary active">
+                                        <input type="radio" name="radiocharttype" value="spline" checked>
+                                        <img src="~/Content/Images/bieudo-02.png" />
+                                    </label>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="row">
+                            <div class="alert alert-block alert-success" id="fixed-tooltip" style="display:none">
+                                <h4 class="title"></h4>
+                                <p class="content"></p>
+                                <p class="buttons"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th rowspan="2"></th>
+                            <th rowspan="2">Tên</th>
+                            <th colspan="2">Lượt xem mới</th>
+                            <th colspan="2">Lượt xem trùng</th>
+                            <th rowspan="2">Số lượng video</th>
+                            <th rowspan="2">Lượt xem/video</th>
+                            <th rowspan="2">Lượt xem/ngày</th>
+                            <th rowspan="2">Lượt xem/tuần</th>
+                            <th rowspan="2">Tổng số giờ chiếu</th>
+                            <th rowspan="2">Lượt xem/giờ chiếu</th>
+                            <th rowspan="2">Loại</th>
+                            @*<th rowspan="2">Độ lệch</th>*@
+                            <th rowspan="2">Video xem nhiều nhất</th>
+                            @*<th rowspan="2"><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>*@
+                        </tr>
+                        <tr>
+                            <th>Số lượng</th>
+                            <th>%</th>
+                            <th>Số lượng</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>Tổng cộng</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            @*<th></th>*@
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog" data-hidden="true" data-backdrop="static"
+     data-keyboard="false">
+    <div class="modal-dialog" id="mymodal" style="position:relative">
+        <div id="circularG">
+            <div id="circularG_1" class="circularG"></div>
+            <div id="circularG_2" class="circularG"></div>
+            <div id="circularG_3" class="circularG"></div>
+            <div id="circularG_4" class="circularG"></div>
+            <div id="circularG_5" class="circularG"></div>
+            <div id="circularG_6" class="circularG"></div>
+            <div id="circularG_7" class="circularG"></div>
+            <div id="circularG_8" class="circularG"></div>
+        </div>
+    </div>
+</div>
+
+@section styles {
+<link href="~/Content/DataTable/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="~/Content/DataTable/buttons.dataTables.css" rel="stylesheet" />
+@*<link href="~/Content/DataTable/jquery.dataTables.css" rel="stylesheet" />*@
+    <style>
+    
+
+
+
+        tr td:first-child {
+            width: 3%;
+        }
+        .sub-table {
+            border-left:none;
+            border-right:none;
+        }
+        .details-view > td {
+            padding: 0px !important;
+        }
+            .details-view > td > table {
+                margin: 0px !important;
+                width: 100% !important;
+                border: none !important;
+            }
+            td.title{
+                width: 15%;
+            }
+        table.sub-table td.title {
+            padding-left: 30px !important;
+        }
+        td.pageview, td.ppageview,  td.pipview, td.ipview, td.totalvideos, td.ivpv, td.ivpd, td.ivph, td.stab, td.hvc, td.ivpw, td.totaldays, td.totalhour
+        {
+                width: 7%
+        }
+        td.details-control {
+            background: url('../../Content/Images/expand38.png') no-repeat center;
+            cursor: pointer;
+            background-size: 20px;
+            background-position: 98%;
+        }
+        tr.shown td.details-control {
+            background: url('../../Content/Images/expand39.png')  no-repeat center;
+            background-size: 20px;
+            background-position: 98%;
+        }
+        .toggle-cat
+        {
+            cursor: pointer;
+        }
+        .toggle-cat[data-checked=true] {
+            font-weight: bold
+        }
+        .tt_chart {
+            height: 400px;
+        }
+    </style>
+    @*<link href="~/Content/bootstrap-table.css" rel="stylesheet" type="text/css" />*@
+    @*<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />*@
+    
+    <link href="~/Content/daterangepicker.css" rel="stylesheet" />
+
+}
+
+@section scripts {
+    <script src="~/Scripts/DataTable/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.buttons.js"></script>
+    <script src="~/Scripts/DataTable/jszip.min.js"></script>
+    <script src="~/Scripts/DataTable/buttons.html5.js"></script>
+    <script src="~/Scripts/DataTable/buttons.print.js"></script>
+    <script src="~/Scripts/DataTable/buttons.colVis.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jspdf/libs/base64.js"></script>
+
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
+    @*<script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>*@
+    @*Highchart*@
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script src="~/Scripts/app/Allreports/index.js"></script>
+    <script>
+        var originalLeave = $.fn.popover.Constructor.prototype.leave;
+        $.fn.popover.Constructor.prototype.leave = function (obj) {
+            var self = obj instanceof this.constructor ?
+                obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+            var container, timeout;
+            
+            originalLeave.call(this, obj);
+
+            if (obj.currentTarget) {
+                container = $(obj.currentTarget).siblings('.popover')
+                timeout = self.timeout;
+                container.one('mouseenter', function () {
+                    //We entered the actual popover – call off the dogs
+                    clearTimeout(timeout);
+                    //Let's monitor popover content instead
+                    container.one('mouseleave', function () {
+                        $.fn.popover.Constructor.prototype.leave.call(self, self);
+        });
+                })
+            }
+        };
+
+        var table;
+        var today =  moment(new Date());        
+        var dateTemp = moment(new Date(today.year(), today.month(), 1))
+        var startDate = dateTemp.format('DD/MM/YYYY');
+        var endDate = dateTemp.add(1, 'months').add(-1, 'days').format('DD/MM/YYYY');
+        
+        var isChartComplete = false;
+        var isTableComplete = false;
+        //CHART
+        var timeRange = 'day';
+        var groupBy = 'video';
+        var selectedDate = null;
+        //var series;
+        var selectedCats = [];
+        var chartQuery;
+
+        var subTables = [];
+
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+            return "";
+        }
+
+        function makeTable($table, isMain, url, complete) {
+            var startTime = new Date();
+            var newTable = $table.DataTable({
+                //"scrollY": "300px",
+                //"paging": false,
+                "ajax":
+                {
+                    "url": url,
+                    "dataSrc": ""
+                },
+                'columnDefs': [
+                    {
+                        'targets': 1,
+                        'class': 'title',
+                        'render': function (data, type, full, meta) {
+                            return '<a href="/videoaccess/AllDetailReports?catId=' + full.VideoCatId + '">' + data + '</a>'
+                        }
+                    },
+                    {
+                        'targets': 2,
+                        'class': 'ipview',
+                        'render': function (data, type, full, meta)
+                        {
+                                return '<div>' + data + '<i class="fa fa-exclamation-circle pull-right"></i></div>';
+                        },
+                        'createdCell': function (td, cellData, rowData, row, col) {
+                            var pIPViewCount = (rowData.IPViewCount / rowData.PageViewCount * 100).toFixed(2);
+                            var ReViewCount = rowData.PageViewCount - rowData.IPViewCount;
+                            var pReViewCount = (ReViewCount / rowData.PageViewCount * 100).toFixed(2);
+                            var ttChartId = 'tt_chart1_' + rowData.VideoCatId;
+                            var content =
+                                    '<div class="col-sm-5 tt_chart" id="' + ttChartId + '"></div>'
+                                    + '<div class="col-sm-7"><table class="table">'
+                                    + '<thead>'
+                                        + '<tr>'
+                                            + '<th style="width: 25%"></th>'
+                                            + '<th style="width: 25%">Số lượng</th>'
+                                            + '<th style="width: 25%">% Chương trình</th>'
+                                            + '<th style="width: 25%">% Tổng chương trình</th>'
+                                        + '</tr>'
+                                    + '</thead>'
+                                    + '<tbody>'
+                                    + '<tr>'
+                                        + '<td>Không trùng</td>'
+                                        + '<td>' + rowData.IPViewCount + '</td>'
+                                        + '<td>' + pIPViewCount + '%</td>'
+                                        + '<td>' + rowData.PercentIPViewCount + '%</td>'
+                                    + '</tr>'
+                                    + '<tr>'
+                                        + '<td>Xem lại</td>'
+                                        + '<td>' + ReViewCount + '</td>'
+                                        + '<td>' + pReViewCount + '%</td>'
+                                        + '<td></td>'
+                                    + '</tr>'
+                                    + '<tr>'
+                                        + '<td>Tổng</td>'
+                                        + '<td>' + rowData.PageViewCount + '</td>'
+                                        + '<td>100%</td>'
+                                        + '<td>' + rowData.PercentPageViewCount + '%</td>'
+                                    + '</tr>'
+
+                                + '</tbody></table></div>';
+                               
+                           
+                            $(td).find("div").attr('data-toggle', 'popover').attr('data-placement', 'right').attr('data-html', 'true').attr('title', rowData.Title).attr('data-content', content).attr("data-ipvc", rowData.IPViewCount).attr("data-rvc", ReViewCount);
+                        }
+                    },
+                    {
+                        'targets': 3,
+                        'class': 'pipview'
+                    },
+                    {
+                        'targets': 4,
+                        'class': 'pageview',
+                       
+                    },
+                    {
+                        'targets': 5,
+                        'class': 'ppageview'
+                    },
+                    {
+                        'targets': 6,
+                        'class': 'totalvideos'
+                    },
+                    {
+                        'targets': 7,
+                        'class': 'ivpv',
+                        'render': function (data, type, full, meta) {
+                            return (full.IPViewCount / full.TotalVideos).toFixed(2);
+                        }
+                    },
+                    {
+                        'targets': 8,
+                        'class': 'ivpd',
+                        'render': function (data, type, full, meta) {
+                            return '<div>' + (full.IPViewCount / full.TotalDays).toFixed(2) + '<i class="fa fa-exclamation-circle pull-right"></i></div>';
+                        },
+                        'createdCell': function (td, cellData, rowData, row, col) {
+                            $(td).find('div').attr('data-toggle', 'tooltip').attr('title', 'Thấp nhất: ' + rowData.MinDayView+'<br/>Cao nhất: ' + rowData.MaxDayView).attr('data-placement', 'right').attr('data-html','true');
+                        }
+                    },
+                    {
+                         'targets': 9,
+                         'class': 'ivpw',
+                         'render': function (data, type, full, meta) {
+                            return (full.IPViewCount * 7 / full.TotalDays).toFixed(2);
+                         }
+                     },
+
+                    {
+                        'targets': 10,
+                        'class': 'totalhour',
+                        'render': function (data, type, full, meta) {
+                            return data.toFixed(2);
+                        }
+                    },
+                    {
+                        'targets': 11,
+                        'class': 'ivph',
+                        'render': function (data, type, full, meta) {
+                            return (full.IPViewCount / full.TotalHourDuration).toFixed(0);
+                        }
+                    },
+                    //{
+                    //    'targets': 13,
+                    //    'class': 'stab',
+                    //    'render': function (data, type, full, meta) {
+                    //        return full.Stability.toFixed(2);
+                    //    }
+                    //},
+                    {
+                        'targets': 13,
+                        'class': 'hvc',
+                        'render': function (data, type, full, meta) {
+                            return "<a href='/VideoAccess/VideoReport?videoId=" + full.HighestVideoId + "'>" + full.HighestVideoCount + "</a>";
+                        }
+                    },
+                    {
+                        'targets': 0,
+                        'searchable': false,
+                        'orderable': false,
+                        'className': 'dt-body-center',
+                        'render': function (data, type, full, meta) {
+                            //console.log(data, type, full, meta);
+                            return '<input type="checkbox" data-id="' + full.VideoCatId + '" data-typeid="' + full.TypeId + '" class="cb_cat" ' + (selectedCats.indexOf(full.VideoCatId) > -1 ? "checked" : "") + '/>';
+                        }
+                    }],
+                "rowCallback": function (row, data, index) {
+
+                    // Bold the grade for all 'A' grade browsers
+                    if (data.ViewDetail == true) {
+                        //console.log(row, data, index);
+                        $('td:eq(1)', row).addClass('details-control');
+                    }
+                },
+                'order': [1, 'asc'],
+                "columns": [
+                     {
+                         //"orderable": false,
+                         //"data": null,
+                         //"defaultContent": '',
+                         //"visible": isMain?true:table.column(0).visible()
+                     },
+                    { "data": "Title", "visible": isMain ? true : table.column(1).visible() },
+                    { "data": "IPViewCount", "visible": isMain ? true : table.column(2).visible() },
+                    { "data": "PercentIPViewCount", "visible": isMain ? true : table.column(3).visible() },
+                    { "data": "PageViewCount", "visible": isMain ? false : table.column(4).visible() },
+                    { "data": "PercentPageViewCount", "visible": isMain ? false : table.column(5).visible() },
+                    { "data": "TotalVideos", "visible": isMain ? true : table.column(6).visible() },
+                    { "data": null, "visible": isMain ? true : table.column(7).visible() },
+                    { "data": null, "visible": isMain ? true : table.column(8).visible() },
+                    { "data": null, "visible": isMain ? true : table.column(9).visible() },
+                    { "data": "TotalHourDuration", "visible": isMain ? true : table.column(10).visible() },
+                    { "data": null, "visible": isMain ? true : table.column(11).visible() },
+                    { "data": "Type", "visible": isMain ? true : table.column(12).visible() },
+                    //{ "data": "Stability", "visible": isMain ? true : table.column(13).visible() },
+                    { "data": "HighestVideoCount", "visible": isMain ? true : table.column(13).visible() },
+                ],
+                dom: 'Bfrtip',
+                buttons: isMain == true ? [
+                    'excelHtml5',
+                    'print',
+                    "colvis"
+                ] : [],
+                "searching": isMain,
+                "paging": false,
+                "info": isMain,
+                "initComplete": function (settings, json) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $('[data-toggle="popover"]').popover(
+                        {
+                            trigger: 'hover focus',
+                            delay: {hide: 100}
+                        })
+                        .on('shown.bs.popover', function () {
+                            $(this).siblings("div.popover").find(".tt_chart").highcharts({
+                                chart: { type: "pie", animation: false },
+                                title: { text: "Tỉ lệ lượt xem" },
+                                tooltip: {
+                                    pointFormat: 'Tỉ lệ: <b>{point.percentage:.1f}%</b><br/>Số lượng: <b>{point.y}</b>'
+                                },
+                                series: [{
+                                    name: "Tỉ lệ lượt xem",
+                                    data: [{
+                                        name: "Không trùng",
+                                        y: $(this).data("ipvc")
+                                    }, {
+                                        name: "Trùng",
+                                        y: $(this).data("rvc")
+                                    }]
+                                }],
+                                plotOptions: {
+                                    pie: {animation:false}
+                                }
+                            });
+                        })
+                    $table.find(".cb_cat").on("click", function () {
+                        var checkbox = this;
+                        var typeId = $(this).data("typeid");
+                        var catId = $(this).data("id");
+                        //Checkbox Cat Type
+                        var sameTypeCheckedLength = $('.cb_cat[data-typeid=' + typeId + ']:checked').length;
+                        var sameTypeLength = $('.cb_cat[data-typeid=' + typeId + ']').length;
+                        if (sameTypeCheckedLength == sameTypeLength)
+                            $("#cb_cattype_" + typeId).prop("checked", true);
+                        else if (sameTypeCheckedLength == 0) {
+                            $("#cb_cattype_" + typeId).prop("checked", false);
+                            $("#cb_cattype_" + typeId).prop("indeterminate", false);
+                        }
+                        else
+                            $("#cb_cattype_" + typeId).prop("indeterminate", true);
+                        //Toggle Cat
+                        $(".toggle-cat[data-id=" + catId + "]").attr("data-checked", checkbox.checked);
+                        $(".toggle-cat[data-id=" + catId + "]").data("checked", checkbox.checked);
+
+                        //add to or remove from selectedCats 
+                        var catIndex = selectedCats.indexOf(catId);
+                        if (checkbox.checked) {
+                            if (catIndex == -1)
+                                selectedCats.push(catId);
+                        }
+                        else if (catIndex > -1)
+                            selectedCats.splice(catIndex, 1);
+                        setCookie("cats", JSON.stringify(selectedCats), 1);//save
+                        //hide or show on chart
+                        var chart = $('#container').highcharts();
+                        $.each(chart.series, function (i, s) {
+                            if (s.options.id == catId) {
+                                if (!checkbox.checked)
+                                    s.hide();
+                                else
+                                    s.show();
+                            }
+                        });
+                    });
+                    if (complete != null) {
+                        complete();
+                    }
+                    var endTime = new Date();
+                    console.log("Table Time: ", Math.abs(endTime - startTime));
+                },
+                headerCallback: function (thead, data, start, end, display) {
+                    if (isMain == false) $(thead).hide();//.css('visibility', 'hidden');
+                },
+                footerCallback: function (row, data, start, end, display) {
+                    if (isMain == true) {
+                        var api = this.api(), data;
+
+                        // Remove the formatting to get integer data for summation
+                        var intVal = function (i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        var cols = [2, 3, 4, 5, 6, 10];
+                        cols.forEach(function (e, i) {
+                            var data = api.column(e).data();
+                            //console.log(data);
+                            // Total over all pages
+                            var total = data.length ? data.reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }) : 0;
+                            // Update footer
+                            $(api.column(e).footer()).html(total.toFixed(0));
+                        });
+                    }
+                }
+            });
+            if (isMain) {
+                newTable.on('column-visibility.dt', function (e, settings, column, state) {
+                    if (isMain) {
+                        //console.log(
+                        //    'Column ' + column + ' has changed to ' + (state ? 'visible' : 'hidden')
+                        //);
+                        //apply to all table
+                        $.each(subTables, function (i, subTable) {
+                            subTable.column(column).visible(state);
+                        });
+                    }
+                });
+            };
+            return newTable;
+        }
+        //setCookie("cats", null, -1);
+        var cats = getCookie("cats");
+        if (cats != "")
+            selectedCats = JSON.parse(cats);
+        function renderSubTable() {
+                $('#example tbody td.details-control').each(function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
+
+                    // Open this row
+                var $table = $("<table class='sub-table table table-striped table-bordered' cellspacing='0' width='100%'></table>");
+                    row.child($table.prop('outerHTML'));
+              
+                    row.child().addClass("details-view");
+                    var subTable = makeTable(row.child().find("td > table"), false, '/VideoAccess/GetChildenReportData?parentId=' + row.data().ParentId + "&startDate=" + startDate + "&endDate=" + endDate);
+
+                    subTables.push(subTable);
+                });
+                //isTableComplete = true;
+                //if (isChartComplete == true)
+                //{
+                //    $("#myModal").modal('hide');
+                //    isTableComplete = false;
+                //    isChartComplete = false;
+                //}
+                    
+        }
+        function renderTable() {
+            table = makeTable($("#example"), true, "/VideoAccess/GetAllReportData?startDate=" + startDate + "&endDate=" + endDate, renderSubTable);
+        }
+
+        function rerenderTable() {
+            subTables = [];
+            table.ajax.url("/VideoAccess/GetAllReportData?startDate=" + startDate + "&endDate=" + endDate).load(renderSubTable);
+        }
+
+        Highcharts.setOptions({
+            lang: {
+                loading: 'Đang tải...',
+                months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                weekdays: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
+                shortMonths: ['01', '02', '03', '4', '05', '06', '07', '08', '09', '10', '11', '12'],
+                exportButtonTitle: "Xuất ra",
+                printButtonTitle: "Khoảng",
+                rangeSelectorFrom: "Từ",
+                rangeSelectorTo: "Đến",
+                rangeSelectorZoom: "Phóng lớn",
+                printChart: "LƯU BIỂU ĐỒ",
+                downloadPNG: 'Lưu ảnh PNG',
+                downloadJPEG: 'Lưu ảnh JPEG',
+                downloadPDF: 'Lưu tệp PDF',
+                downloadSVG: 'Lưu ảnh SVG'
+            }
+        });
+
+        var chartOptions = {
+            chart: { type: 'spline', animation: false },
+            title: { text: 'Biểu đồ thống kê lượng truy cập' },
+            legend: { enabled: false },
+            tooltip:
+            {
+                valueDecimals: 2,
+                formatter: function () {
+                    var s = '';
+                    if (timeRange == 'day') {
+                       s += '<b>' + Highcharts.dateFormat('%e/%b/%Y', this.x) + '</b>';
+                    } else if (timeRange == 'week') {
+                        var dat = new Date(this.x);
+                        var target = new Date(this.x);
+                        // ISO week date weeks start on monday  
+                        // so correct the day number  
+                        var dayNr = (dat.getDay() + 6) % 7;
+
+                        // Set the target to the thursday of this week so the  
+                        // target date is in the right year  
+                        target.setDate(target.getDate() - dayNr + 3);
+
+                        // ISO 8601 states that week 1 is the week  
+                        // with january 4th in it  
+                        var jan4 = new Date(target.getFullYear(), 0, 4);
+
+                        // Number of days between target date and january 4th  
+                        var dayDiff = (target - jan4) / 86400000;
+                        // Calculate week number: Week 1 (january 4th) plus the    
+                        // number of weeks between target date and january 4th    
+                        var weekNr = 1 + Math.ceil(dayDiff / 7);
+
+                        s += '<b>Tuần từ ngày ' + Highcharts.dateFormat('%e/%b', this.x) + ' ( ' + weekNr + ' )</b>';
+                    } else if (timeRange == 'month') {
+                        s += '<b>Tháng ' + Highcharts.dateFormat('%b/%Y', this.x) + '</b>';
+                    } else if (timeRange == 'quarter') {
+                        var today = new Date(this.x);
+                        var quarter = Math.floor((today.getMonth() + 3) / 3);
+                        s += '<b>Quý ' + quarter + '/' + Highcharts.dateFormat('%Y', this.x) + '</b>';
+                    } else if (timeRange == 'year') {
+                        s += '<b>Năm ' + Highcharts.dateFormat('%Y', this.x) + '</b>';
+                    }
+
+                    //$.each(this.point, function () {
+                        s += '<br/> <span style="font-weight:bold; color:' + this.series.color + '">' + this.series.name + '</span>: ' + this.point.y;
+                    //});
+
+                    return s;
+                }
+
+            },
+            xAxis:
+            {
+                type: 'datetime',
+                dateTimeLabelFormats:
+                {
+                    millisecond: '%H:%M:%S.%L',
+                    second: '%H:%M:%S',
+                    minute: '%H:%M',
+                    hour: '%H:%M',
+                    day: '%e/%b',
+                    week: '%e/%b',
+                    month: '%b/%y',
+                    year: '%Y'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Lượt xem'
+                }
+
+            },
+            plotOptions: {
+                spline: {
+                    animation: false,
+                    lineWidth: 2,
+                    states: {
+                        hover: {
+                            lineWidth: 3
+                        }
+                    },
+                    marker: {
+                        enabled: false
+                    },
+                    
+                    pointInterval: 3600000, // one hour
+                    pointStart: Date.UTC(2015, 4, 31, 0, 0, 0)
+                },
+                line:
+                {
+                    animation: false
+                       
+                }, 
+                column:
+                {
+                    animation: false
+                },
+                //sang
+                series:
+                {
+                    point:
+                    {
+                        events:
+                        {
+                            click: function (e) {
+                                var selectedDate = Highcharts.dateFormat('%d/%m/%Y', this.x);
+                                var catid = this.series.options.id;
+                                var $fixedTooltip = $("#fixed-tooltip");
+                                var link = '/VideoAccess/VideoReportByCat?catid=' + catid + '&from=' + selectedDate + '&dateType=' + timeRange;
+                                
+                                $fixedTooltip.show();
+                                $fixedTooltip.find(".title").html(this.series.name + " - " + selectedDate);
+                                $fixedTooltip.find(".content").load('/VideoAccess/GetTopVideo?catid=' + catid + '&from=' + selectedDate + '&dateType=' + timeRange);
+                                
+                                $fixedTooltip.find(".buttons").html('<a href="' + link + '" class="btn btn-default chi tiết">Xem</a>');
+                            }
+                        }
+                    }
+                }
+
+            }
+        };
+
+        $('.dropdownchild').on('click', '.selectpicker', function (e) {
+            e.preventDefault();
+            startDate = $(this).data('start');
+            endDate = $(this).data('end');
+            $('#daterange').data('daterangepicker').setStartDate(startDate);
+            $('#daterange').data('daterangepicker').setEndDate(endDate);
+            var title = $(this).data('display');
+            
+            $('.selectparent').each(function () {
+                $(this).empty();
+                $(this).html($(this).data('default') + ' <span class="caret"></span>');
+                $(this).removeClass('active');
+            });
+            var button = $(this).parent().parent().parent().parent().children('button');
+            button.empty();
+            button.html(title + ' <span class="caret"></span>');
+            button.addClass('active');
+            updateTitle();
+            console.log(startDate.toString("DD/MM/yyyy"));
+            console.log(endDate.toString("DD/MM/yyyy"));
+            $("#myModal").modal('show');
+            drawChart();
+            rerenderTable();
+        });
+
+        var pickerRange = $('#daterange').daterangepicker({
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            startDate: startDate,
+            endDate: endDate,
+            opens: 'left',
+        });
+
+        function updateChartQuery() {
+            chartQuery = '/VideoAccess/GetAllCatAccessDataGroupBy?groupBy=' + timeRange;
+
+            if (startDate != null && endDate != null) {
+                chartQuery += ("&startDate=" + startDate + "&endDate=" + endDate)
+            }
+            $.each(selectedCats, function (i, cat) {
+
+                chartQuery += "&cats=" + cat;
+            });
+        }
+        var chartSeries = [];
+        function getChartData(i, onComplete)
+        {
+            if (i == 0)
+                chartSeries = [];
+            chartQuery = '/VideoAccess/GetAllCatAccessDataGroupBy?groupBy=' + timeRange;
+
+            if (startDate != null && endDate != null) {
+                chartQuery += ("&startDate=" + startDate + "&endDate=" + endDate)
+            }
+            chartQuery += "&catId=" + selectedCats[i];
+            
+            $.getJSON(chartQuery, function (accessdata) {
+                chartSeries.push(accessdata);
+                if (i < selectedCats.length - 1)
+                    getChartData(i + 1, onComplete);
+                else if (onComplete != null)
+                    onComplete(chartSeries);
+            });
+            
+        }
+        function addChartData(catId, onComplete)
+        {
+            chartQuery = '/VideoAccess/GetAllCatAccessDataGroupBy?groupBy=' + timeRange;
+
+            if (startDate != null && endDate != null) {
+                chartQuery += ("&startDate=" + startDate + "&endDate=" + endDate)
+            }
+            chartQuery += "&catId=" + catId;
+            $.getJSON(chartQuery, function (accessdata) {
+                if (accessdata.id == 0) accessdata.id = "tb_" + accessdata.typeid;
+                chartSeries.push(accessdata);
+                if (onComplete != null)
+                    onComplete(accessdata);
+            });
+        }
+        function drawChart(complete) {
+            var startTime = new Date();
+            //updateChartQuery();
+            getChartData(0, function (accessdata) {
+                $.each(accessdata, function (i, data) {
+                    if (data.id == 0) data.id = "tb_" + data.typeid;
+                    //bật lại các mục đã chọn
+                    if (selectedCats.indexOf(data.id) == -1)
+                        data.visible = false;
+                    else {
+                        $(".toggle-cat[data-id=" + data.id + "]").attr("data-checked", true);
+                        $(".toggle-cat[data-id=" + data.id + "]").data("checked", true);
+
+                        //$(".cb_cat[data-id=" + data.id + "]").attr("data-checked", true);
+                    }
+                })
+                chartOptions.series = accessdata;
+                chartOptions.plotOptions.spline.marker.enabled = document.getElementById('cbToggleMarker').checked;
+                $('#container').highcharts(chartOptions);
+                //isChartComplete = true;
+                //if (isTableComplete == true) {
+                    $("#myModal").modal('hide');
+                    //isChartComplete = false;
+                    //isTableComplete = false;
+                //}
+                if (complete != null)
+                    complete();
+                var endTime = new Date();
+                console.log("Chart Time:", Math.abs(endTime - startTime));
+            });
+        }
+
+        function registerChartControl() {
+            
+                
+            //radio checkbox - chart type
+            $('input:radio[name="radiocharttype"]').change(function () {
+                var charttype = $(this).val();
+                chartOptions.chart.type = charttype;
+                $('#container').highcharts(chartOptions);
+            });
+            //checkbox nhóm chương trình (trực tiếp/gián tiếp/chính luận...)
+            $(".cb_cattype").on("click", function () {
+                var checkbox = this;
+                var chart = $('#container').highcharts();
+                var id = $(this).data("id");
+                $(".toggle-cat[data-typeid=" + id + "]").each(function (i, el)
+                {
+                    var catid = $(this).data("id");
+                    
+                    var index = selectedCats.indexOf(catid);
+                    if (checkbox.checked) {
+                        if (index == -1) {
+                            selectedCats.push(catid);
+                        }
+                        var serie = chart.series.filter(function (x) {
+                            return x.options.id == catid
+                        });
+
+                        if (serie.length == 0) {
+                            addChartData(catid, function (accessdata) {
+                                chart.addSeries(accessdata, true);
+                            });
+                        }
+                        else
+                        {
+                            serie[0].show();
+                        }
+                    }
+                    else {
+                        if (index > -1) {
+                            selectedCats.splice(index, 1);
+                        }
+                        var serie = chart.series.filter(function (x) {
+                            return x.options.id == catid
+                        });
+                        if(serie.length > 0)
+                        {
+                            serie[0].hide();
+                        }
+                    }
+                });
+                setCookie("cats", JSON.stringify(selectedCats), 1);
+                //checkbox từng chương trình
+                $(".cb_cat[data-typeid=" + id + "]").prop('checked', checkbox.checked);
+                $(".toggle-cat[data-typeid=" + id + "]").data('checked', checkbox.checked);
+                $(".toggle-cat[data-typeid=" + id + "]").attr('data-checked', checkbox.checked);
+                chart.redraw();
+            });
+
+            $(".toggle-cat").on("click", function () {
+                var toggleBtn = this;
+                var typeId = $(this).data("typeid");
+                var catId = $(this).data("id");
+                var parentId = $(this).data("parentid")
+                var checked = !$(this).data("checked");
+                $(this).attr("data-checked", checked);
+                $(this).data("checked", checked);
+
+
+                $(".cb_cat[data-id=" + catId + "]").prop('checked', checked);
+
+                //nếu là chuyên mục con thì mở chuyên mục cha và check chuyên mục con ở bảng
+                table.rows().every(function () {
+                    var d = this.data();
+                    
+                    if (d.ParentId == parentId) {
+                        var isShown = this.child.isShown();
+                        this.child.show();
+                        //check checkbox
+                        $(".cb_cat[data-id=" + catId + "]").prop('checked', checked);
+
+                        //neu bo chon
+                        if (!checked) {
+                            //neu ko hien thi tren bang thi tat lai
+                            if (!isShown)
+                                this.child.hide();
+                        }
+                    }
+                });
+
+                //add to or remove from selectedCats 
+                var catIndex = selectedCats.indexOf(catId);
+                if (checked) {
+                    if (catIndex == -1)
+                        selectedCats.push(catId);
+                }
+                else if (catIndex > -1)
+                    selectedCats.splice(catIndex, 1);
+                setCookie("cats", JSON.stringify(selectedCats), 1);//save
+                //Cat Type
+                var sameTypeCheckedLength = $('.cb_cat[data-typeid=' + typeId + ']:checked').length;
+                var sameTypeLength = $('.cb_cat[data-typeid=' + typeId + ']').length;
+                if (sameTypeCheckedLength == sameTypeLength)
+                    $("#cb_cattype_" + typeId).prop("checked", true);
+                else if (sameTypeCheckedLength == 0) {
+                    $("#cb_cattype_" + typeId).prop("checked", false);
+                    $("#cb_cattype_" + typeId).prop("indeterminate", false);
+                }
+                else
+                    $("#cb_cattype_" + typeId).prop("indeterminate", true);
+
+                var chart = $('#container').highcharts();
+                var found = false;
+                $.each(chart.series, function (i, s) {
+                    if (s.options.id == catId) {
+                        found = true; //da co san data
+                        if (!checked)
+                            s.hide();
+                        else
+                            s.show();
+                    }
+                });
+                if(!found) //chua co san data
+                    addChartData(catId, function (accessdata) {
+                        chart.addSeries(accessdata, true);
+                    });
+            });
+            
+            $("#cbToggleMarker").on("change", function () {
+                //var chart = $('#container').highcharts();
+                //console.log(chart.options.plotOptions.spline.marker.enabled);
+                var enabled = chartOptions.plotOptions.spline.marker.enabled;
+                chartOptions.plotOptions.spline.marker.enabled = !enabled;
+                $('#container').highcharts(chartOptions);
+                //if (enabled) {
+                //    $(this).val("Hiển thị điểm");
+                //}
+                //else
+                //{
+                //    $(this).val("Ẩn điểm");
+                //}
+            })
+        }
+
+        function updateTitle()
+        {
+            $("#rangetitle").html(startDate + " - " + endDate);
+            $("#periodtypetitle").html(timeRangeValues[timeRange]);
+        }
+
+        var timeRangeValues = { "day": "Ngày", "week": "Tuần", "month": "Tháng", "quater": "Quý", "year": "Năm" };
+        $(function () {
+            updateTitle();
+
+            //$('.selectpicker').on('click', function (e) {
+            //    e.preventDefault();
+            //    var start = $(this).data('start');
+            //    var end = $(this).data('end');
+            //    $('#daterange').data('daterangepicker').setStartDate(start);
+            //    $('#daterange').data('daterangepicker').setEndDate(end);
+            //    updateTitle();
+            //});
+
+            var pickerRange = $('#daterange').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+                startDate: startDate,
+                endDate: endDate,
+                opens: 'left',
+            });
+
+            $('#daterange').on("apply.daterangepicker", function (ev, picker) {
+                startDate = $('#daterange').data('daterangepicker').startDate.format('DD-MM-YYYY');
+                endDate = $('#daterange').data('daterangepicker').endDate.format('DD-MM-YYYY');
+                $("#myModal").modal('show');
+                drawChart();
+                rerenderTable();
+                updateTitle();
+            });
+
+            $("#timeSelector").on("change", function () {
+                changeTimeRange($(this).val());
+                updateTitle();
+            });
+
+            $("#btnday, #btnweek, #btnmonth, #btnquarter, #btnyear").on("click", function () {
+                $('#selectDate').empty();
+                $('#selectDate').append($(this).html() + ' <span class="caret"></span>');
+                $(this).removeClass("active");
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+                $("#myModal").modal('show');
+                changeTimeRange($(this).data("value"));
+                updateTitle();
+                //drawChart();
+            });
+
+            function changeTimeRange(val) {
+                if (val != timeRange) {
+                    timeRange = val;
+                    isTableComplete = true;
+                    drawChart();
+                }
+            }
+            $('#myModal').modal('show');
+            drawChart(registerChartControl);
+            renderTable();
+            $('#selectDate').addClass('active');
+            if (timeRange == 'day')
+            {
+                $('#selectDate').empty();
+                $('#selectDate').html('Theo Ngày <span class="caret"></span>');
+            }
+            $('#initMonth').empty();
+            $('#initMonth').html(dateTemp.month() + 1 + ' / ' + dateTemp.year() + ' <span class="caret"></span>');
+            $('#initMonth').addClass('active')
+            
+            $('#sidebar-nav #devReportMng').toggleClass("active");
+            $('#sidebar-nav #devReportMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#dr-li-1').toggleClass("active");
+            $('#sidebar-nav a#dr-li-1').parent().siblings().removeClass("active");
+            
+            $('#example tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    //close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    row.child.show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,183 @@
+﻿@model List<DeviceReport>
+
+@{
+    ViewBag.Title = "Báo cáo thiết bị";
+    
+    var now = DateTime.Now;
+    string from = ViewBag.fromDate;
+    string to = ViewBag.toDate;
+}
+
+@section styles {
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.6/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+}
+
+@section scripts {
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+    <script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+    @*Highchart*@
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+        $(document).ready(function () {
+            var query = "/videoaccess/getdevicereportbydate?from=@from&to=@to";
+            $.getJSON(query, function (data) {
+                
+                var pieChartOptions =
+                {
+                    title:{text: 'Số lượng người coi từng loại thiết bị'},
+                    chart: { type: 'pie', animation: false }
+                };
+                var pieChartSeries = [{name:"Báo cáo thiết bị", data : []}];
+               
+                
+                var tableData = [];
+                $.each(data, function (i, row) {
+                    tableData.push([row.Name, row.IPViewCount, row.PercentIPViewCount, row.PageViewCount, row.PercentPageViewCount, row.PercentDuplicateViewCount]);
+                    pieChartSeries[0].data[i] = { name: row.Name, y: row.IPViewCount };
+                });
+
+                //TABLE
+                $("#dataTable").DataTable({
+                    data: tableData,
+                    paging: false,
+                    searching: false,
+                    order: [[1, "desc"]],
+                    info: false
+                });
+                //CHART
+                pieChartOptions.series = pieChartSeries;
+                $("#chart").highcharts(pieChartOptions);
+            });
+           
+
+
+            $('#daterange').daterangepicker({
+                opens: 'left',
+                format: 'DD-MM-YYYY',
+            });
+            $('#daterange').on('apply.daterangepicker', function (ev, picker) {
+                var from = picker.startDate.format('YYYY-MM-DD');
+                var to = picker.endDate.format('YYYY-MM-DD');
+                window.location = "/videoaccess/devicereportbydate?from=" + from + "&to=" + to + "&datetype=custom";
+            });
+
+            $('#sidebar-nav #videoAccessMng').toggleClass("active");
+            $('#sidebar-nav #videoAccessMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#vda-li-5').toggleClass("active");
+            $('#sidebar-nav a#vda-li-5').parent().siblings().removeClass("active");
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Báo cáo</h2>
+                <div class="pull-right">
+                    <div class="form-group vd-ctg-report">
+                        <div class="btn-group">
+                            <label>Tùy chọn: </label>
+                            <input type="text" name="daterange" id="daterange" value="@(ViewBag.fromDate) - @(ViewBag.toDate)" />
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "week" ? "active" : "")" data-toggle="dropdown" aria-expanded="false">
+                                Tuần <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @for (int i = 0; i < 4; i++)
+                                {
+                                    //--Tuần tính từ T7 tuần trước đển T6 tuần hiện tại--//
+                                    var currDay = now.DayOfWeek;
+                                    var prevSat = now.AddDays(((int)currDay + 1) * -1);
+                                    var beginWeek = prevSat.ToString("dd/MM/yyyy");
+                                    var endWeek = prevSat.AddDays(6).ToString("dd/MM/yyyy");
+                                    now = prevSat.AddDays(-1);
+
+                                    <li><a href="/videoaccess/devicereportbydate?from=@beginWeek&to=@endWeek&dateType=week">Tuần từ @beginWeek - @endWeek</a></li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "month" ? "active" : "")" data-toggle="dropdown" aria-expanded="false">
+                                Tháng <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    var tempDate = now.AddMonths(-i);
+                                    var beginMonth = new DateTime(tempDate.Year, tempDate.Month, 1).ToString("dd/MM/yyyy");
+                                    var endMonth = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month)).ToString("dd/MM/yyyy");
+                                    <li><a href="/videoaccess/devicereportbydate?from=@beginMonth&to=@endMonth&dateType=month">Tháng @tempDate.Month</a></li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle @(ViewBag.dateType == "year" ? "active" : "")" data-toggle="dropdown" aria-expanded="false">
+                                Năm <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @for (int i = 0; i < 4; i++)
+                                {
+                                    var year = now.Year - i;
+                                    var beginYear = new DateTime(year, 1, 1).ToString("dd/MM/yyyy");
+                                    var endYear = new DateTime(year, 12, 31).ToString("dd/MM/yyyy");
+
+                                    <li><a href="/videoaccess/devicereportbydate?from=@beginYear&to=@endYear&dateType=year">Năm @year</a></li>
+
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <div class="col-md-12" id="chart">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <h2>Loại thiết bị</h2>
+                    <table class="table table-bordered" id="dataTable" width="100%">
+                        <thead>
+                            <tr class="text-center">
+                                <th rowspan="2">Loại thiết bị</th>
+                                <th colspan="2">Lượt xem không trùng</th>
+                                <th colspan="2">Lượt xem trùng</th>
+                                <th rowspan="2">% xem lại</th>
+                            </tr>
+                            <tr class="text-center">
+                                <th>Số lượng</th>
+                                <th>%</th>
+                                <th>Số lượng</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (DeviceReport p in Model)
+                            {
+                                <tr>
+                                    <td>@p.Name</td>
+                                    <td>@p.IPViewCount</td>
+                                    <td>@p.PercentIPViewCount.ToString().Replace(",", ".")</td>
+                                    <td>@p.PageViewCount</td>
+                                    <td>@(p.PercentPageViewCount.ToString().Replace(",", "."))</td>
+                                    <td>@(p.PercentDuplicateViewCount.ToString().Replace(",", "."))</td>
+                                </tr>
+                            }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

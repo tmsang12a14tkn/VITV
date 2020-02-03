@@ -1,0 +1,480 @@
+﻿@model MyArticlesView
+@{
+    ViewBag.Title = "Quản lý bài viết";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="filter-block pull-left">
+        <a href="/Article/Management" class="btn btn-info pull-right">
+            <i class="fa fa-newspaper-o fa-lg"></i> Danh sách
+        </a>
+        <a href="/Article/Create" class="btn btn-success pull-right">
+            <i class="fa fa-plus fa-lg"></i> Tạo bài viết
+        </a>
+    </div>
+    <form class="form-inline pull-right" method="post" action="/Article/AdminSearch" data-ajax="true" data-ajax-complete="onCompleteArticleSearch" data-ajax-update="#articleSearchResultContainer" data-ajax-mod="replace">
+        <input type="search" class="form-control" name="query"/>
+        <button type="submit" class="form-control">Tìm kiếm</button>
+    </form>
+</div>
+
+<div class="tabs-wrapper">
+    <ul class="nav nav-tabs">
+       
+        <li class="@(ViewBag.tab=="needreview"?"active":"")">
+            <a href="#needreview" data-toggle="tab">Cần duyệt</a>
+        </li>
+        <li class="@(ViewBag.tab=="neededit"?"active":"")">
+            <a href="#neededit" data-toggle="tab">Cần chỉnh sửa</a>
+        </li class="@(ViewBag.tab=="needreview"?"active":"")">
+        <li class="@(ViewBag.tab== "good-needpublish" ? "active":"")">
+            <a href="#good-needpublish" data-toggle="tab">Tốt - Cần đăng</a>
+        </li>
+        <li class="@(ViewBag.tab== "reject" ? "active":"")">
+            <a href="#reject" data-toggle="tab">Bị loại</a>
+        </li>
+        <li class="@(ViewBag.tab== "published" ? "active":"")">
+            <a href="#published" data-toggle="tab">Đã đăng</a>
+        </li>
+    </ul>
+    <div class="tab-content tab-content-body">
+        <div class="tab-pane @(ViewBag.tab == "needreview" ? "active":"")" id="needreview">
+            @{
+                if (Model.NeedReviewList != null)
+                {
+                    <table class="table table-responsive">
+                        <thead></thead>
+                        <tbody>
+                            @foreach (var art in Model.NeedReviewList)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="col-lg-2">
+                                            <div style="background:url('@art.Thumbnail') no-repeat;background-size:cover;background-position: 50% 50%;width:50px;height:50px;"></div>
+                                        </div>
+                                       
+                                        <div class="col-lg-10">
+                                           
+                                            <div>
+                                                @if (User.IsInRole("Reviewer") || User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                                                { 
+                                                    <a href="@Url.Action("edit", new { id=art.Id })" style="font-size: 14px;">
+                                                    @Html.DisplayFor(modelItem => art.Title)
+                                                </a>
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayFor(modelItem => art.Title)
+                                                }
+                                                
+                                            </div>
+                                            <div style="font-size: 12px;">
+                                                @foreach (var cat in art.Categories)
+                                                {
+                                                    <a href="#">@cat.Name</a> 
+                                                }
+                                            </div>
+                                            @if (art.ArticleSeriesId.HasValue)
+                                            {
+                                                <div class="row">
+                                                    <a href="@Url.Action("details", "ArticleSeries" , new { id=art.ArticleSeriesId })" style="font-weight: 600;font-size: 14px;color: #3498db;">
+                                                        Series: @Html.DisplayFor(modelItem => art.Series.Name)
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @foreach (Employee rpt in art.Reporters)
+                                        {
+                                            <img src="@rpt.ProfilePicture" style="width: 50px; height: auto;">
+                                        }
+                                    </td>
+                                    <td>
+                                        
+                                        <span class="label label-default">Cần duyệt</span>
+                                       
+                                        @if (art.IsPublished)
+                                        {
+                                            <span class="label label-primary">Đã đăng</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="http://startup.vitv.vn/tin-chu/@(art.PublishedTime.Value.ToString("dd-mm-yyyy")) />@(art.UniqueTitle)/@(art.Id)" target="_blank" class="table-link">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+
+                                        <a href="@Url.Action("delete", "Article" , new { id=art.Id })" class="table-link danger">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div class="tab-pane @(ViewBag.tab == "needreview" ? "neededit":"")" id="neededit">
+           @{
+               if (Model.NeedEditList != null)
+               {
+                <table class="table table-responsive">
+                    <thead></thead>
+                    <tbody>
+                        @foreach (var art in Model.NeedEditList)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="col-lg-2">
+                                        <div style="background:url('@art.Thumbnail') no-repeat;background-size:cover;background-position: 50% 50%;width:50px;height:50px;"></div>
+                                    </div>
+
+                                    <div class="col-lg-10">
+
+                                        <div>
+                                            @if (User.IsInRole("Writter") || User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                                            {
+                                                    <a href="@Url.Action("edit", new { id=art.Id })" style="font-size: 14px;">
+                                                    @Html.DisplayFor(modelItem => art.Title)
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                @Html.DisplayFor(modelItem => art.Title)
+                                            }
+                                        </div>
+                                        <div style="font-size: 12px;">
+                                            @foreach (var cat in art.Categories)
+                                            {
+                                                <a href="#">@cat.Name</a>
+                                            }
+                                        </div>
+                                        @if (art.ArticleSeriesId.HasValue)
+                                        {
+                                            <div class="row">
+                                                    <a href="@Url.Action("details", "ArticleSeries" , new { id=art.ArticleSeriesId })" style="font-weight: 600;font-size: 14px;color: #3498db;">
+                                                    Series: @Html.DisplayFor(modelItem => art.Series.Name)
+                                                </a>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    @foreach (Employee rpt in art.Reporters)
+                                    {
+                                        <img src="@rpt.ProfilePicture" style="width: 50px; height: auto;">
+                                    }
+                                </td>
+                                <td>
+                                    <span class="label label-warning">Cần chỉnh sửa</span>
+                                    
+                                    @if (art.IsPublished)
+                                    {
+                                        <span class="label label-primary">Đã đăng</span>
+                                    }
+                                </td>
+                                <td>
+                                        <a href="http://startup.vitv.vn/tin-chu/@(art.PublishedTime.Value.ToString("dd-mm-yyyy")) />@(art.UniqueTitle)/@(art.Id)" target="_blank" class="table-link">
+                                        <span class="fa-stack">
+                                            <i class="fa fa-square fa-stack-2x"></i>
+                                            <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+
+                                        <a href="@Url.Action("delete", "Article" , new { id=art.Id })" class="table-link danger">
+                                        <span class="fa-stack">
+                                            <i class="fa fa-square fa-stack-2x"></i>
+                                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+               }
+        }
+        </div>
+
+        <div class="tab-pane @(ViewBag.tab == "good-needpublish" ? "active":"")" id="good-needpublish">
+            @{
+                var group3 = Model.GoodList;
+                if (group3 != null)
+                {
+                    <table class="table table-responsive">
+                        <thead></thead>
+                        <tbody>
+                            @foreach (var art in group3)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="col-lg-2">
+                                            <div style="background:url('@art.Thumbnail') no-repeat;background-size:cover;background-position: 50% 50%;width:50px;height:50px;"></div>
+                                        </div>
+
+                                        <div class="col-lg-10">
+                                            <div>
+                                                @if (User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                                                { 
+                                                    <a href="@Url.Action("edit", new { id=art.Id })" style="font-size: 14px;">
+                                                        @Html.DisplayFor(modelItem => art.Title)
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                     @Html.DisplayFor(modelItem => art.Title)
+                                                }
+                                            </div>
+                                            <div style="font-size: 12px;">
+                                                @foreach (var cat in art.Categories)
+                                                {
+                                                    <a href="#">@cat.Name</a>
+                                                }
+                                            </div>
+                                            @if (art.ArticleSeriesId.HasValue)
+                                            {
+                                                <div class="row">
+                                                    <a href="@Url.Action("details", "ArticleSeries" , new { id=art.ArticleSeriesId })" style="font-weight: 600;font-size: 14px;color: #3498db;">
+                                                        Series: @Html.DisplayFor(modelItem => art.Series.Name)
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @foreach (Employee rpt in art.Reporters)
+                                        {
+                                            <img src="@rpt.ProfilePicture" style="width: 50px; height: auto;">
+                                        }
+                                    </td>
+                                    <td>
+                                       
+                                        <span class="label label-success">Tốt</span>
+                                        
+                                    </td>
+                                   
+                                    <td>
+                                        <a href="http://startup.vitv.vn/tin-chu/@(art.PublishedTime.Value.ToString("dd-mm-yyyy")) />@(art.UniqueTitle)/@(art.Id)" target="_blank" class="table-link">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                        
+                                        <a href="@Url.Action("delete", "Article" , new { id=art.Id })" class="table-link danger">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                        
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+
+        <div class="tab-pane @(ViewBag.tab == "reject" ? "active":"")" id="reject">
+            @{
+                if (Model.RejectList != null)
+                {
+                    <table class="table table-responsive">
+                        <thead></thead>
+                        <tbody>
+                            @foreach (var art in Model.RejectList)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="col-lg-2">
+                                            <div style="background:url('@art.Thumbnail') no-repeat;background-size:cover;background-position: 50% 50%;width:50px;height:50px;"></div>
+                                        </div>
+
+                                        <div class="col-lg-10">
+                                            <div>
+                                                @if (User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                                                {
+
+                                                    <a href="@Url.Action("edit", new { id=art.Id })" style="font-size: 14px;">
+                                                        @Html.DisplayFor(modelItem => art.Title)
+                                                    </a>
+
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayFor(modelItem => art.Title)
+                                                }
+                                            </div>
+                                            <div style="font-size: 12px;">
+                                                @foreach (var cat in art.Categories)
+                                                {
+                                                    <a href="#">@cat.Name</a>
+                                                }
+                                            </div>
+                                            @if (art.ArticleSeriesId.HasValue)
+                                            {
+                                                <div class="row">
+                                                    <a href="@Url.Action("details", "ArticleSeries" , new { id=art.ArticleSeriesId })" style="font-weight: 600;font-size: 14px;color: #3498db;">
+                                                        Series: @Html.DisplayFor(modelItem => art.Series.Name)
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @foreach (Employee rpt in art.Reporters)
+                                        {
+                                            <img src="@rpt.ProfilePicture" style="width: 50px; height: auto;">
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="label label-danger">Bị loại</span>
+                                    </td>
+                                   
+                                    <td>
+                                        
+                                        <a href="http://startup.vitv.vn/tin-chu/@(art.PublishedTime.Value.ToString("dd-mm-yyyy")) />@(art.UniqueTitle)/@(art.Id)" target="_blank" class="table-link">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+
+
+                                        <a href="@Url.Action("delete", "Article" , new { id=art.Id })" class="table-link danger">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                        
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+
+        <div class="tab-pane @(ViewBag.tab == "published" ? "active":"")" id="published">
+            
+            <div class="tabs-wrapper tabs-no-header">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li><a href="@Url.Action("managementtab", "Article" , new { tab="published" })"><i class="fa fa-home"></i></a></li>
+                    <li>
+                        <a href="@Url.Action("managementtab", "Article" , new
+                        {
+                           tab="published" ,
+                           week = Model.PublishedList[0].Week - 1,
+                        })">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                    </li>
+
+                    @for (int i = 0; i < Model.PublishedList.Count; i++)
+                {
+                        <li class="@(i == Model.PublishedList.Count - 1 ? "active":"" )">
+                            <a href="#tab@(Model.PublishedList[i].Week)" role="tab" data-toggle="tab" style="@(Model.PublishedList[i].Articles.Count == 0 ? "color:#a09a9a;":"" )">Tuần @Model.PublishedList[i].Week</a>
+                </li>
+                }
+
+                    <li>
+                        <a href="@Url.Action("managementtab", "Article" , new
+                        {
+                               tab="published" ,
+                               week = Model.PublishedList[Model.PublishedList.Count-1].Week + 5,
+                        })">
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    @for (int i = 0; i < Model.PublishedList.Count; i++)
+                    {
+                        <div class="tab-pane fade @(i == Model.PublishedList.Count - 1 ? "active in":"")" id="tab@(Model.PublishedList[i].Week)">
+                            @Html.Partial("_WeekList", Model.PublishedList[i])
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="articleSearchResultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class=" modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Kết quả tìm kiếm</h4>
+        </div>
+        <div class="modal-body" id="articleSearchResultContainer">
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts {
+    <script>
+        function getURLParameter(name) {
+            return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+        }
+
+        function changeUrlParam(param, value) {
+            var currentURL = window.location.href + '&';
+            var change = new RegExp('(' + param + ')=(.*)&', 'g');
+            var newURL = currentURL.replace(change, '$1=' + value + '&');
+
+            if (getURLParameter(param) !== null) {
+                try {
+                    window.history.replaceState('', '', newURL.slice(0, -1));
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                var currURL = window.location.href;
+                if (currURL.indexOf("?") !== -1) {
+                    window.history.replaceState('', '', currentURL.slice(0, -1) + '&' + param + '=' + value);
+                } else {
+                    window.history.replaceState('', '', currentURL.slice(0, -1) + '?' + param + '=' + value);
+                }
+            }
+        }
+
+        $('a[href="#published"]').on('shown.bs.tab', function (e) {
+            changeUrlParam("tab", "published");
+        });
+        $('a[href="#reject"]').on('shown.bs.tab', function (e) {
+            changeUrlParam("tab", "reject");
+        });
+
+        $('a[href="#good-needpublish"]').on('shown.bs.tab', function (e) {
+            changeUrlParam("tab", "good-needpublish");
+        });
+        $('a[href="#neededit"]').on('shown.bs.tab', function (e) {
+            changeUrlParam("tab", "neededit");
+        });
+
+        $('a[href="#needreview"]').on('shown.bs.tab', function (e) {
+            changeUrlParam("tab", "needreview");
+        });
+
+        var onCompleteArticleSearch = function()
+        {
+            $("#articleSearchResultModal").modal("show");
+        }
+    </script>
+}

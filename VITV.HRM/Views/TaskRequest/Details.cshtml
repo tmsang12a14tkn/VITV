@@ -1,0 +1,236 @@
+﻿@model TaskRequest
+@{
+    ViewBag.Title = "Xem yêu cầu";
+    Employee me = ViewBag.Me;
+}
+
+<div class="widget-box transparent">
+    <div class="widget-header widget-header-flat">
+        <h4 class="widget-title smaller"><span @*class="@(ViewBag.CanEdit == true?"task-editable":"")"*@ data-url="/TaskRequest/EditProperty" data-pk="@Model.Id" data-name="Title" data-mode="inline">@Model.Title</span></h4> @*href="/TaskRequest/Details/@Model.Id"*@
+
+        <div class="widget-toolbar">
+            @if(ViewBag.CanEdit == true)
+            { 
+                <div class="tools action-buttons">
+                    <div class="btn-group">
+                        <a data-toggle="dropdown">
+                            <i class="ace-icon fa fa-plus bigger-125"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <form action="/Checklist/Create" method="post" class="create-checklist-form">
+                                    <div class="input-group" style="line-height: 20px;">
+                                        <input type="hidden" name="TaskRequestId" value="@Model.Id" />
+                                        <input type="text" class="input-medium" name="Title" placeholder="Thêm danh sách việc" value="Danh sách công việc" />
+                                        <span class="input-group-btn">
+                                            <input class="btn btn-success btn-sm" type="submit" value="Xong" />
+                                        </span>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+               
+                    <a data-href="/TaskRequest/Edit/@Model.Id" class="blue" data-toggle="modal" data-target="#request-modal">
+                        <i class="ace-icon fa fa-pencil bigger-125"></i>
+                    </a>
+
+                    <a data-href="/TaskRequest/Delete/@Model.Id" class="red" data-toggle="modal" data-target="#request-delete-modal">
+                        <i class="ace-icon fa fa-times bigger-125"></i>
+                    </a>
+                </div>
+            }
+        </div>
+        @*<div class="widget-toolbar">
+            <a href="#" data-action="collapse">
+                <i class="1 ace-icon fa bigger-125 fa-chevron-up"></i>
+            </a>
+        </div>*@
+        @*<div class="widget-toolbar no-border">@(Model.Start.HasValue ? Model.Start.Value.PassTimeString() : "")</div>*@
+    </div>
+    <div class="widget-body">
+        <div class="widget-main">
+            <p>
+                @Html.Raw(Model.Content)  
+            </p>
+
+            @*<i class="ace-icon fa fa-clock-o bigger-110"></i>*@
+
+            @if (Model.RequestTo.HasValue && Model.RequestFrom.HasValue)
+            {
+                var denominator = (Model.RequestTo.Value - Model.RequestFrom.Value).TotalMinutes;
+                var numerator = (DateTime.Now - Model.RequestFrom.Value).TotalMinutes;
+                var percent = numerator > denominator || denominator == 0 ? 100 : Math.Round(numerator * 100 / denominator, 0);
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span class="pull-left">
+                            @Model.RequestFrom.Value.ToString("dd/MM/yyyy HH:mm")
+                        </span>
+                        <span class="pull-right">
+                            @Model.RequestTo.Value.ToString("dd/MM/yyyy HH:mm")
+                        </span>
+                    </div>
+                </div>
+                <div class="progress pos-rel" data-percent="@percent%">
+                    <div class="progress-bar" style="width:@percent%">
+                        @*<i class="ace-icon fa fa-clock-o bigger-110 pull-left"></i>*@
+                    </div>
+                </div>
+            }
+            <div class="hr"></div>
+            @*<span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title="Thêm" data-content='<form action="/Checklist/Create" method="post" id="create-checklist-form"><div class="form-group form-inline"><input type="hidden" name="TaskRequestId" value="@Model.Id"/><input type="text" class="form-control" name="Title"/><input class="btn btn-success" type="submit" value="Xong"/></div></form>'>Thêm danh sách việc</span>*@
+            @*<div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle" aria-expanded="true">
+                        Thêm danh sách việc
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-warning">
+                        <li>
+                            <form action="/Checklist/Create" method="post" id="create-checklist-form">
+                                <div class="form-group form-inline">
+                                    <input type="hidden" name="TaskRequestId" value="@Model.Id" />
+                                    <input type="text" class="form-control" name="Title" />
+                                    <input class="btn btn-success" type="submit" value="Xong" />
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>*@
+            <ul class="list-unstyled" id="checklists-@Model.Id">
+                @Html.Partial("~/Views/Checklist/List.cshtml", Model.JobLists)
+            </ul>
+            <div class="hr"></div>
+            @*<div class="message-attachment clearfix">
+                    <div class="attachment-title">
+                        <span class="blue bolder bigger-110">Đính kèm</span>
+                        &nbsp;
+                        <span class="grey">(@Model.Attachments.Count tệp)</span>
+
+                        <div class="inline position-relative">
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                    &nbsp;
+                                    <i class="ace-icon fa fa-caret-down bigger-125 middle"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-lighter">
+                                    <li>
+                                        <a href="#">Download all as zip</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">Display in slideshow</a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+
+                    &nbsp;
+                    <ul class="attachment-list pull-left list-unstyled">
+                        @foreach (var attachment in Model.Attachments)
+                        {
+                            <li>
+                                <a href="@attachment.AttachmentLink" target="_blank" class="attached-file">
+                                    <i class="ace-icon fa fa-file-o bigger-110"></i>
+                                    <span class="attached-name">@Path.GetFileName(attachment.AttachmentLink)</span>
+                                </a>
+
+                                <span class="action-buttons">
+                                    <a href="@attachment.AttachmentLink" download>
+                                        <i class="ace-icon fa fa-download bigger-125 blue"></i>
+                                    </a>
+
+                                    <a href="#">
+                                            <i class="ace-icon fa fa-trash-o bigger-125 red"></i>
+                                        </a>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+
+                </div>*@
+
+            @*<div class="hr hr-double"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Model.Responses.Count(rp => !rp.IsDeleted) phản hồi
+                        <div class="pull-right">
+
+                                <div class="btn-toolbar inline middle no-margin">
+                                    <div data-toggle="buttons" class="btn-group no-margin">
+                                        <label class="btn btn-sm btn-yellow active">
+                                            <span class="bigger-110">Tất cả</span>
+
+                                            <input type="radio" value="all" data-Modelid="@Model.Id"/>
+                                        </label>
+
+                                        <label class="btn btn-sm btn-yellow">
+                                            <span class="bigger-110">Có đính kèm</span>
+
+                                            <input type="radio" value="attachment-only" data-Modelid="@Model.Id" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                            <a href="#" class="pull-right btn btn-danger btn-xs" data-action="add" data-toggle="modal" data-target="#Model-modal" data-href="/TaskRequest/Add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></a>
+                        </div>
+
+                </div>*@
+            @*<div class="space-4"></div>
+                <div class="row">
+                    <div class="col-sm-12" id="response-items-@Model.Id">
+                        @foreach (var response in Model.Responses.OrderBy(rp => rp.CreatedTime))
+                        {
+                            if (!response.IsDeleted)
+                            {
+                                @Html.Partial("~/Views/TaskResponse/_Details.cshtml", response)
+                            }
+                        }
+                        @using (Html.BeginForm("Create", "TaskResponse", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal response-form", data_id = Model.Id }))
+                        {
+                            @Html.Hidden("TaskRequestId", Model.Id)
+                            <div class="">
+                                <div class="timeline-item clearfix">
+                                    <div class="timeline-info">
+                                        <img class="pull-left" src="@me.ProfilePicture" />
+                                    </div>
+
+                                    <div class="widget-box">
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <div class="form-group">
+                                                    <textarea class="form-control" name="Content"></textarea>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input type="file" name="attachments" class="input-attachments" multiple />
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="submit" value="OK" typeof="text" class="btn btn-sm btn-danger pull-right" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            registerJobList();
+        });
+    </script>
+}

@@ -1,0 +1,119 @@
+﻿@using System.Globalization
+@model CategoryIntro
+
+@Html.HiddenFor(model => model.Id)
+
+<div class="modal-body">
+            <div class="main-box-body clearfix">
+                @Html.ValidationSummary(true)
+                <div class="row">
+                    <div class="form-group pull-right" style="margin-right:10px">
+                        <button type="submit" class="btn btn-success btn-ok"><span class="fa fa-check"></span> Hoàn thành</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-times"></span> Hủy</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Title, string.Empty, new { @class = "help-block" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description, string.Empty, new { @class = "help-block" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VideoCategoryId, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        <select class="form-control" id="VideoCategoryId" name="VideoCategoryId">
+                            @foreach (VideoCatGroup grp in ViewBag.VideoCatGroups)
+                            {
+                                <optgroup label="@(grp.Name)">
+                                    @foreach (var cat in grp.VideoCats.OrderBy(c => c.Order))
+                                    {
+                                        <option value="@cat.Id" @(Model != null && cat.Id == Model.VideoCategoryId ? "selected" : ViewBag.catid != null && ViewBag.catid == cat.Id ? "selected" : "")>@cat.Name</option>
+                                    }
+                                </optgroup>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.VideoCategoryId, string.Empty, new { @class = "help-block" })
+                    </div>
+                    
+                </div>
+                @*<div class="form-group">
+                    @Html.LabelFor(model => model.VideoCategoryId, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("VideoCategoryId", null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VideoCategoryId, string.Empty, new { @class = "help-block" })
+                    </div>
+                </div>*@
+
+                @* Video URL *@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Url, new { @class = "col-lg-2 control-label" })
+                    @Html.HiddenFor(model => model.Url)
+                    <div class="col-lg-10">
+                        <div id="video-progress" class="progress progress-striped active">
+                            <div class="bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                        </div>
+                        <div id="videoupload">
+                            <input id="file_upload" name="file_upload" class="file_upload" type="file" accept="video/*" />
+                        </div>
+                        <video id="video" class="video-js" controls data-settings="autoresize:fit;" style="width: 100%; height: auto">
+                            @if (Model != null && !String.IsNullOrEmpty(Model.Url))
+                            {
+                                <source id="videosource" src="@Model.Url" type='video/mp4'>
+                            }
+                        </video>
+
+
+                        @Html.ValidationMessageFor(model => model.Url, string.Empty, new { @class = "help-block" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Thumbnail, new { @class = "col-lg-2 control-label" })
+                    @Html.HiddenFor(model => model.Thumbnail)
+                    <div class="col-lg-10">
+                        <img id="thumbnailImg" width="100%" height="426" src="@((Model == null || String.IsNullOrEmpty(Model.Thumbnail))? "/Images/NoImage.png" : Model.Thumbnail)" />
+                        <div id="photoupload">
+                            <input type="button" class="btn btn-success" id="setThumbnailBtn" value="Đặt làm hình đại diện từ video" disabled="disabled" />
+                            <input type="file" class="form-control" id="photoinput" name="thumbnailFile" value="Chọn hình ảnh từ máy tính" accept="image/*" />
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Thumbnail, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-success btn-ok"><span class="fa fa-check"></span> Hoàn thành</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-times"></span> Hủy</button>
+</div>
+
+
+<!-- Modal -->
+<div class="modal wizard-modal in" role="dialog" id="existFileModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Video</h4>
+            </div>
+            <div class="modal-body">
+                <p>Video đã tồn tại &hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalReuseBtn" class="btn btn-primary">Sử dụng lại video</button>
+                <button type="button" id="modalOverrideBtn" class="btn btn-primary">Ghi đè</button>
+                <button type="button" id="modalCancalBtn" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

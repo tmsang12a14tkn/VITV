@@ -1,0 +1,174 @@
+﻿@model VideoModel
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Tạo mới video";
+    var reporters = ViewBag.Reporters;
+    ViewBag.PassingReporters = reporters;
+}
+
+<div class="row">
+    <h2>Tạo mới video trong chuyên mục @ViewBag.catname</h2>
+    @using (Html.BeginForm("Create", "Video", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "videoForm" }))
+    {
+        @Html.Partial("_CreateOrEdit", Model)
+    }
+</div>
+
+@section styles {
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+    <script src="~/Scripts/videoedit.js"></script>
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/ImageSelect.jquery.js"></script>
+  
+    <script>
+        $("#video").bind("loadedmetadata", function () {
+            var width = this.videoWidth;
+            var height = this.videoHeight;
+            console.log(width + '-' + height);
+            $('#VideoWidth').val(width);
+            $('#VideoHeight').val(height);
+        });
+
+        $(document).ready(function () {
+            //Published Time
+            $("#changePublishedTime-btn").click(function () {
+                $("#PublishImmediately").val("False");
+                var publishedTimeVal = $("#PublishedTime-txt").val();
+                $("#PublishedTime-label").html(publishedTimeVal);
+                $("#PublishedTime").val(publishedTimeVal);
+                $("#published-time-edit").collapse('hide');
+            });
+
+            //Save Draft
+            $("#saveDraft-btn").click(function () {
+                saveDraft();
+            });
+            //setInterval(function () {
+            //    saveDraft();
+            //}, 30000);
+
+            $('#SecondSkip').spinner({
+                spin: function (event, ui) {
+                    if (ui.value >= 60) {
+                        $(this).spinner('value', ui.value - 60);
+                        $('#MinuteSkip').spinner('stepUp');
+                        return false;
+                    } else if (ui.value < 0) {
+                        $(this).spinner('value', ui.value + 60);
+                        $('#MinuteSkip').spinner('stepDown');
+                        return false;
+                    }
+                }
+            });
+
+            $('#MinuteSkip').spinner({
+                spin: function (event, ui) {
+                    if (ui.value >= 60) {
+                        $(this).spinner('value', ui.value - 60);
+                        $('#HourSkip').spinner('stepUp');
+                        return false;
+                    } else if (ui.value < 0) {
+                        $(this).spinner('value', ui.value + 60);
+                        $('#HourSkip').spinner('stepDown');
+                        return false;
+                    }
+                }
+            });
+
+            $('#HourSkip').spinner({
+                min: 0
+            });
+
+            function saveDraft() {
+                var form = document.forms.namedItem("videoForm");
+                var oReq = new XMLHttpRequest();
+                var formData = new FormData(form);
+                formData.append("IsPublished", "False");
+                oReq.open("post", form.action);
+                oReq.send(formData);
+                oReq.addEventListener("load", saveDraftComplete, false);
+            }
+
+            function saveDraftComplete(evt) {
+                var response = JSON.parse(evt.target.responseText);
+                if (response.success == true) {
+                    //document.getElementById("draftSaveTime").innerHTML = "Đã lưu nháp lúc " + response.time;
+                    alert("Đã lưu nháp lúc " + response.time);
+                    document.getElementById("Id").value = response.id;
+                }
+                else {
+                    alert('Chưa điền đầy đủ thông tin');
+                }
+            }
+
+            var availableKeywords = [
+                @foreach(VITV.Data.Models.Keyword keyword in ViewBag.PossibleKeywords)
+                {
+                    <text>"@Html.Raw(keyword.Value)",</text>
+                }
+            ];
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $("#Keywords")
+              // don't navigate away from the field on tab when selecting an item
+              .bind("keydown", function (event) {
+                  if (event.keyCode === $.ui.keyCode.TAB &&
+                      $(this).data("ui-autocomplete").menu.active) {
+                      event.preventDefault();
+                  }
+              })
+              .autocomplete({
+                  minLength: 0,
+                  source: function (request, response) {
+                      // delegate back to autocomplete, but extract the last term
+                      response($.ui.autocomplete.filter(
+                        availableKeywords, extractLast(request.term)));
+                  },
+                  focus: function () {
+                      // prevent value inserted on focus
+                      return false;
+                  },
+                  select: function (event, ui) {
+                      var terms = split(this.value);
+                      // remove the current input
+                      terms.pop();
+                      // add the selected item
+                      terms.push(ui.item.value);
+                      // add placeholder to get the comma-and-space at the end
+                      terms.push("");
+                      this.value = terms.join(", ");
+                      return false;
+                  }
+              });
+
+            $("#tbReporters").chosen({
+                width: "100%",
+                no_results_text: "Không có kết quả nào!"
+            });
+
+            $('#tbReporters').on('change', function (evt, params) {
+                var ids = "";
+                var selectedIds = $("#tbReporters").chosen().val();
+
+                if (selectedIds != null) {
+                    $.each(selectedIds, function (index, value) {
+                        ids = ids + ", " + value;
+                    });
+                }
+                $("#ReporterIds").val(ids);
+            });
+        });
+    </script>
+}

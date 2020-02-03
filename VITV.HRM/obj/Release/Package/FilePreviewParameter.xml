@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="hrm.zeusgang.com" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.HRM\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.HRM\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="StoreInfoContext-Web.config Connection String" description="" value="StoreInfoContext_ConnectionString" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.HRM\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StoreInfoContext']/@connectionString" />
+  </parameter>
+  <parameter name="VITVContext-Web.config Connection String" description="" value="VITVContext_ConnectionString" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.HRM\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='VITVContext']/@connectionString" />
+  </parameter>
+  <parameter name="VITVSecondContext-Web.config Connection String" description="" value="Data Source=192.168.0.240;Initial Catalog=VITVSecond;Persist Security Info=True;User ID=vitv;Password=Abc@@123;MultipleActiveResultSets=True" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.HRM\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='VITVSecondContext']/@connectionString" />
+  </parameter>
+</parameters>

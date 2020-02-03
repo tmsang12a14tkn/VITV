@@ -1,0 +1,60 @@
+﻿@model Employee
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Delete";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2>Bạn có chắc chắn muốn xóa người này không?</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("Delete", "Reporter", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10 form-field-display">
+                            @Html.DisplayFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProfilePicture, new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10"><img src="@Model.ProfilePicture" width="200" height="200" /></div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Position, new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10 form-field-display">
+                            @Html.DisplayFor(model => model.Position.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Videos, "Videos", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10 form-field-display">
+                            @(Model.Videos == null ? "None" : Model.Videos.Count.ToString())
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Articles, "Articles", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10 form-field-display">
+                            @(Model.Articles == null ? "None" : Model.Articles.Count.ToString())
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                            @Html.ActionLink("Quay về trang quản lý", "Management")
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

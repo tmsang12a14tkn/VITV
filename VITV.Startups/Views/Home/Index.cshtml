@@ -1,0 +1,142 @@
+﻿@using System.Globalization
+@model VITV.Data.ViewModels.HomeModel
+
+@{
+    ViewBag.Title = "Cổng công nghệ - VIT";
+    var articles = Model.HotArticles;
+}
+
+<!--Videos Area-->
+<div class="row video_news_area">
+    <div class="row hr_line">
+        <h4>TIN HÌNH</h4>
+    </div>
+    <div class="row">
+        <div class="related_video_content">
+            <div class="row single_related">
+                <div class="col-sm-4">
+                    <div class="single_video">
+                        <div class="video_image">
+                            <a href="#">
+                                <span class="thumb">
+                                    <span class="thumb_sizer">
+                                        <span class="thumb_tugger">
+                                            <img class="poster" src="http://data1.vitv.vn/UploadedImages/VideoThumbnail/DIpqX77C7kKCci9yIHqyPQ.jpg">
+                                            <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(http://data1.vitv.vn/UploadedImages/VideoCategory/HIX4nVfNyEj51PA0IKQ3g_bsdn.jpg) no-repeat center;"></span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="video_info">
+                            <p><a href="#"><span>DARE TO DREAM</span></a></p>
+                            <p>Phát sóng 06:30 ngày 15/09/2015</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="single_video">
+                        <div class="video_image">
+                            <a href="#">
+                                <span class="thumb">
+                                    <span class="thumb_sizer">
+                                        <span class="thumb_tugger">
+                                            <img class="poster" src="http://data1.vitv.vn/UploadedImages/VideoThumbnail/9vVIn8ha0KAch0cewYK2Q.jpg">
+                                            <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(http://data1.vitv.vn/UploadedImages/VideoCategory/7ELqoCuXku841KQR1ZOOg_146073041_Gio-thu-9-80.jpg) no-repeat center;"></span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="video_info">
+                            <p><a href="#"><span>360<sup>o</sup> STARTUP</span></a></p>
+                            <p>Phát sóng 18:30 ngày 14/09/2015</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--News Area-->
+<div class="row text_news_area">
+    <div class="row hr_line">
+        <h4>TIN CHỮ</h4>
+    </div>
+    <div class="row m7">
+        <div class="row recent_news">
+            <div class="col-md-8 lg_news">
+                <a href="@Url.Action("Details", "Article", new { id = articles.ElementAt(0).Id })">
+                    <div class="article_bigest_thumb" style="background:url('@(articles.ElementAt(0).Thumbnail)') no-repeat;background-size:cover;">
+                        <span>
+                            @(articles.ElementAt(0).Title)
+                            <p class="tm">@(articles.ElementAt(0).PublishedTime)</p>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 sm_news">
+                <div class="row sm">
+                    <a href="@Url.Action("Details", "Article", new { id = articles.ElementAt(1).Id })">
+                        <div style="background:url('@(articles.ElementAt(1).Thumbnail)') no-repeat;background-size:cover;height:100%;">
+                            <span>
+                                @(articles.ElementAt(1).Title)
+                                <p class="tm">@(articles.ElementAt(1).PublishedTime)</p>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="row sm">
+                    <a href="@Url.Action("Details", "Article", new { id = articles.ElementAt(2).Id })">
+                        <div style="background:url('@(articles.ElementAt(2).Thumbnail)') no-repeat;background-size:cover;height:100%;">
+                            <span>
+                                @(articles.ElementAt(2).Title)
+                                <p class="tm">@(articles.ElementAt(2).PublishedTime)</p>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="row sm">
+                    <a href="@Url.Action("Details", "Article", new { id = articles.ElementAt(3).Id })">
+                        <div style="background:url('@(articles.ElementAt(3).Thumbnail)') no-repeat;background-size:cover;height:100%;">
+                            <span>
+                                @(articles.ElementAt(3).Title)
+                                <p class="tm">@(articles.ElementAt(3).PublishedTime)</p>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="related_artical_content">
+            @for (int i = 4; i < 7; i++)
+            {
+                <div class="row single_related">
+                    <div class="single_artical">
+                        <div class="col col-xs-4">
+                            <div class="artical_image">
+                                <a href="#">
+                                    <span class="thumb">
+                                        <span class="thumb_sizer">
+                                            <span class="thumb_tugger">
+                                                <img class="poster" src="@(articles.ElementAt(i).Thumbnail)">
+                                            </span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col col-xs-8">
+                            <div class="artical_info">
+                                <h3><a href="#">@(articles.ElementAt(i).Title)</a></h3>
+                                <p class="tm">@(articles.ElementAt(i).PublishedTime)</p>
+                                <p class="cn">@(articles.ElementAt(i).ShortBrief)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

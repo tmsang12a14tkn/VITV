@@ -1,0 +1,60 @@
+﻿@model InterestRateModel
+
+@{
+    ViewBag.Title = "Lãi suất ngân hàng";
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+}
+
+<div class="interest_rate_page row">
+    <div class="container">
+        <div class="row">
+            <select class="form-control sl_sm" id="sortbytarget_sm" name="TargetValue">
+                <option value="1" @(Model.TargetValue == TargetType.Personal ? "selected" : "")>Cá nhân</option>
+                <option value="2" @(Model.TargetValue == TargetType.Company ? "selected" : "")>Doanh nghiệp</option>
+            </select>
+        </div>
+        <div class="row">
+            <ul id="ir_tab" class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab1" role="tab" data-toggle="tab">VNĐ</a></li>
+                <li><a href="#tab2" role="tab" data-toggle="tab">USD</a></li>
+                <li><a href="#tab3" role="tab" data-toggle="tab">Vàng</a></li>
+                <li class="target_select">
+                    <select class="form-control sl_lg" id="sortbytarget_lg" name="TargetValue">
+                        <option value="1" @(Model.TargetValue == TargetType.Personal ? "selected" : "")>Cá nhân</option>
+                        <option value="2" @(Model.TargetValue == TargetType.Company ? "selected" : "")>Doanh nghiệp</option>
+                    </select>
+                </li>
+            </ul>
+
+            <div id="ir_tab_content" class="tab-content">
+                @for (int i = 1; i <= 3; i++)
+                {
+                    <div class="tab-pane fade @(i == 1 ? "active in" : "")" id="tab@(i)">
+                        @Html.Partial("_IRList", Model, new ViewDataDictionary { { "TypeValue", i }, { "TargetValue", Model.TargetValue } })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.sl_sm, .sl_lg').on('change', function () {
+                window.location.href = "/lai-suat/f?_target=" + $(this).val();
+            });
+        });
+    </script>
+}
+
+@section seo{
+    <meta name="description" content="Lãi suất ngân hàng cho Cá nhân và Doanh nghiệp">
+    <meta name="keywords" content="Lãi suất ngân hàng,Cá nhân,Doanh nghiệp,VNĐ,USD,Vàng,Lai suat ngan hang,Ca nhan,Doanh nghiep,VND,Vang">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/Content/Images/logo.png" />
+    <meta property="og:image:width" content="286" />
+    <meta property="og:image:height" content="60" />
+}
+

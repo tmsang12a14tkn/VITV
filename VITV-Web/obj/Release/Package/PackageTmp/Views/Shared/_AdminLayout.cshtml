@@ -1,0 +1,478 @@
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - VITV</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/layout.css" rel="stylesheet" />
+    <link href="~/Content/elements.css" rel="stylesheet" />
+
+    <link href="~/Content/Froala/plugins/char_counter.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/code_view.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/colors.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/emoticons.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/file.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/fullscreen.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/image.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/image_manager.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/line_breaker.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/quick_insert.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/table.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/video.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/plugins/comment.css" rel="stylesheet" />
+    <link href="~/Content/Froala/froala_editor.min.css" rel="stylesheet">
+    <link href="~/Content/Froala/froala_style.css" rel="stylesheet" />
+
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet">
+
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,700italic,300,300italic,400italic,600italic,900,900italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+
+    @RenderSection("Styles", false)
+
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<body class="theme-blue-gradient">
+    <header class="navbar" id="header-navbar">
+        <div class="container">
+            <a href="" id="logo" class="navbar-brand text-center"><span>VITV</span></a>
+            <div class="clearfix">
+                <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
+                    <ul class="nav navbar-nav pull-left">
+                        <li>
+                            <a class="btn" id="make-small-nav">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-no-collapse pull-right" id="header-nav">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="page-wrapper" class="container">
+        <div id="nav-col">
+            <section id="col-left" class="col-left-nano">
+                <div id="col-left-inner" class="col-left-nano-content">
+                    <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
+                        <img alt="" src="~/Content/assets/Flag-S-02.jpg" />
+                        <div class="user-box">
+                            <span class="name">
+                                @User.Identity.GetUserName()
+                            </span>
+                            <span class="status">
+                                <i class="fa fa-circle"></i> Online
+                            </span>
+                        </div>
+                    </div>
+                    <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+                        <ul class="nav nav-pills nav-stacked">
+                            @if (User.CanAccess("Index", "Admin", "admin"))
+                            {
+                                <li class="active">
+                                    <a href="/Admin/Index">
+                                        <i class="fa fa-dashboard"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                            }
+                            <li id="scheduleMng">
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="fa fa-list-alt"></i>
+                                    <span>LỊCH PHÁT SÓNG</span>
+                                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                </a>
+                                <ul class="submenu">
+                                    @if (User.CanAccess("Index", "ProgramSchedules", "admin"))
+                                    {
+                                        <li>
+                                            <a id="sch-li-1" href="/ProgramSchedules/Index">
+                                                Khung chương trình
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("Management", "ProgramScheduleDetails", "admin"))
+                                    {
+                                        <li>
+                                            <a id="sch-li-2" href="/ProgramScheduleDetails/Management">
+                                                Lịch phát sóng hằng ngày
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li id="videoMng">
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="fa fa-desktop"></i>
+                                    <span>CHUYÊN MỤC & VIDEO</span>
+                                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                </a>
+                                <ul class="submenu">
+                                    @if (User.CanAccess("Index", "VideoCatGroups", "admin"))
+                                    {
+                                        <li>
+                                            <a id="vd-li-1" href="/quan-ly-nhom-chuyen-muc">
+                                                Nhóm chuyên mục
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("Management", "Video", "admin"))
+                                    {
+                                        <li>
+                                            <a id="vd-li-2" href="/Video/Management">
+                                                Danh sách video
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("Management", "CategoryIntro", "admin"))
+                                    {
+                                        <li>
+                                            <a id="vd-li-3" href="/CategoryIntro/Management">
+                                                Danh sách video intro
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("Management", "VideoTVC", "admin"))
+                                    {
+                                        <li>
+                                            <a id="vd-li-4" href="/VideoTVC/Management">
+                                                Danh sách TVC
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("Management", "VideoCatSponsor", "admin"))
+                                    {
+                                        <li>
+                                            <a id="vd-li-5" href="/VideoCatSponsor/Management">
+                                                Danh sách đối tác/tài trợ
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li id="articleMng">
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="fa fa-edit"></i>
+                                    <span>BÀI VIẾT</span>
+                                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                </a>
+                                <ul class="submenu">
+                                    @if (User.CanAccess("Management", "ArticleCategory", "admin"))
+                                    {
+                                        <li>
+                                            <a id="ar-li-1" href="/ArticleCategory/Management">
+                                                Chuyên mục bài viết
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("Management", "Article", "admin"))
+                                    {
+                                        <li>
+                                            <a id="ar-li-2" href="/Article/Management">
+                                                Tất cả bài viết
+                                            </a>
+                                        </li>
+                                    }
+                                    <li>
+                                        <a id="ar-li-2" href="/Article/ManagementTab">
+                                            Quản lý theo tab
+                                        </a>
+                                    </li>
+                                    @if (User.CanAccess("Management", "ArticleSeries", "admin"))
+                                    {
+                                        <li>
+                                            <a id="ar-li-3" href="/ArticleSeries/Management">
+                                                Danh sách series
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.CanAccess("HighlightManagement", "Article", "admin"))
+                                    {
+                                        <li>
+                                            <a id="ar-li-4" href="/Article/HighlightManagement">
+                                                Danh sách tin nổi bật
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            @if (User.CanAccess("Management", "Reporter", "admin"))
+                            {
+                                <li id="reporterMng">
+                                    <a href="/Reporter/Management">
+                                        <i class="fa fa-users"></i>
+                                        <span>NHÂN SỰ</span>
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li id="recruitMng">
+                                    <a href="#" class="dropdown-toggle">
+                                        <i class="fa fa-suitcase"></i>
+                                        <span>TUYỂN DỤNG</span>
+                                        <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                    </a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a id="re-li-1" href="/RecruitCategory/Management">
+                                                Ngành nghề tuyển dụng
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a id="re-li-2" href="/Recruit/Management">
+                                                Tin tuyển dụng
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a id="re-li-3" href="/RecruitExtraInfo/Management">
+                                                Thông tin thêm
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li id="productMng">
+                                    <a href="/Product/Management">
+                                        <i class="fa fa-archive"></i>
+                                        <span>SẢN PHẨM</span>
+                                    </a>
+                                </li>
+                                <li id="bankMng">
+                                    <a href="#" class="dropdown-toggle">
+                                        <i class="fa fa-bank"></i>
+                                        <span>NGÂN HÀNG</span>
+                                        <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                    </a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a id="re-li-1" href="/Bank/Management">
+                                                Danh sách ngân hàng
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a id="re-li-2" href="/Term/Management">
+                                                Kỳ hạn gửi tiền
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a id="re-li-3" href="/InterestRate/Management">
+                                                Lãi suất
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li id="infoMng">
+                                    <a href="/Info/Management">
+                                        <i class="fa fa-info-circle"></i>
+                                        <span>THÔNG TIN CHUNG</span>
+                                    </a>
+                                </li>
+                                <li id="keywordMng">
+                                    <a href="/Keyword/Management">
+                                        <i class="fa fa-tags"></i>
+                                        <span>TỪ KHÓA</span>
+                                    </a>
+                                </li>
+                                <li id="specialEventMng">
+                                    <a href="/SpecialEvent/Management">
+                                        <i class="fa fa-tags"></i>
+                                        <span>SỰ KIỆN ĐẶC BIỆT</span>
+                                    </a>
+                                </li>
+                                <li id="holidayMng">
+                                    <a href="/Holiday/Management">
+                                        <i class="fa fa-tags"></i>
+                                        <span>DỊP LỄ</span>
+                                    </a>
+                                </li>
+                                <li id="backgroundMng">
+                                    <a href="/Background/Management">
+                                        <i class="fa fa-tags"></i>
+                                        <span>HÌNH NỀN</span>
+                                    </a>
+                                </li>
+                                <li id="contactMng">
+                                    <a href="/Contact/Management">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <span>LIÊN HỆ NGƯỜI DÙNG</span>
+                                    </a>
+                                </li>
+                                @*<li id="delTemp">
+                                        <a href="/Admin/DeleteTemp">
+                                            <i class="fa fa-recycle"></i>
+                                            <span>Xóa tập tin rác</span>
+                                        </a>
+                                    </li>*@
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div id="content-wrapper">
+            @RenderBody()
+
+            <footer id="footer-bar" class="row" style="opacity: 1;">
+                <p id="footer-copyright" class="col-xs-12">
+                    © 2014 <a href="#" target="_blank">VIT Media</a>. Powered by VIT Telecom.
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <div class="jvectormap-label">
+
+    </div>
+
+    <div id="toTop" class="icon-up-open">
+        <i class="fa fa-angle-up"></i>
+    </div>
+
+    <script src="~/Scripts/jquery-2.1.3.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/MicrosoftAjax.js"></script>
+    <script src="~/Scripts/MicrosoftMvcAjax.js"></script>
+    <script src="~/Scripts/MicrosoftMvcValidation.js"></script>
+
+    <script src="~/Scripts/jquery.ui.widget.js"></script>
+    <script src="~/Scripts/jquery.iframe-transport.js"></script>
+    <script src="~/Scripts/jquery.fileupload.js"></script>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/Froala/froala_editor.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/align.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/char_counter.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/code_beautifier.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/code_view.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/colors.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/draggable.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/emoticons.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/entities.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/file.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/forms.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/fullscreen.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/font_family.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/font_size.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/video.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/image.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/image_manager.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/inline_style.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/line_breaker.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/link.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/lists.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/paragraph_format.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/paragraph_style.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/quick_insert.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/quote.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/table.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/url.min.js"></script>
+    <script src="~/Scripts/Froala/plugins/comment.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/demo-skin-changer.js"></script>
+    <script src="~/Scripts/jquery.nanoscroller.min.js"></script>
+    <script src="~/Scripts/demo.js"></script>
+    <script src="~/Scripts/scripts.js"></script>
+
+
+    @RenderSection("Scripts", false)
+
+    <script>
+
+        $(document).ready(function () {
+            function fix_height() {
+                var h = $("#tray").height();
+                $("#preview").attr("height", (($(window).height()) - h) + "px");
+            }
+            $(window).resize(function () { fix_height(); }).resize();
+            //$("#preview").contentWindow.focus();
+
+            // Scroll to top button
+            $(window).scroll(function () { // hide/show button when page is scrolled
+                if ($(this).scrollTop() > 200) {
+                    $('#toTop').fadeIn();
+                } else {
+                    $('#toTop').fadeOut();
+                }
+            });
+
+            $('#toTop').click(function () {
+                $('body,html').animate({ scrollTop: 0 }, 800);
+            });
+
+        });
+
+        var clearForm = function (date) {
+            $('#tab' + date).find('form')[0].reset();
+        };
+
+        $(function () {
+            $('.editable').froalaEditor({
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+                pluginsEnabled: null,
+                imageUploadParam: 'files',
+                imageUploadURL: '/Home/FroalaUploadImage',
+                preloaderSrc: "/Content/assets/ajax-loader.gif",
+                imagesLoadURL: '/Home/FroalaMediaManager',
+                imageDeleteURL: "/Home/FroalaDelete",
+                emptytext: '',
+                minHeight: 400,
+                maxHeight: window.innerHeight - 50,
+                fontFamilySelection: true,
+                fontSizeSelection: true,
+                toolbarSticky: false
+            });
+
+            jQuery('.datetimepicker').datetimepicker(
+                {
+                    format: 'd/m/Y H:i'
+                });
+
+            jQuery('.datepicker').datetimepicker(
+                {
+                    format: 'd/m/Y',
+                    timepicker: false
+                });
+
+            jQuery('.timepicker').datetimepicker(
+                {
+                    datepicker: false,
+                    format: 'H:i',
+                    allowTimes: ['00:00', '00:15', '00:30', '00:45', '1:00', '1:15', '1:30', '1:45', '2:00', '2:15', '2:30', '2:45', '3:00', '3:15', '3:30', '3:45', '4:00', '4:15', '4:30', '4:45', '5:00', '5:15', '5:30', '5:45', '6:00', '6:15', '6:30', '6:45', '7:00', '7:15', '7:30', '7:45', '8:00', '8:15', '8:30', '8:45', '9:00', '9:15', '9:30', '9:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45', '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00', '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15', '21:30', '21:45', '22:00', '22:15', '22.30', '22:45', '23:00', '23:15', '23:30', '23:45']
+                });
+
+            // fix date validation for chrome
+            jQuery.extend(jQuery.validator.methods, {
+                date: function (value, element) {
+                    var isChrome = window.chrome;
+                    // make correction for chrome
+                    if (isChrome) {
+                        //console.log("chrome", value);
+                        //var d = new Date();
+                        return true; //this.optional(element) ||!/Invalid|NaN/.test(new Date(d.toLocaleDateString("2014/12/12")));
+                    }
+                        // leave default behavior
+                    else {
+                        return this.optional(element) ||
+                            !/Invalid|NaN/.test(new Date(value));
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

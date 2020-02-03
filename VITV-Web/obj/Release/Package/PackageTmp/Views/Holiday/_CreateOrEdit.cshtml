@@ -1,0 +1,63 @@
+﻿@model HolidayModel
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.LeftFixedBkgr, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.LeftFixedBkgr)
+    <div class="col-lg-10">
+        <img id="photoView_first" width=200 height=200 src="@(Model != null && !String.IsNullOrEmpty(Model.LeftFixedBkgr) ? Model.LeftFixedBkgr : "")" />
+        <input class="form-control" id="photoinput_first" type="file" name="LeftFixedBkgrFile" accept="image/*">
+    </div>
+    @Html.ValidationMessageFor(model => model.LeftFixedBkgr, string.Empty, new { @class = "help-block" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.RightFixedBkgr, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.RightFixedBkgr)
+    <div class="col-lg-10">
+        <img id="photoView_second" width=200 height=200 src="@(Model != null && !String.IsNullOrEmpty(Model.RightFixedBkgr) ? Model.RightFixedBkgr : "")" />
+        <input class="form-control" id="photoinput_second" type="file" name="RightFixedBkgrFile" accept="image/*">
+    </div>
+    @Html.ValidationMessageFor(model => model.RightFixedBkgr, string.Empty, new { @class = "help-block" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.StartDate, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group" id="datetimepicker1">
+            <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+            @Html.TextBoxFor(model => model.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "rangeBegin" })
+        </div>
+        @Html.ValidationMessageFor(model => model.StartDate, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.EndDate, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group">
+            <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+            @Html.TextBoxFor(model => model.EndDate, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "rangeEnd" })
+        </div>
+        @Html.ValidationMessageFor(model => model.EndDate, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <div class="checkbox-nice">
+            <input type="checkbox" id="RepeatYear" name="RepeatYear" value="true" @(Model == null || Model.Id == default(int) ? "" : (Model.RepeatYear ? "checked" : ""))>
+            <label for="RepeatYear">@Html.DisplayNameFor(model => model.RepeatYear)</label>
+            <input name="RepeatYear" type="hidden" value="false" />
+            @Html.ValidationMessageFor(model => model.RepeatYear, string.Empty, new { @class = "help-block" })
+        </div>
+    </div>
+</div>

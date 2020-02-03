@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ArticleCategory>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <ul class="submenu">
+        @foreach (var c in Model)
+        {
+            <li>
+                <a href="#" data-value="@c.Id">@c.Name</a>
+                @Html.Action("DrawChildNode", new { pId = c.Id })
+            </li>
+        }
+    </ul>
+}

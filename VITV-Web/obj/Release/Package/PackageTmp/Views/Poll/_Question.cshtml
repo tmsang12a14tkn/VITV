@@ -1,0 +1,179 @@
+﻿@model PollQuestion
+
+@using (Ajax.BeginForm("AnswerQuestion", "Poll", new AjaxOptions { UpdateTargetId = "poll_panel" + Model.Id, InsertionMode = InsertionMode.Replace }))
+{
+    @Html.Hidden("QuestionId", Model.Id)
+    <div class="row">
+        @*<div class="row">
+            <hr style="height:5px; width:20%;background-color:#3f93c9; border:none ">
+        </div>
+        <div class="row poll_name_web">
+            <h4>@Model.Name</h4>
+        </div>*@
+        <div class="row poll_name_web">
+            <h4>@Model.Name</h4>
+        </div>
+        <div class="row">
+            <div class="progress" style="height:2px;margin-top:10px">
+                <div class="progress-bar" role="progressbar" style="width: 30%;">
+                </div>
+            </div>    
+        </div>
+        
+        <div class="row">
+            
+                <p>@Html.Raw(Model.Question)</p>
+            
+        </div>
+    </div>
+    <div class="row poll_container_answer">
+       
+            @foreach (var answer in Model.Answers)
+            {
+                <div class="row poll_single_row">
+                    @if (Model.MultipleChoice)
+                    {
+
+                        if (!string.IsNullOrEmpty(answer.Image))
+                        {
+                            <div class="col-xs-1">
+                                <img width="50" height="50" src="@answer.Image" />
+                            </div>
+                            <div class="col-xs-7 content">
+                                <div class="form-group">
+                                    <div class="checkbox-nice"><input type="checkbox" name="orders" value="@answer.AnswerId" id="checkbox@(Model.Id)@(answer.AnswerId)"><label for="checkbox@(Model.Id)@(answer.AnswerId)">@Html.Raw(answer.Answer)</label></div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-xs-7">
+                                <div class="form-group">
+                                    <div class="checkbox-nice"><input type="checkbox" name="orders" value="@answer.AnswerId" id="checkbox@(Model.Id)@(answer.AnswerId)"><label for="checkbox@(Model.Id)@(answer.AnswerId)">@Html.Raw(answer.Answer)</label></div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(answer.Image))
+                        {
+                            <div class="col-xs-1 time">
+                                <img width="50" height="50" src="@answer.Image" />
+                            </div>
+                            <div class="col-xs-7 content">
+                                <div class="form-group">
+                                    <div class="radio"><input type="radio" name="orders" value="@answer.AnswerId" id="optionsRadios@(Model.Id)@(answer.AnswerId)"><label for="optionsRadios@(Model.Id)@(answer.AnswerId)">@Html.Raw(answer.Answer)</label></div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-xs-7 content">
+                                <div class="form-group">
+                                    <div class="radio"><input type="radio" name="orders" value="@answer.AnswerId" id="optionsRadios@(Model.Id)@(answer.AnswerId)"><label for="optionsRadios@(Model.Id)@(answer.AnswerId)">@Html.Raw(answer.Answer)</label></div>
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+
+                </div>
+            }
+        
+    </div>
+    <div class="row pull-left">
+        <input type="submit" name="savevcg" class="poll_btn poll_btn_primary" value="Bỏ phiếu" />
+        @if (Model.Published)
+        {
+            <a href="#" class="poll_btn poll_btn_primary resultpoll" data-questionid="@Model.Id">Xem kết quả</a>
+        }
+    </div>
+}
+@*<div class="modal-header">
+    <h4 class="modal-title"><b><i class="fa fa-check-circle-o fa-lg"></i> @Model.Name</b></h4>
+    <div class="row">
+        <div class="col-xs-9 video-title wow fadeInDown" data-wow-duration="400ms" data-wow-delay="0ms">
+            <h5><a href="/chuong-trinh/tap-chi-ngan-hang">TẠP CHÍ NGÂN HÀNG</a></h5>
+            <h4>Động thái Fed tăng lãi suất và những tác động đến thị trường tiền tệ</h4>
+            <div class="row">
+                <img width="300" height="225" src="@Model.Image" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+        
+        @Html.Hidden("QuestionId", Model.Id)
+        <div class="form-group">
+            <div class="row">
+                <label for="exampleInputEmail1" style="word-wrap:break-word"><b>@Model.Question</b></label>
+
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Image))
+            {
+                <div class="row">
+                    <img width="300" height="225" src="@Model.Image" />
+                </div>
+            }
+        </div>
+
+        @foreach (var answer in Model.Answers)
+        {
+            <div class="row" style="margin-bottom: 10px">
+
+                @if (Model.MultipleChoice)
+                {
+
+                    if (!string.IsNullOrEmpty(answer.Image))
+                    {
+                        <div class="col-lg-2">
+                            <img width="50" height="50" src="@Model.Image" />
+                        </div>
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <div class="checkbox-nice"><input type="checkbox" name="orders" value="@answer.AnswerId"><label for="optionsRadios1">@Html.Raw(answer.Answer)</label></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-lg-10">
+                            <div class="checkbox-nice"><input type="checkbox" name="orders" value="@answer.AnswerId"><label for="optionsRadios1">@Html.Raw(answer.Answer)</label></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(answer.Image))
+                    {
+                        <div class="col-lg-2">
+                            <img width="50" height="50" src="@answer.Image" />
+                        </div>
+                        <div class="col-lg-10">
+                            <div class="form-group">
+                                <div class="radio"><input type="radio" name="orders" value="@answer.AnswerId" id="optionsRadios@(Model.Id)@(answer.AnswerId)"><label for="optionsRadios@(Model.Id)@(answer.AnswerId)">@Html.Raw(answer.Answer)</label></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-lg-10">
+                            <div class="radio"><input type="radio" name="orders" value="@answer.AnswerId" id="optionsRadios@(Model.Id)@(answer.AnswerId)"><label for="optionsRadios@(Model.Id)@(answer.AnswerId)">@Html.Raw(answer.Answer)</label></div>
+                        </div>
+                    }
+
+                }
+            </div>
+        }
+
+        </div>
+<div class="modal-footer">
+    <input type="submit" name="savevcg" class="btn btn-primary" value="Bỏ phiếu" />
+    @if (Model.Published)
+    {
+        <a href="#" class="resultpoll" data-questionid="@Model.Id">Xem kết quả</a>
+    }
+</div>*@
+

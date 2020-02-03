@@ -1,0 +1,11 @@
+﻿@model IEnumerable<VITV.Data.Models.Article>
+
+<div class="row series_news m11">
+    <div class="row sn_title">TIN TRONG CHUỖI BÀI</div>
+    @foreach (var art in Model)
+    {
+        <div class="row single_news @(art.Id == ViewBag.CurrentArticleId ? "current" : "")">
+            <a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })"><span>@(art.SeriesOrder). </span> @art.Title</a>
+        </div>
+    }
+</div>

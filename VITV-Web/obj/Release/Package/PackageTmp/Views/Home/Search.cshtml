@@ -1,0 +1,92 @@
+﻿@model SearchModel
+
+@{
+    ViewBag.Title = "Tìm kiếm | VITV";
+    Layout = "~/Views/Shared/_SearchLayout.cshtml";
+}
+
+<div class="search">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <nav class="submenu" id="submenu">
+                    <h3 class="submenu__heading"><a class="l3 submenu__link submenu__heading__link" href="/search?q=ted#">Search menu</a></h3>
+                    <div class="submenu__lists">
+                        <ul class="submenu__list">
+                            <li class="submenu__item">
+                                <a class="l3 submenu__link" href="#videoresult">Video</a>
+                                <span class="submenu__item__count">
+                                    @Model.Videos.Count()
+                                </span>
+                            </li>
+                            <li class="submenu__item">
+                                <a class="l3 submenu__link" href="#articleresult">Tin tức</a>
+                                <span class="submenu__item__count">
+                                    @Model.Articles.Count()
+                                </span>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="col-lg-9 search__results module m2">
+                <div class="heading search__results__heading">
+                    <div class="heading__body h1">
+                        Kết quả cho @Model.Query
+                    </div>
+                    <span class="heading__deco">
+                        <span class="heading__deco__sizer h1"></span>
+                        1 - 12 of @Model.ResultCount kết quả
+                    </span>
+                </div>
+                <section id="videoresult">
+                    <div class="h3 m2">
+                        Video
+                    </div>
+                    @foreach(var video in Model.Videos)
+                    { 
+                        <article class="m1 search__result">
+                            <h3 class="h7 m4">
+                                <a href="@Url.Action("Details", "Video", new { Id = video.Id, title = video.UniqueTitle, date = video.PublishedTime.ToString("dd-MM-yyyy") })">@video.Title</a>
+                            </h3>
+                            <div class="media">
+                                <div class="media__image media__image--thumb search__result__image--video">
+                                    <a href="@Url.Action("Details", "Video", new { Id = video.Id, title = video.UniqueTitle, date = video.PublishedTime.ToString("dd-MM-yyyy") })"><span class="thumb thumb--video thumb--crop-top"><span class="thumb__sizer"><span class="thumb__tugger"><img alt="" class=" thumb__image" src="@video.Thumbnail"><span class="thumb__aligner"></span></span></span></span></a>
+                                </div>
+                                <div class="media__message">
+                                    <div class="search__result__description m4">
+                                        @video.Title
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    }
+
+                </section>
+                <section id="articleresult">
+                    <div class="h3 m2">
+                        Tin tức
+                    </div>
+                    @foreach (var article in Model.Articles)
+                    {
+                        <article class="m1 search__result">
+                            <h3 class="h7 m4">
+                                <a href="@Url.Action("Details", "Article", new { Id = article.Id})">@article.Title</a>
+                            </h3>
+                            <div class="media">
+                                <div class="media__message">
+                                    <div class="search__result__description m4">
+                                        @article.Title
+
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+

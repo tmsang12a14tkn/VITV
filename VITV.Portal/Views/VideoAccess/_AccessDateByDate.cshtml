@@ -1,0 +1,97 @@
+﻿@model VideoAccessDateView
+
+<link rel="stylesheet" href="~/Content/tooltipster.css" type="text/css" />
+<script src="~/Scripts/jquery.tooltipster.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.tooltip1').tooltipster({
+            contentAsHTML: true,
+            interactive: true,
+            position: 'right',
+            delay: 50,
+            speed: 50,
+            trigger: 'hover',
+            updateAnimation: false,
+            theme: 'tooltipster-shadow',
+        });
+    });
+</script>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+    @if (Model.PeriodType == PeriodType.Daily)
+    {
+        <h4 class="modal-title">Dữ liệu truy cập ngày @Model.Date.ToString("dd/MM/yyyy")</h4>
+    }
+    else if (Model.PeriodType == PeriodType.Monthly)
+    {
+        <h4 class="modal-title">Dữ liệu truy cập tháng @Model.Date.ToString("MM/yyyy")</h4>
+    }
+    else if (Model.PeriodType == PeriodType.Weekly)
+    {
+        <h4 class="modal-title">Dữ liệu truy cập tuần từ @Model.Date.ToString("dd/MM/yyyy") đến @Model.Date.AddDays(6).ToString("dd/MM/yyyy")</h4>
+    }
+    else if (Model.PeriodType == PeriodType.Year)
+    {
+        <h4 class="modal-title">Dữ liệu truy cập năm @Model.Date.Year</h4>
+    }
+</div>
+<div class="modal-body">
+    <div class="form-group pull-right vd-access-details">
+        <a class="btn btn-primary @(Model.GroupByType == GroupByType.Video?"active":"")" id="btnvideo" data-value="video" onclick="onChangeGroupBy(this);">
+            <span><img src="~/Content/Images/vd_filter_icon.png" width="20" height="16" /></span>
+            Theo Video
+        </a>
+        <a class="btn btn-primary  @(Model.GroupByType == GroupByType.VideoCat?"active":"")" id="btnvideocat" data-value="videocat" onclick="onChangeGroupBy(this);">
+            <span><img src="~/Content/Images/vdcat_filter_icon.png" width="20" height="17" /></span>
+            Theo Chương trình
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td class="text-center">Tiêu đề</td>
+                @if(Model.GroupByType == GroupByType.Video)
+                { 
+                <td class="text-center">Danh mục</td>
+                }
+                <td class="text-center">Người coi</td>
+                <td class="text-center">Truy cập</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var access in Model.AccessData)
+            {
+                <tr>
+                    <td>
+                        @* <img src="@access.Thumbnail" class="img-responsive img-thumbnail" /> *@
+                        @if (Model.GroupByType == GroupByType.VideoCat)
+                        {
+                            <a href="http://vitv.vn@(access.Url)" class="vd-ctg tooltip1 tooltipster-shadow" title="&lt;img src=&quot;@access.Thumbnail&quot; class=&quot;img-responsive img-thumbnail&quot;/&gt;"><span>@access.Title</span></a>
+                        }
+                        else
+                        {
+                            <a href="http://vitv.vn@(access.Url)" class="tooltip1 tooltipster-shadow" title="&lt;img src=&quot;@access.Thumbnail&quot; class=&quot;img-responsive img-thumbnail&quot;/&gt;">@access.Title</a>
+                        }
+
+                    </td>
+                    @if(Model.GroupByType == GroupByType.Video)
+                    {
+                    <td>
+                        @access.VideoCatName.ToUpper()
+                    </td>
+                    }
+                    <td>@access.IPViewCount</td>
+                    <td>@access.PageViewCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+</div>
+
+

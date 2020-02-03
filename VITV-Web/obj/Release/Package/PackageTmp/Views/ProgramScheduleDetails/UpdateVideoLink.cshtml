@@ -1,0 +1,39 @@
+﻿@model ProgramScheduleDetail
+
+@{
+    ViewBag.Title = "Cập nhật video";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2>Chương trình <b>@Html.Raw(Model.FullName)</b> được phát lại từ:</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("UpdateVideoLink", "ProgramScheduleDetails", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.DateTime)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VideoId, "Chương trình", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.DropDownList("VideoId", null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.VideoId, string.Empty, new { @class = "help-block" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-success">Hoàn thành</button>
+                            @Html.ActionLink("Quay về trang quản lý", "Management", new { date = Model.DateTime.ToShortDateString() }, null)
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+﻿@model Project
+@{
+    List<Employee> employees = ViewBag.Employees;
+}
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Sửa dự án
+    </div>
+</div>
+@using (Html.BeginForm("Edit", "Project", FormMethod.Post,
+            new { enctype = "multipart/form-data", @class = "form-horizontal project-form", id ="edit-project-form" }))
+{
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-title"> Tên </label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="form-title" placeholder="Tên" name="Title" value="@Model.Title">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-content"> Nội dung </label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="form-content" name="Content" placeholder="Content">@Model.Content</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="attachments">Thêm tệp đính kèm</label>
+            <div class="col-sm-10">
+                <div class="row">
+                    @{
+                        var imageExtentions = new List<string>{".jpg",".jpeg",".png",".gif",".svg",".bmp",".tiff"};
+                        var videoExtentions = new List<string>{"mpg","mpeg","flv","mov","avi","swf","mp4","mkv","webm","wmv","3gp"};
+                        var audioExtentions = new List<string>{"mp3","ogg","wav","wma","amr","aac"};
+                        foreach (var attachment in Model.Attachments)
+                        {
+                            <label class="ace-file-input ace-file-multiple uploaded-attachment col-sm-4">
+                                <input type="hidden" value="@attachment.AttachmentLink" name="uploadedAttachments" />
+                                <span class="ace-file-container hide-placeholder selected">
+                                    <span class="ace-file-name" data-title="@Path.GetFileName(attachment.AttachmentLink)">
+                                        @{
+                                        var extention = Path.GetExtension(attachment.AttachmentLink);
+                                        if (imageExtentions.Contains(extention))
+                                        {
+                                            <img class="middle" style="width: 50px; height: 50px;" src="@attachment.AttachmentLink">
+                                            <i class="ace-icon fa fa-picture-o file-image"></i>
+                                        }
+                                        else if (videoExtentions.Contains(extention))
+                                        {
+                                            <i class="ace-icon fa fa-film file-video"></i>
+                                        }
+                                        else if (audioExtentions.Contains(extention))
+                                        {
+                                            <i class="ace-icon fa fa-music file-audio"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="ace-icon fa fa-file"></i>
+                                        }
+                                        }
+                                    </span>
+                                </span>
+                                <a class="remove" href="#">
+                                    <i class=" ace-icon fa fa-times"></i>
+                                </a>
+                            </label>
+                        }
+                    }
+                </div>
+                <input multiple type="file" id="attachments" name="attachments" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(model => model.Start)
+            @Html.HiddenFor(model => model.End)
+            <label class="col-sm-2 control-label no-padding-right" for="date-range">Thời gian</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="date-range" name="date-range" value="@(Model.Start.HasValue && Model.End.HasValue? Model.Start.Value.ToString("dd/MM/yyyy") + "-" + Model.End.Value.ToString("dd/MM/yyyy"):"")" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(model => model.EmployeeIds)
+            <label class="col-sm-2 control-label no-padding-right" for="receivedemployees">Nhân sự</label>
+
+            <div class="col-sm-10">
+                <select data-placeholder="..." multiple="multiple" id="tbEmployees" name="tbEmployees" class="form-control">
+                    @foreach (var ep in employees)
+                    {
+                        <option value="@ep.Id" data-img-src="@ep.ProfilePicture" @(Model.Employees.Any(e => e.Id == ep.Id) ? "selected" : "")>@ep.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="">Riêng tư</label>
+            <div class="col-sm-10">
+                <label>
+                    <input name="IsPrivate" class="ace ace-switch" type="checkbox" value="true" @(Model.IsPrivate?"checked":"")/>
+                    <span class="lbl"></span>
+                    <input name="IsPrivate" class="" type="hidden" value="false" />
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer no-margin-top">
+        <button type="submit" class="btn btn-sm btn-danger pull-right">
+            <i class="ace-icon fa fa-times"></i>
+            OK
+        </button>
+    </div>
+}

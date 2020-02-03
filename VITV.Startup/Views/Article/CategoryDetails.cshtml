@@ -1,0 +1,66 @@
+﻿@model VITV.Data.Models.ArticleCategory
+
+@{
+    ViewBag.Title = Model.Name + " - StartUp VITV";
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+}
+
+<!--News Area-->
+<div class="row text_pg_area">
+    @Html.Action("GetArticleByGroup", "Article", new { id = Model.Id })
+</div>
+
+@section styles {
+    <link href="~/Content/jquery.mCustomScrollbar.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script src="~/Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script>
+        $.mCustomScrollbar.defaults.scrollButtons.enable = true; //enable scrolling buttons by default
+        $(".sm_news").mCustomScrollbar({ theme: "rounded", autoDraggerLength: false });
+
+        $('.right_content').addClass('main_pg');
+
+        function RefreshPagination(page, groupid) {
+            $.get('/Article/GetPagination?page=' + page + '&groupid=' + groupid, function (data) {
+                $('#pg_block').html(data);
+            });
+        }
+
+        curGroupId = @Model.Id;
+        function filter(groupId) {
+            if (groupId >= 0) {
+                if (curGroupId != groupId) {
+                    var targetDiv = $("div.text_pg_area");
+                    $.get('/Article/GetArticleByGroup?id=' + groupId, function (data) {
+                        targetDiv.hide();
+                        targetDiv.empty();
+                        targetDiv.append(data);
+                        $(".sm_news").mCustomScrollbar({ theme: "rounded", autoDraggerLength: false });
+                        targetDiv.fadeIn(200);
+                        curGroupId = groupId;
+                    });
+                }
+            }
+        }
+
+        $('body').on('click', '.sideCat a', function (e) {
+            e.preventDefault();
+
+            var id = $(this).parent().data('id');
+            filter(id);
+        });
+    </script>
+}
+
+@section seo {
+    <meta name="description" content="@Model.Description">
+    <meta name="keywords" content="@Model.Name, @Model.UniqueTitle">
+    <meta property="og:title" content="@(Model.Name)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="@(Request.Url.AbsoluteUri)">
+    <meta property="og:image" content="./fb_share_img.jpg" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="544" />
+}

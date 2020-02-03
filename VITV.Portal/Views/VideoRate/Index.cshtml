@@ -1,0 +1,38 @@
+﻿@model List<ScheduleDetailFilterView>
+@{
+    ViewBag.Title = "Quản lý đánh gia video";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Quản lý lịch phát sóng hằng ngày</h2>
+                <div class="filter-block pull-right">
+                    @using (Html.BeginForm("Management", "ProgramScheduleDetails", FormMethod.Get, null))
+                    {
+                        @Html.TextBox("date", Model[0].DateTime, "{0:dd/MM/yyyy}", new { @class = "datepicker", data_format = "dd/MM/yyyy" })
+                        <input type="submit" class="btn btn-primary" value="Đến" />
+                    }
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <li class="@(i==0?"active":"")"><a href="#tab@(Model[i].DateTime.ToString("dd-MM-yyyy"))" role="tab" data-toggle="tab">@Model[i].DateTime.ToString("dddd dd-MM-yyyy")</a></li>
+                    }
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <div class="tab-pane fade @(i==0?"active in":"")" id="tab@(Model[i].DateTime.ToString("dd-MM-yyyy"))">
+                            @Html.Partial("_DateList", Model[i])
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

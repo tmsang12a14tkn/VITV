@@ -1,0 +1,12 @@
+﻿@model DateTime
+@{
+    DateTime dateQuarter = Model.AddMonths(-3);
+}
+
+@for (int i = 0; i < 4; i++)
+{
+    int quarter = (dateQuarter.Month - 1) / 3 + 1;
+    Tuple<DateTime, DateTime> date = Extensions.SetLastQuarterDates(quarter, dateQuarter.Year);
+    <p data-date="@date.Item1.ToString("dd/MM/yyyy")"><a href="#" class="selectpicker" data-display="Quý @quarter / @dateQuarter.Year" data-start="@date.Item1.ToString("dd/MM/yyyy")" data-end="@date.Item2.ToString("dd/MM/yyyy")">Quý @quarter / @dateQuarter.Year</a></p>
+    dateQuarter = dateQuarter.AddMonths(-3);
+}

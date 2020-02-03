@@ -1,0 +1,1563 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{191E8273-21C4-43D4-A1D4-1393F5FABF13}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VITV.Data</RootNamespace>
+    <AssemblyName>VITV.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccessLayer\GoogleAnalyticContext.cs" />
+    <Compile Include="DataAccessLayer\StoreInfoContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataAccessLayer\VITVContext.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\Impersonator.cs" />
+    <Compile Include="Helpers\RoleAuthorizeAttribute.cs" />
+    <Compile Include="Helpers\VideoHelper.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201511250935014_init.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201511250935014_init.Designer.cs">
+      <DependentUpon>201511250935014_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\201511270453053_videoid.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201511270453053_videoid.Designer.cs">
+      <DependentUpon>201511270453053_videoid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\201511270650521_social-url.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201511270650521_social-url.Designer.cs">
+      <DependentUpon>201511270650521_social-url.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\201512010427103_age-gender-overview.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201512010427103_age-gender-overview.Designer.cs">
+      <DependentUpon>201512010427103_age-gender-overview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\201512040717106_pageview_countryisocode.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201512040717106_pageview_countryisocode.Designer.cs">
+      <DependentUpon>201512040717106_pageview_countryisocode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\201512040807369_countryisocode_removedate.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201512040807369_countryisocode_removedate.Designer.cs">
+      <DependentUpon>201512040807369_countryisocode_removedate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\201512040820252_countryisocode_fullname.cs" />
+    <Compile Include="MigrationsGoogleAnalytcis\201512040820252_countryisocode_fullname.Designer.cs">
+      <DependentUpon>201512040820252_countryisocode_fullname.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsGoogleAnalytcis\ConfigurationGA.cs" />
+    <Compile Include="MigrationsStoreInfo\201501240533548_Initial.cs" />
+    <Compile Include="MigrationsStoreInfo\201501240533548_Initial.Designer.cs">
+      <DependentUpon>201501240533548_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201501260459310_VNDExchangeRates.cs" />
+    <Compile Include="MigrationsStoreInfo\201501260459310_VNDExchangeRates.Designer.cs">
+      <DependentUpon>201501260459310_VNDExchangeRates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201501260736062_VNDExchangeRates_Day.cs" />
+    <Compile Include="MigrationsStoreInfo\201501260736062_VNDExchangeRates_Day.Designer.cs">
+      <DependentUpon>201501260736062_VNDExchangeRates_Day.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201501260759467_USDExchangeRates_Day.cs" />
+    <Compile Include="MigrationsStoreInfo\201501260759467_USDExchangeRates_Day.Designer.cs">
+      <DependentUpon>201501260759467_USDExchangeRates_Day.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201501270502569_CreateNewSomeTable.cs" />
+    <Compile Include="MigrationsStoreInfo\201501270502569_CreateNewSomeTable.Designer.cs">
+      <DependentUpon>201501270502569_CreateNewSomeTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201501310334451_edittableGoldPriceVietNam.cs" />
+    <Compile Include="MigrationsStoreInfo\201501310334451_edittableGoldPriceVietNam.Designer.cs">
+      <DependentUpon>201501310334451_edittableGoldPriceVietNam.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502020241237_edittableGoldPriceVietNam1.cs" />
+    <Compile Include="MigrationsStoreInfo\201502020241237_edittableGoldPriceVietNam1.Designer.cs">
+      <DependentUpon>201502020241237_edittableGoldPriceVietNam1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502020307521_changeVNDExchangeRate.cs" />
+    <Compile Include="MigrationsStoreInfo\201502020307521_changeVNDExchangeRate.Designer.cs">
+      <DependentUpon>201502020307521_changeVNDExchangeRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502020845509_GoldPriceVietNam_Day.cs" />
+    <Compile Include="MigrationsStoreInfo\201502020845509_GoldPriceVietNam_Day.Designer.cs">
+      <DependentUpon>201502020845509_GoldPriceVietNam_Day.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502030406202_updateVNDExchangeRate.cs" />
+    <Compile Include="MigrationsStoreInfo\201502030406202_updateVNDExchangeRate.Designer.cs">
+      <DependentUpon>201502030406202_updateVNDExchangeRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502031005435_edittableOrder.cs" />
+    <Compile Include="MigrationsStoreInfo\201502031005435_edittableOrder.Designer.cs">
+      <DependentUpon>201502031005435_edittableOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502040431037_editGoldPrice.cs" />
+    <Compile Include="MigrationsStoreInfo\201502040431037_editGoldPrice.Designer.cs">
+      <DependentUpon>201502040431037_editGoldPrice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502040531172_addtableStock.cs" />
+    <Compile Include="MigrationsStoreInfo\201502040531172_addtableStock.Designer.cs">
+      <DependentUpon>201502040531172_addtableStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502040737537_DeleteTableStocks.cs" />
+    <Compile Include="MigrationsStoreInfo\201502040737537_DeleteTableStocks.Designer.cs">
+      <DependentUpon>201502040737537_DeleteTableStocks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502040847120_changeGoldPrice.cs" />
+    <Compile Include="MigrationsStoreInfo\201502040847120_changeGoldPrice.Designer.cs">
+      <DependentUpon>201502040847120_changeGoldPrice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502040925465_changeGoldPrice2.cs" />
+    <Compile Include="MigrationsStoreInfo\201502040925465_changeGoldPrice2.Designer.cs">
+      <DependentUpon>201502040925465_changeGoldPrice2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502040953545_EditTableStock.cs" />
+    <Compile Include="MigrationsStoreInfo\201502040953545_EditTableStock.Designer.cs">
+      <DependentUpon>201502040953545_EditTableStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502090425508_EditStockWorld.cs" />
+    <Compile Include="MigrationsStoreInfo\201502090425508_EditStockWorld.Designer.cs">
+      <DependentUpon>201502090425508_EditStockWorld.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201502100412516_EditUSDExchangeRate.cs" />
+    <Compile Include="MigrationsStoreInfo\201502100412516_EditUSDExchangeRate.Designer.cs">
+      <DependentUpon>201502100412516_EditUSDExchangeRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201503070323159_addStockVN.cs" />
+    <Compile Include="MigrationsStoreInfo\201503070323159_addStockVN.Designer.cs">
+      <DependentUpon>201503070323159_addStockVN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201503100409012_marketStock.cs" />
+    <Compile Include="MigrationsStoreInfo\201503100409012_marketStock.Designer.cs">
+      <DependentUpon>201503100409012_marketStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201503160708015_stockmarket_realtime.cs" />
+    <Compile Include="MigrationsStoreInfo\201503160708015_stockmarket_realtime.Designer.cs">
+      <DependentUpon>201503160708015_stockmarket_realtime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\201503160810298_editstockworld2.cs" />
+    <Compile Include="MigrationsStoreInfo\201503160810298_editstockworld2.Designer.cs">
+      <DependentUpon>201503160810298_editstockworld2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MigrationsStoreInfo\ConfigurationStoreInfo.cs" />
+    <Compile Include="Migrations\201406181031162_1.cs" />
+    <Compile Include="Migrations\201406181031162_1.Designer.cs">
+      <DependentUpon>201406181031162_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406190312496_2.cs" />
+    <Compile Include="Migrations\201406190312496_2.Designer.cs">
+      <DependentUpon>201406190312496_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406210316091_ordercat.cs" />
+    <Compile Include="Migrations\201406210316091_ordercat.Designer.cs">
+      <DependentUpon>201406210316091_ordercat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406240325484_editVideoHighlights.cs" />
+    <Compile Include="Migrations\201406240325484_editVideoHighlights.Designer.cs">
+      <DependentUpon>201406240325484_editVideoHighlights.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407030834472_editHighlight.cs" />
+    <Compile Include="Migrations\201407030834472_editHighlight.Designer.cs">
+      <DependentUpon>201407030834472_editHighlight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407041042138_addrate.cs" />
+    <Compile Include="Migrations\201407041042138_addrate.Designer.cs">
+      <DependentUpon>201407041042138_addrate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407041051107_editHighlight1.cs" />
+    <Compile Include="Migrations\201407041051107_editHighlight1.Designer.cs">
+      <DependentUpon>201407041051107_editHighlight1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407140325305_addschedule.cs" />
+    <Compile Include="Migrations\201407140325305_addschedule.Designer.cs">
+      <DependentUpon>201407140325305_addschedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407140505383_updateschdule1.cs" />
+    <Compile Include="Migrations\201407140505383_updateschdule1.Designer.cs">
+      <DependentUpon>201407140505383_updateschdule1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407141004573_updateartcat.cs" />
+    <Compile Include="Migrations\201407141004573_updateartcat.Designer.cs">
+      <DependentUpon>201407141004573_updateartcat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407160321374_editArticle.cs" />
+    <Compile Include="Migrations\201407160321374_editArticle.Designer.cs">
+      <DependentUpon>201407160321374_editArticle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407160807469_addRecruit.cs" />
+    <Compile Include="Migrations\201407160807469_addRecruit.Designer.cs">
+      <DependentUpon>201407160807469_addRecruit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407160819283_IsNew.cs" />
+    <Compile Include="Migrations\201407160819283_IsNew.Designer.cs">
+      <DependentUpon>201407160819283_IsNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407160858184_editrecruit.cs" />
+    <Compile Include="Migrations\201407160858184_editrecruit.Designer.cs">
+      <DependentUpon>201407160858184_editrecruit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407160910581_updateVideo.cs" />
+    <Compile Include="Migrations\201407160910581_updateVideo.Designer.cs">
+      <DependentUpon>201407160910581_updateVideo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170256022_editrecruit1.cs" />
+    <Compile Include="Migrations\201407170256022_editrecruit1.Designer.cs">
+      <DependentUpon>201407170256022_editrecruit1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170404209_removestartendtime.cs" />
+    <Compile Include="Migrations\201407170404209_removestartendtime.Designer.cs">
+      <DependentUpon>201407170404209_removestartendtime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170405020_removestartendtime2.cs" />
+    <Compile Include="Migrations\201407170405020_removestartendtime2.Designer.cs">
+      <DependentUpon>201407170405020_removestartendtime2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170406360_editrecruit2.cs" />
+    <Compile Include="Migrations\201407170406360_editrecruit2.Designer.cs">
+      <DependentUpon>201407170406360_editrecruit2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170412008_editrecruit3.cs" />
+    <Compile Include="Migrations\201407170412008_editrecruit3.Designer.cs">
+      <DependentUpon>201407170412008_editrecruit3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170752136_editrecruit4.cs" />
+    <Compile Include="Migrations\201407170752136_editrecruit4.Designer.cs">
+      <DependentUpon>201407170752136_editrecruit4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407170959477_correctIsNew.cs" />
+    <Compile Include="Migrations\201407170959477_correctIsNew.Designer.cs">
+      <DependentUpon>201407170959477_correctIsNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407180416163_addextra.cs" />
+    <Compile Include="Migrations\201407180416163_addextra.Designer.cs">
+      <DependentUpon>201407180416163_addextra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201407190413591_editrecruit5.cs" />
+    <Compile Include="Migrations\201407190413591_editrecruit5.Designer.cs">
+      <DependentUpon>201407190413591_editrecruit5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408110721268_addpartner.cs" />
+    <Compile Include="Migrations\201408110721268_addpartner.Designer.cs">
+      <DependentUpon>201408110721268_addpartner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408200856328_editvideocategory.cs" />
+    <Compile Include="Migrations\201408200856328_editvideocategory.Designer.cs">
+      <DependentUpon>201408200856328_editvideocategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411140925374_mobile-cat.cs" />
+    <Compile Include="Migrations\201411140925374_mobile-cat.Designer.cs">
+      <DependentUpon>201411140925374_mobile-cat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411170323528_mobile-video.cs" />
+    <Compile Include="Migrations\201411170323528_mobile-video.Designer.cs">
+      <DependentUpon>201411170323528_mobile-video.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412060437063_changearticle.cs" />
+    <Compile Include="Migrations\201412060437063_changearticle.Designer.cs">
+      <DependentUpon>201412060437063_changearticle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412090803078_seoarticle.cs" />
+    <Compile Include="Migrations\201412090803078_seoarticle.Designer.cs">
+      <DependentUpon>201412090803078_seoarticle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412110909401_position-reporter.cs" />
+    <Compile Include="Migrations\201412110909401_position-reporter.Designer.cs">
+      <DependentUpon>201412110909401_position-reporter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412130242080_repoter-role.cs" />
+    <Compile Include="Migrations\201412130242080_repoter-role.Designer.cs">
+      <DependentUpon>201412130242080_repoter-role.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412181030317_uniquetitle_video.cs" />
+    <Compile Include="Migrations\201412181030317_uniquetitle_video.Designer.cs">
+      <DependentUpon>201412181030317_uniquetitle_video.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412181040410_uniquetitle_video_2.cs" />
+    <Compile Include="Migrations\201412181040410_uniquetitle_video_2.Designer.cs">
+      <DependentUpon>201412181040410_uniquetitle_video_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412190357141_uniquetitle_article.cs" />
+    <Compile Include="Migrations\201412190357141_uniquetitle_article.Designer.cs">
+      <DependentUpon>201412190357141_uniquetitle_article.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412190723131_uniquetitle-cat.cs" />
+    <Compile Include="Migrations\201412190723131_uniquetitle-cat.Designer.cs">
+      <DependentUpon>201412190723131_uniquetitle-cat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412190730208_uniquetitle-cat_2.cs" />
+    <Compile Include="Migrations\201412190730208_uniquetitle-cat_2.Designer.cs">
+      <DependentUpon>201412190730208_uniquetitle-cat_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412270353411_videoreporter1.cs" />
+    <Compile Include="Migrations\201412270353411_videoreporter1.Designer.cs">
+      <DependentUpon>201412270353411_videoreporter1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412270411115_videoreporter2.cs" />
+    <Compile Include="Migrations\201412270411115_videoreporter2.Designer.cs">
+      <DependentUpon>201412270411115_videoreporter2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412290249142_editvideo.cs" />
+    <Compile Include="Migrations\201412290249142_editvideo.Designer.cs">
+      <DependentUpon>201412290249142_editvideo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501100824085_addfieldTitleReporter.cs" />
+    <Compile Include="Migrations\201501100824085_addfieldTitleReporter.Designer.cs">
+      <DependentUpon>201501100824085_addfieldTitleReporter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502120844364_editReporterIsShow.cs" />
+    <Compile Include="Migrations\201502120844364_editReporterIsShow.Designer.cs">
+      <DependentUpon>201502120844364_editReporterIsShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502120933122_editReporterBioIntro.cs" />
+    <Compile Include="Migrations\201502120933122_editReporterBioIntro.Designer.cs">
+      <DependentUpon>201502120933122_editReporterBioIntro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502240743117_NewTableSpecialEvent.cs" />
+    <Compile Include="Migrations\201502240743117_NewTableSpecialEvent.Designer.cs">
+      <DependentUpon>201502240743117_NewTableSpecialEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502240813539_EditTableSpecialEvent.cs" />
+    <Compile Include="Migrations\201502240813539_EditTableSpecialEvent.Designer.cs">
+      <DependentUpon>201502240813539_EditTableSpecialEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502250348589_remove_IsSpecial.cs" />
+    <Compile Include="Migrations\201502250348589_remove_IsSpecial.Designer.cs">
+      <DependentUpon>201502250348589_remove_IsSpecial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502260307083_CreateTableHoliday.cs" />
+    <Compile Include="Migrations\201502260307083_CreateTableHoliday.Designer.cs">
+      <DependentUpon>201502260307083_CreateTableHoliday.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502260359073_holiday.cs" />
+    <Compile Include="Migrations\201502260359073_holiday.Designer.cs">
+      <DependentUpon>201502260359073_holiday.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503040320322_Uniquetile_videocatgroup.cs" />
+    <Compile Include="Migrations\201503040320322_Uniquetile_videocatgroup.Designer.cs">
+      <DependentUpon>201503040320322_Uniquetile_videocatgroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503040330101_Uniquetile_videocatgroup2.cs" />
+    <Compile Include="Migrations\201503040330101_Uniquetile_videocatgroup2.Designer.cs">
+      <DependentUpon>201503040330101_Uniquetile_videocatgroup2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503050430416_removeHighlight.cs" />
+    <Compile Include="Migrations\201503050430416_removeHighlight.Designer.cs">
+      <DependentUpon>201503050430416_removeHighlight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503090310030_interest.cs" />
+    <Compile Include="Migrations\201503090310030_interest.Designer.cs">
+      <DependentUpon>201503090310030_interest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503090708214_editbank.cs" />
+    <Compile Include="Migrations\201503090708214_editbank.Designer.cs">
+      <DependentUpon>201503090708214_editbank.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503100753571_deleteallIdentity.cs" />
+    <Compile Include="Migrations\201503100753571_deleteallIdentity.Designer.cs">
+      <DependentUpon>201503100753571_deleteallIdentity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503100802122_addallIdentityagain.cs" />
+    <Compile Include="Migrations\201503100802122_addallIdentityagain.Designer.cs">
+      <DependentUpon>201503100802122_addallIdentityagain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503200949576_videoaccess.cs" />
+    <Compile Include="Migrations\201503200949576_videoaccess.Designer.cs">
+      <DependentUpon>201503200949576_videoaccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503230921509_updatevideoaccess.cs" />
+    <Compile Include="Migrations\201503230921509_updatevideoaccess.Designer.cs">
+      <DependentUpon>201503230921509_updatevideoaccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503230930436_updatevideoaccess1.cs" />
+    <Compile Include="Migrations\201503230930436_updatevideoaccess1.Designer.cs">
+      <DependentUpon>201503230930436_updatevideoaccess1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504020357102_employee.cs" />
+    <Compile Include="Migrations\201504020357102_employee.Designer.cs">
+      <DependentUpon>201504020357102_employee.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504020433206_department.cs" />
+    <Compile Include="Migrations\201504020433206_department.Designer.cs">
+      <DependentUpon>201504020433206_department.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504020817266_employee_user.cs" />
+    <Compile Include="Migrations\201504020817266_employee_user.Designer.cs">
+      <DependentUpon>201504020817266_employee_user.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504020841475_edit_user.cs" />
+    <Compile Include="Migrations\201504020841475_edit_user.Designer.cs">
+      <DependentUpon>201504020841475_edit_user.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504030935522_update-group.cs" />
+    <Compile Include="Migrations\201504030935522_update-group.Designer.cs">
+      <DependentUpon>201504030935522_update-group.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504060930472_update-employeeworkinfo.cs" />
+    <Compile Include="Migrations\201504060930472_update-employeeworkinfo.Designer.cs">
+      <DependentUpon>201504060930472_update-employeeworkinfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504061002113_update-group2.cs" />
+    <Compile Include="Migrations\201504061002113_update-group2.Designer.cs">
+      <DependentUpon>201504061002113_update-group2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504091115320_fix-employeeposition.cs" />
+    <Compile Include="Migrations\201504091115320_fix-employeeposition.Designer.cs">
+      <DependentUpon>201504091115320_fix-employeeposition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504100258097_update-pageaccess.cs" />
+    <Compile Include="Migrations\201504100258097_update-pageaccess.Designer.cs">
+      <DependentUpon>201504100258097_update-pageaccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504180406557_videocattype.cs" />
+    <Compile Include="Migrations\201504180406557_videocattype.Designer.cs">
+      <DependentUpon>201504180406557_videocattype.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504200245588_editpageaccess.cs" />
+    <Compile Include="Migrations\201504200245588_editpageaccess.Designer.cs">
+      <DependentUpon>201504200245588_editpageaccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504220730219_editpageaccess1.cs" />
+    <Compile Include="Migrations\201504220730219_editpageaccess1.Designer.cs">
+      <DependentUpon>201504220730219_editpageaccess1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504220731044_editpageaccess2.cs" />
+    <Compile Include="Migrations\201504220731044_editpageaccess2.Designer.cs">
+      <DependentUpon>201504220731044_editpageaccess2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504230344511_editpa_rm_colBrowser.cs" />
+    <Compile Include="Migrations\201504230344511_editpa_rm_colBrowser.Designer.cs">
+      <DependentUpon>201504230344511_editpa_rm_colBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504230514519_editpa_pk.cs" />
+    <Compile Include="Migrations\201504230514519_editpa_pk.Designer.cs">
+      <DependentUpon>201504230514519_editpa_pk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504230743112_editpa_addpk.cs" />
+    <Compile Include="Migrations\201504230743112_editpa_addpk.Designer.cs">
+      <DependentUpon>201504230743112_editpa_addpk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505040232208_edit-video-publish.cs" />
+    <Compile Include="Migrations\201505040232208_edit-video-publish.Designer.cs">
+      <DependentUpon>201505040232208_edit-video-publish.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505040839282_video-displaytime.cs" />
+    <Compile Include="Migrations\201505040839282_video-displaytime.Designer.cs">
+      <DependentUpon>201505040839282_video-displaytime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506120805111_editvideo1.cs" />
+    <Compile Include="Migrations\201506120805111_editvideo1.Designer.cs">
+      <DependentUpon>201506120805111_editvideo1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506121004322_editvideo2.cs" />
+    <Compile Include="Migrations\201506121004322_editvideo2.Designer.cs">
+      <DependentUpon>201506121004322_editvideo2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506121005123_editvideo3.cs" />
+    <Compile Include="Migrations\201506121005123_editvideo3.Designer.cs">
+      <DependentUpon>201506121005123_editvideo3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506130404336_editfktoappuser.cs" />
+    <Compile Include="Migrations\201506130404336_editfktoappuser.Designer.cs">
+      <DependentUpon>201506130404336_editfktoappuser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507210423042_editvideo-skipintro.cs" />
+    <Compile Include="Migrations\201507210423042_editvideo-skipintro.Designer.cs">
+      <DependentUpon>201507210423042_editvideo-skipintro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507220336068_addtranscript.cs" />
+    <Compile Include="Migrations\201507220336068_addtranscript.Designer.cs">
+      <DependentUpon>201507220336068_addtranscript.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507220741384_controlleractionpermission.cs" />
+    <Compile Include="Migrations\201507220741384_controlleractionpermission.Designer.cs">
+      <DependentUpon>201507220741384_controlleractionpermission.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508200352090_videouploadedtime.cs" />
+    <Compile Include="Migrations\201508200352090_videouploadedtime.Designer.cs">
+      <DependentUpon>201508200352090_videouploadedtime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509010235044_editvideo_size.cs" />
+    <Compile Include="Migrations\201509010235044_editvideo_size.Designer.cs">
+      <DependentUpon>201509010235044_editvideo_size.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509150348138_name2-videocategory.cs" />
+    <Compile Include="Migrations\201509150348138_name2-videocategory.Designer.cs">
+      <DependentUpon>201509150348138_name2-videocategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509180255320_cat_access.cs" />
+    <Compile Include="Migrations\201509180255320_cat_access.Designer.cs">
+      <DependentUpon>201509180255320_cat_access.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509300349302_videorate.cs" />
+    <Compile Include="Migrations\201509300349302_videorate.Designer.cs">
+      <DependentUpon>201509300349302_videorate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510020433174_delLog.cs" />
+    <Compile Include="Migrations\201510020433174_delLog.Designer.cs">
+      <DependentUpon>201510020433174_delLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510020754548_editDelLog.cs" />
+    <Compile Include="Migrations\201510020754548_editDelLog.Designer.cs">
+      <DependentUpon>201510020754548_editDelLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510060842399_videoduration.cs" />
+    <Compile Include="Migrations\201510060842399_videoduration.Designer.cs">
+      <DependentUpon>201510060842399_videoduration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511160252495_articlecatgrp.cs" />
+    <Compile Include="Migrations\201511160252495_articlecatgrp.Designer.cs">
+      <DependentUpon>201511160252495_articlecatgrp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511170911327_editarticlecat.cs" />
+    <Compile Include="Migrations\201511170911327_editarticlecat.Designer.cs">
+      <DependentUpon>201511170911327_editarticlecat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511170921329_alter_articlecat.cs" />
+    <Compile Include="Migrations\201511170921329_alter_articlecat.Designer.cs">
+      <DependentUpon>201511170921329_alter_articlecat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512010658031_addvideopagegrp.cs" />
+    <Compile Include="Migrations\201512010658031_addvideopagegrp.Designer.cs">
+      <DependentUpon>201512010658031_addvideopagegrp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512040223362_addseries.cs" />
+    <Compile Include="Migrations\201512040223362_addseries.Designer.cs">
+      <DependentUpon>201512040223362_addseries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512050256075_editarticleorder.cs" />
+    <Compile Include="Migrations\201512050256075_editarticleorder.Designer.cs">
+      <DependentUpon>201512050256075_editarticleorder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512051013572_editarticlereporter.cs" />
+    <Compile Include="Migrations\201512051013572_editarticlereporter.Designer.cs">
+      <DependentUpon>201512051013572_editarticlereporter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512070923396_editorderseries.cs" />
+    <Compile Include="Migrations\201512070923396_editorderseries.Designer.cs">
+      <DependentUpon>201512070923396_editorderseries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512100804525_articlehightlight.cs" />
+    <Compile Include="Migrations\201512100804525_articlehightlight.Designer.cs">
+      <DependentUpon>201512100804525_articlehightlight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512170425104_edit-contact.cs" />
+    <Compile Include="Migrations\201512170425104_edit-contact.Designer.cs">
+      <DependentUpon>201512170425104_edit-contact.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512250439425_addartrevision.cs" />
+    <Compile Include="Migrations\201512250439425_addartrevision.Designer.cs">
+      <DependentUpon>201512250439425_addartrevision.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512310345181_edit-articlerevision.cs" />
+    <Compile Include="Migrations\201512310345181_edit-articlerevision.Designer.cs">
+      <DependentUpon>201512310345181_edit-articlerevision.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601290320574_videopiority.cs" />
+    <Compile Include="Migrations\201601290320574_videopiority.Designer.cs">
+      <DependentUpon>201601290320574_videopiority.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602150809016_addcatintro.cs" />
+    <Compile Include="Migrations\201602150809016_addcatintro.Designer.cs">
+      <DependentUpon>201602150809016_addcatintro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602160944078_site-setting.cs" />
+    <Compile Include="Migrations\201602160944078_site-setting.Designer.cs">
+      <DependentUpon>201602160944078_site-setting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602171017250_addtvc.cs" />
+    <Compile Include="Migrations\201602171017250_addtvc.Designer.cs">
+      <DependentUpon>201602171017250_addtvc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602180840309_cat-tvc.cs" />
+    <Compile Include="Migrations\201602180840309_cat-tvc.Designer.cs">
+      <DependentUpon>201602180840309_cat-tvc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602190426282_update-tvc.cs" />
+    <Compile Include="Migrations\201602190426282_update-tvc.Designer.cs">
+      <DependentUpon>201602190426282_update-tvc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602190725192_update-tvc2.cs" />
+    <Compile Include="Migrations\201602190725192_update-tvc2.Designer.cs">
+      <DependentUpon>201602190725192_update-tvc2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602220849140_introcategory.cs" />
+    <Compile Include="Migrations\201602220849140_introcategory.Designer.cs">
+      <DependentUpon>201602220849140_introcategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603010926361_hastranscipt.cs" />
+    <Compile Include="Migrations\201603010926361_hastranscipt.Designer.cs">
+      <DependentUpon>201603010926361_hastranscipt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603021000213_alterarticlestatus.cs" />
+    <Compile Include="Migrations\201603021000213_alterarticlestatus.Designer.cs">
+      <DependentUpon>201603021000213_alterarticlestatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603050423456_hasads.cs" />
+    <Compile Include="Migrations\201603050423456_hasads.Designer.cs">
+      <DependentUpon>201603050423456_hasads.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603081021175_poll1.cs" />
+    <Compile Include="Migrations\201603081021175_poll1.Designer.cs">
+      <DependentUpon>201603081021175_poll1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603140428324_poll2.cs" />
+    <Compile Include="Migrations\201603140428324_poll2.Designer.cs">
+      <DependentUpon>201603140428324_poll2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603241040062_poll3.cs" />
+    <Compile Include="Migrations\201603241040062_poll3.Designer.cs">
+      <DependentUpon>201603241040062_poll3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604040324229_articleAccess.cs" />
+    <Compile Include="Migrations\201604040324229_articleAccess.Designer.cs">
+      <DependentUpon>201604040324229_articleAccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604050950225_subtitle.cs" />
+    <Compile Include="Migrations\201604050950225_subtitle.Designer.cs">
+      <DependentUpon>201604050950225_subtitle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604120439581_videoaccess1.cs" />
+    <Compile Include="Migrations\201604120439581_videoaccess1.Designer.cs">
+      <DependentUpon>201604120439581_videoaccess1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604220912247_article-comment.cs" />
+    <Compile Include="Migrations\201604220912247_article-comment.Designer.cs">
+      <DependentUpon>201604220912247_article-comment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604261040392_article-new.cs" />
+    <Compile Include="Migrations\201604261040392_article-new.Designer.cs">
+      <DependentUpon>201604261040392_article-new.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605050849546_article-change.cs" />
+    <Compile Include="Migrations\201605050849546_article-change.Designer.cs">
+      <DependentUpon>201605050849546_article-change.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605170338289_sitepage.cs" />
+    <Compile Include="Migrations\201605170338289_sitepage.Designer.cs">
+      <DependentUpon>201605170338289_sitepage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605170933303_fix-article.cs" />
+    <Compile Include="Migrations\201605170933303_fix-article.Designer.cs">
+      <DependentUpon>201605170933303_fix-article.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605301034271_accountlocked.cs" />
+    <Compile Include="Migrations\201605301034271_accountlocked.Designer.cs">
+      <DependentUpon>201605301034271_accountlocked.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607280708373_addsponsor.cs" />
+    <Compile Include="Migrations\201607280708373_addsponsor.Designer.cs">
+      <DependentUpon>201607280708373_addsponsor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ApplicationUser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Article.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ArticleAccess.cs" />
+    <Compile Include="Models\ArticleCategory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ArticleComment.cs" />
+    <Compile Include="Models\ArticleHighlightAll.cs" />
+    <Compile Include="Models\ArticleHighlightCat.cs" />
+    <Compile Include="Models\ArticleReview.cs" />
+    <Compile Include="Models\ArticleRevision.cs" />
+    <Compile Include="Models\ArticleSeries.cs" />
+    <Compile Include="Models\Bank.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\CategoryAccess.cs" />
+    <Compile Include="Models\CategoryIntro.cs" />
+    <Compile Include="Models\City.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Contact.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Currency.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\DeletionLog.cs" />
+    <Compile Include="Models\EmployeeWorkInfo.cs" />
+    <Compile Include="Models\GoogleAnalytics\Age.cs" />
+    <Compile Include="Models\GoogleAnalytics\Browser.cs" />
+    <Compile Include="Models\GoogleAnalytics\City.cs" />
+    <Compile Include="Models\GoogleAnalytics\Continent.cs" />
+    <Compile Include="Models\GoogleAnalytics\Country.cs" />
+    <Compile Include="Models\GoogleAnalytics\DeviceBranding.cs" />
+    <Compile Include="Models\GoogleAnalytics\DeviceCategory.cs" />
+    <Compile Include="Models\GoogleAnalytics\DeviceInfo.cs" />
+    <Compile Include="Models\GoogleAnalytics\Gender.cs" />
+    <Compile Include="Models\GoogleAnalytics\OS.cs" />
+    <Compile Include="Models\GoogleAnalytics\Resolution.cs" />
+    <Compile Include="Models\GoogleAnalytics\SiteContent.cs" />
+    <Compile Include="Models\GoogleAnalytics\SiteSearch.cs" />
+    <Compile Include="Models\GoogleAnalytics\SocialNetworkDetail.cs" />
+    <Compile Include="Models\GoogleAnalytics\SocialNetworkGrp.cs" />
+    <Compile Include="Models\GoogleAnalytics\SubContinent.cs" />
+    <Compile Include="Models\GoogleAnalytics\UserType.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Agency.cs" />
+    <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\Holiday.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IdentityModels.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Info.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\InterestRate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Keyword.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\SitePage.cs" />
+    <Compile Include="Models\PageAccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Partner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ControllerActionPermission.cs" />
+    <Compile Include="Models\Poll.cs" />
+    <Compile Include="Models\Position.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\PositionLevel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Product.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Program.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProgramCategory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProgramSchedule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ProgramScheduleDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Recruit.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\RecruitCategory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\RecruitExtraInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Employee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EmployeeInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Role.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Setting.cs" />
+    <Compile Include="Models\SpecialEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\ExchangeRate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\GoldPriceVietNam.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\GoldPriceWorld.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\MetalPrice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\OilPrice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\Stock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\StockMarket_RealTime.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\StockWorld.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\Stock_Day.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\USDExchangeRate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\StoreInfo\VNDExchangeRate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Subtitle.cs" />
+    <Compile Include="Models\Term.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Video.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\VideoAccess.cs" />
+    <Compile Include="Models\VideoCategory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\VideoCategorySponsor.cs" />
+    <Compile Include="Models\VideoCatGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\VideoCatType.cs" />
+    <Compile Include="Models\PageGroup.cs" />
+    <Compile Include="Models\VideoRate.cs" />
+    <Compile Include="Models\VideoTranscript.cs" />
+    <Compile Include="Models\VideoTVC.cs" />
+    <Compile Include="Models\VNDExchangeRate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ArticleCategoryRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ArticleHighlightAllRepository.cs" />
+    <Compile Include="Repositories\ArticleHighlightCatRepository.cs" />
+    <Compile Include="Repositories\ArticleRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ArticleRevisionRepository.cs" />
+    <Compile Include="Repositories\ArticleSeriesRepository.cs" />
+    <Compile Include="Repositories\PageGroupRepository.cs" />
+    <Compile Include="Repositories\PollRepository.cs" />
+    <Compile Include="Repositories\BankRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\CategoryIntroRepository.cs" />
+    <Compile Include="Repositories\CityRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ContactRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\HolidayRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\InfoRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\InterestRateRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\KeywordRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\PageRepository.cs" />
+    <Compile Include="Repositories\PartnerRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\PositionGroupRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\PositionRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ProductRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ProgramScheduleDetailRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ProgramScheduleRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\RecruitCategoryRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\RecruitExtraInfoRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\RecruitRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\ReporterRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\RoleRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\SpecialEventRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\SettingRepository.cs" />
+    <Compile Include="Repositories\TermRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\VideoCategoryRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\VideoCatGroupRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\VideoCatSponsorRepository.cs" />
+    <Compile Include="Repositories\VideoCatTypeRepository.cs" />
+    <Compile Include="Repositories\VideoRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\VideoTranscriptRepository.cs" />
+    <Compile Include="Repositories\VideoTVCRepository.cs" />
+    <Compile Include="Repositories\VNDExchangeRateRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\ArticleFilterView.cs" />
+    <Compile Include="ViewModels\ArticleHighlightView.cs" />
+    <Compile Include="ViewModels\ArticleHomeView.cs" />
+    <Compile Include="ViewModels\ArticleModel.cs" />
+    <Compile Include="ViewModels\ArticlePaginationView.cs" />
+    <Compile Include="ViewModels\BankModel.cs" />
+    <Compile Include="ViewModels\CatCombineView.cs" />
+    <Compile Include="ViewModels\CategoryIntroManage.cs" />
+    <Compile Include="ViewModels\ChangePasswordModel.cs" />
+    <Compile Include="ViewModels\CityView.cs" />
+    <Compile Include="ViewModels\CommentModel.cs" />
+    <Compile Include="ViewModels\CreateRoleModel.cs" />
+    <Compile Include="ViewModels\CreateUserModel.cs" />
+    <Compile Include="ViewModels\DashboardView.cs" />
+    <Compile Include="ViewModels\DowScheduleDetailModel.cs" />
+    <Compile Include="ViewModels\DowScheduleView.cs" />
+    <Compile Include="ViewModels\EditUserModel.cs" />
+    <Compile Include="ViewModels\ExchangeRateView.cs" />
+    <Compile Include="ViewModels\GoldPriceView.cs" />
+    <Compile Include="ViewModels\HolidayModel.cs" />
+    <Compile Include="ViewModels\HomeModel.cs" />
+    <Compile Include="ViewModels\InterestRateModel.cs" />
+    <Compile Include="ViewModels\LoginModel.cs" />
+    <Compile Include="ViewModels\MenuModel.cs" />
+    <Compile Include="ViewModels\MyArticlesView.cs" />
+    <Compile Include="ViewModels\PageGroupModel.cs" />
+    <Compile Include="ViewModels\PagePermissionModel.cs" />
+    <Compile Include="ViewModels\Portal\ArticleView.cs" />
+    <Compile Include="ViewModels\Portal\CatAccessDataChart.cs" />
+    <Compile Include="ViewModels\Portal\CompareVideoModel.cs" />
+    <Compile Include="ViewModels\Portal\VideoRateModel.cs" />
+    <Compile Include="ViewModels\ProgramSchedulesView.cs" />
+    <Compile Include="ViewModels\RateAndPrices.cs" />
+    <Compile Include="ViewModels\ReporterGroupView.cs" />
+    <Compile Include="ViewModels\ReporterModel.cs" />
+    <Compile Include="ViewModels\ResetPasswordModel.cs" />
+    <Compile Include="ViewModels\VideoTabFilterView.cs" />
+    <Compile Include="ViewModels\ScheduleDetailFilterView.cs" />
+    <Compile Include="ViewModels\SearchModel.cs" />
+    <Compile Include="ViewModels\SearchVideoModel.cs" />
+    <Compile Include="ViewModels\SpecialEventDatail.cs" />
+    <Compile Include="ViewModels\SpecialEventModel.cs" />
+    <Compile Include="ViewModels\SpecialEventView.cs" />
+    <Compile Include="ViewModels\StockChartEntity.cs" />
+    <Compile Include="ViewModels\UploadReportModel.cs" />
+    <Compile Include="ViewModels\ReportModels.cs" />
+    <Compile Include="ViewModels\VideoCatGroupView.cs" />
+    <Compile Include="ViewModels\VideoFilterView.cs" />
+    <Compile Include="ViewModels\VideoHomeView.cs" />
+    <Compile Include="ViewModels\VideoModel.cs" />
+    <Compile Include="ViewModels\VideoSetting.cs" />
+    <Compile Include="ViewModels\VideoTranscriptModel.cs" />
+    <Compile Include="ViewModels\VideoTranscriptView.cs" />
+    <Compile Include="ViewModels\VideoUploadReportModel.cs" />
+    <Compile Include="ViewModels\VideoView.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201511250935014_init.resx">
+      <DependentUpon>201511250935014_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201511270453053_videoid.resx">
+      <DependentUpon>201511270453053_videoid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201511270650521_social-url.resx">
+      <DependentUpon>201511270650521_social-url.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201512010427103_age-gender-overview.resx">
+      <DependentUpon>201512010427103_age-gender-overview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201512040717106_pageview_countryisocode.resx">
+      <DependentUpon>201512040717106_pageview_countryisocode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201512040807369_countryisocode_removedate.resx">
+      <DependentUpon>201512040807369_countryisocode_removedate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsGoogleAnalytcis\201512040820252_countryisocode_fullname.resx">
+      <DependentUpon>201512040820252_countryisocode_fullname.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201501240533548_Initial.resx">
+      <DependentUpon>201501240533548_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201501260459310_VNDExchangeRates.resx">
+      <DependentUpon>201501260459310_VNDExchangeRates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201501260736062_VNDExchangeRates_Day.resx">
+      <DependentUpon>201501260736062_VNDExchangeRates_Day.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201501260759467_USDExchangeRates_Day.resx">
+      <DependentUpon>201501260759467_USDExchangeRates_Day.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201501270502569_CreateNewSomeTable.resx">
+      <DependentUpon>201501270502569_CreateNewSomeTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201501310334451_edittableGoldPriceVietNam.resx">
+      <DependentUpon>201501310334451_edittableGoldPriceVietNam.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502020241237_edittableGoldPriceVietNam1.resx">
+      <DependentUpon>201502020241237_edittableGoldPriceVietNam1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502020307521_changeVNDExchangeRate.resx">
+      <DependentUpon>201502020307521_changeVNDExchangeRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502020845509_GoldPriceVietNam_Day.resx">
+      <DependentUpon>201502020845509_GoldPriceVietNam_Day.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502030406202_updateVNDExchangeRate.resx">
+      <DependentUpon>201502030406202_updateVNDExchangeRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502031005435_edittableOrder.resx">
+      <DependentUpon>201502031005435_edittableOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502040431037_editGoldPrice.resx">
+      <DependentUpon>201502040431037_editGoldPrice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502040531172_addtableStock.resx">
+      <DependentUpon>201502040531172_addtableStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502040737537_DeleteTableStocks.resx">
+      <DependentUpon>201502040737537_DeleteTableStocks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502040847120_changeGoldPrice.resx">
+      <DependentUpon>201502040847120_changeGoldPrice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502040925465_changeGoldPrice2.resx">
+      <DependentUpon>201502040925465_changeGoldPrice2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502040953545_EditTableStock.resx">
+      <DependentUpon>201502040953545_EditTableStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502090425508_EditStockWorld.resx">
+      <DependentUpon>201502090425508_EditStockWorld.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201502100412516_EditUSDExchangeRate.resx">
+      <DependentUpon>201502100412516_EditUSDExchangeRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201503070323159_addStockVN.resx">
+      <DependentUpon>201503070323159_addStockVN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201503100409012_marketStock.resx">
+      <DependentUpon>201503100409012_marketStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201503160708015_stockmarket_realtime.resx">
+      <DependentUpon>201503160708015_stockmarket_realtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MigrationsStoreInfo\201503160810298_editstockworld2.resx">
+      <DependentUpon>201503160810298_editstockworld2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406181031162_1.resx">
+      <DependentUpon>201406181031162_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406190312496_2.resx">
+      <DependentUpon>201406190312496_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406210316091_ordercat.resx">
+      <DependentUpon>201406210316091_ordercat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406240325484_editVideoHighlights.resx">
+      <DependentUpon>201406240325484_editVideoHighlights.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407030834472_editHighlight.resx">
+      <DependentUpon>201407030834472_editHighlight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407041042138_addrate.resx">
+      <DependentUpon>201407041042138_addrate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407041051107_editHighlight1.resx">
+      <DependentUpon>201407041051107_editHighlight1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407140325305_addschedule.resx">
+      <DependentUpon>201407140325305_addschedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407140505383_updateschdule1.resx">
+      <DependentUpon>201407140505383_updateschdule1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407141004573_updateartcat.resx">
+      <DependentUpon>201407141004573_updateartcat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407160321374_editArticle.resx">
+      <DependentUpon>201407160321374_editArticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407160807469_addRecruit.resx">
+      <DependentUpon>201407160807469_addRecruit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407160819283_IsNew.resx">
+      <DependentUpon>201407160819283_IsNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407160858184_editrecruit.resx">
+      <DependentUpon>201407160858184_editrecruit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407160910581_updateVideo.resx">
+      <DependentUpon>201407160910581_updateVideo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170256022_editrecruit1.resx">
+      <DependentUpon>201407170256022_editrecruit1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170404209_removestartendtime.resx">
+      <DependentUpon>201407170404209_removestartendtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170405020_removestartendtime2.resx">
+      <DependentUpon>201407170405020_removestartendtime2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170406360_editrecruit2.resx">
+      <DependentUpon>201407170406360_editrecruit2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170412008_editrecruit3.resx">
+      <DependentUpon>201407170412008_editrecruit3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170752136_editrecruit4.resx">
+      <DependentUpon>201407170752136_editrecruit4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407170959477_correctIsNew.resx">
+      <DependentUpon>201407170959477_correctIsNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407180416163_addextra.resx">
+      <DependentUpon>201407180416163_addextra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201407190413591_editrecruit5.resx">
+      <DependentUpon>201407190413591_editrecruit5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408110721268_addpartner.resx">
+      <DependentUpon>201408110721268_addpartner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408200856328_editvideocategory.resx">
+      <DependentUpon>201408200856328_editvideocategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411140925374_mobile-cat.resx">
+      <DependentUpon>201411140925374_mobile-cat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411170323528_mobile-video.resx">
+      <DependentUpon>201411170323528_mobile-video.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412060437063_changearticle.resx">
+      <DependentUpon>201412060437063_changearticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412090803078_seoarticle.resx">
+      <DependentUpon>201412090803078_seoarticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412110909401_position-reporter.resx">
+      <DependentUpon>201412110909401_position-reporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412130242080_repoter-role.resx">
+      <DependentUpon>201412130242080_repoter-role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412181030317_uniquetitle_video.resx">
+      <DependentUpon>201412181030317_uniquetitle_video.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412181040410_uniquetitle_video_2.resx">
+      <DependentUpon>201412181040410_uniquetitle_video_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412190357141_uniquetitle_article.resx">
+      <DependentUpon>201412190357141_uniquetitle_article.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412190723131_uniquetitle-cat.resx">
+      <DependentUpon>201412190723131_uniquetitle-cat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412190730208_uniquetitle-cat_2.resx">
+      <DependentUpon>201412190730208_uniquetitle-cat_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412270353411_videoreporter1.resx">
+      <DependentUpon>201412270353411_videoreporter1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412270411115_videoreporter2.resx">
+      <DependentUpon>201412270411115_videoreporter2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412290249142_editvideo.resx">
+      <DependentUpon>201412290249142_editvideo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501100824085_addfieldTitleReporter.resx">
+      <DependentUpon>201501100824085_addfieldTitleReporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502120844364_editReporterIsShow.resx">
+      <DependentUpon>201502120844364_editReporterIsShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502120933122_editReporterBioIntro.resx">
+      <DependentUpon>201502120933122_editReporterBioIntro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502240743117_NewTableSpecialEvent.resx">
+      <DependentUpon>201502240743117_NewTableSpecialEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502240813539_EditTableSpecialEvent.resx">
+      <DependentUpon>201502240813539_EditTableSpecialEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502250348589_remove_IsSpecial.resx">
+      <DependentUpon>201502250348589_remove_IsSpecial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502260307083_CreateTableHoliday.resx">
+      <DependentUpon>201502260307083_CreateTableHoliday.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502260359073_holiday.resx">
+      <DependentUpon>201502260359073_holiday.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503040320322_Uniquetile_videocatgroup.resx">
+      <DependentUpon>201503040320322_Uniquetile_videocatgroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503040330101_Uniquetile_videocatgroup2.resx">
+      <DependentUpon>201503040330101_Uniquetile_videocatgroup2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503050430416_removeHighlight.resx">
+      <DependentUpon>201503050430416_removeHighlight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503090310030_interest.resx">
+      <DependentUpon>201503090310030_interest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503090708214_editbank.resx">
+      <DependentUpon>201503090708214_editbank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503100753571_deleteallIdentity.resx">
+      <DependentUpon>201503100753571_deleteallIdentity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503100802122_addallIdentityagain.resx">
+      <DependentUpon>201503100802122_addallIdentityagain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503200949576_videoaccess.resx">
+      <DependentUpon>201503200949576_videoaccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503230921509_updatevideoaccess.resx">
+      <DependentUpon>201503230921509_updatevideoaccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503230930436_updatevideoaccess1.resx">
+      <DependentUpon>201503230930436_updatevideoaccess1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504020357102_employee.resx">
+      <DependentUpon>201504020357102_employee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504020433206_department.resx">
+      <DependentUpon>201504020433206_department.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504020817266_employee_user.resx">
+      <DependentUpon>201504020817266_employee_user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504020841475_edit_user.resx">
+      <DependentUpon>201504020841475_edit_user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504030935522_update-group.resx">
+      <DependentUpon>201504030935522_update-group.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504060930472_update-employeeworkinfo.resx">
+      <DependentUpon>201504060930472_update-employeeworkinfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504061002113_update-group2.resx">
+      <DependentUpon>201504061002113_update-group2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504091115320_fix-employeeposition.resx">
+      <DependentUpon>201504091115320_fix-employeeposition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504100258097_update-pageaccess.resx">
+      <DependentUpon>201504100258097_update-pageaccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504180406557_videocattype.resx">
+      <DependentUpon>201504180406557_videocattype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504200245588_editpageaccess.resx">
+      <DependentUpon>201504200245588_editpageaccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220730219_editpageaccess1.resx">
+      <DependentUpon>201504220730219_editpageaccess1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220731044_editpageaccess2.resx">
+      <DependentUpon>201504220731044_editpageaccess2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504230344511_editpa_rm_colBrowser.resx">
+      <DependentUpon>201504230344511_editpa_rm_colBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504230514519_editpa_pk.resx">
+      <DependentUpon>201504230514519_editpa_pk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504230743112_editpa_addpk.resx">
+      <DependentUpon>201504230743112_editpa_addpk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505040232208_edit-video-publish.resx">
+      <DependentUpon>201505040232208_edit-video-publish.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505040839282_video-displaytime.resx">
+      <DependentUpon>201505040839282_video-displaytime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506120805111_editvideo1.resx">
+      <DependentUpon>201506120805111_editvideo1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506121004322_editvideo2.resx">
+      <DependentUpon>201506121004322_editvideo2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506121005123_editvideo3.resx">
+      <DependentUpon>201506121005123_editvideo3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506130404336_editfktoappuser.resx">
+      <DependentUpon>201506130404336_editfktoappuser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507210423042_editvideo-skipintro.resx">
+      <DependentUpon>201507210423042_editvideo-skipintro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507220336068_addtranscript.resx">
+      <DependentUpon>201507220336068_addtranscript.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507220741384_controlleractionpermission.resx">
+      <DependentUpon>201507220741384_controlleractionpermission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508200352090_videouploadedtime.resx">
+      <DependentUpon>201508200352090_videouploadedtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509010235044_editvideo_size.resx">
+      <DependentUpon>201509010235044_editvideo_size.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509150348138_name2-videocategory.resx">
+      <DependentUpon>201509150348138_name2-videocategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509180255320_cat_access.resx">
+      <DependentUpon>201509180255320_cat_access.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509300349302_videorate.resx">
+      <DependentUpon>201509300349302_videorate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510020433174_delLog.resx">
+      <DependentUpon>201510020433174_delLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510020754548_editDelLog.resx">
+      <DependentUpon>201510020754548_editDelLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510060842399_videoduration.resx">
+      <DependentUpon>201510060842399_videoduration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511160252495_articlecatgrp.resx">
+      <DependentUpon>201511160252495_articlecatgrp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511170911327_editarticlecat.resx">
+      <DependentUpon>201511170911327_editarticlecat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511170921329_alter_articlecat.resx">
+      <DependentUpon>201511170921329_alter_articlecat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512010658031_addvideopagegrp.resx">
+      <DependentUpon>201512010658031_addvideopagegrp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512040223362_addseries.resx">
+      <DependentUpon>201512040223362_addseries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512050256075_editarticleorder.resx">
+      <DependentUpon>201512050256075_editarticleorder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512051013572_editarticlereporter.resx">
+      <DependentUpon>201512051013572_editarticlereporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512070923396_editorderseries.resx">
+      <DependentUpon>201512070923396_editorderseries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512100804525_articlehightlight.resx">
+      <DependentUpon>201512100804525_articlehightlight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512170425104_edit-contact.resx">
+      <DependentUpon>201512170425104_edit-contact.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512250439425_addartrevision.resx">
+      <DependentUpon>201512250439425_addartrevision.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512310345181_edit-articlerevision.resx">
+      <DependentUpon>201512310345181_edit-articlerevision.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601290320574_videopiority.resx">
+      <DependentUpon>201601290320574_videopiority.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602150809016_addcatintro.resx">
+      <DependentUpon>201602150809016_addcatintro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602160944078_site-setting.resx">
+      <DependentUpon>201602160944078_site-setting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602171017250_addtvc.resx">
+      <DependentUpon>201602171017250_addtvc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602180840309_cat-tvc.resx">
+      <DependentUpon>201602180840309_cat-tvc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602190426282_update-tvc.resx">
+      <DependentUpon>201602190426282_update-tvc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602190725192_update-tvc2.resx">
+      <DependentUpon>201602190725192_update-tvc2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602220849140_introcategory.resx">
+      <DependentUpon>201602220849140_introcategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603010926361_hastranscipt.resx">
+      <DependentUpon>201603010926361_hastranscipt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603021000213_alterarticlestatus.resx">
+      <DependentUpon>201603021000213_alterarticlestatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603050423456_hasads.resx">
+      <DependentUpon>201603050423456_hasads.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603081021175_poll1.resx">
+      <DependentUpon>201603081021175_poll1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603140428324_poll2.resx">
+      <DependentUpon>201603140428324_poll2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603241040062_poll3.resx">
+      <DependentUpon>201603241040062_poll3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604040324229_articleAccess.resx">
+      <DependentUpon>201604040324229_articleAccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604050950225_subtitle.resx">
+      <DependentUpon>201604050950225_subtitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604120439581_videoaccess1.resx">
+      <DependentUpon>201604120439581_videoaccess1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604220912247_article-comment.resx">
+      <DependentUpon>201604220912247_article-comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604261040392_article-new.resx">
+      <DependentUpon>201604261040392_article-new.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605050849546_article-change.resx">
+      <DependentUpon>201605050849546_article-change.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605170338289_sitepage.resx">
+      <DependentUpon>201605170338289_sitepage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605170933303_fix-article.resx">
+      <DependentUpon>201605170933303_fix-article.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605301034271_accountlocked.resx">
+      <DependentUpon>201605301034271_accountlocked.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607280708373_addsponsor.resx">
+      <DependentUpon>201607280708373_addsponsor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\MarketInfoMigrations\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

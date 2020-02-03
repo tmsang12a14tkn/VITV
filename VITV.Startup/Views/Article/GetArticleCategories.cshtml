@@ -1,0 +1,6 @@
+﻿@model IEnumerable<VITV.Data.Models.ArticleCategory>
+
+@foreach (var ac in Model)
+{
+    <li class="sideCat" data-id="@ac.Id"><a href="@Url.Action("CategoryDetails", "Article", new { id = ac.Id, title = ac.UniqueTitle })">@ac.Name</a></li>
+}

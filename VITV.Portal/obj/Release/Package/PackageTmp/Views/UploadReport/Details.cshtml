@@ -1,0 +1,159 @@
+﻿@model List<UploadReportModel>
+
+@{
+    ViewBag.Title = "Chi tiết Upload";
+    var date = ViewBag.today;
+    string empId = ViewBag.employeeid; 
+}
+
+@section styles {
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.6/css/jquery.dataTables.min.css" type="text/css" />
+}
+
+@section scripts {
+    <script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.dataTable').DataTable({
+                paging: false,
+                searching: false,
+                "order": [[0, "desc"], [3, "desc"]]
+            });
+
+            $("#datepicker").datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+
+            //$('.employee').on('click', function () {
+            //    var date = $('#datepicker').val();
+            //    var emp = $(this).data('empid');
+            //    window.location = "/UploadReport/UploadReport?date=" + date + "&emp=" + emp;
+            //});
+
+            $("#sel2, #datepicker").change(function () {
+                $("#myform").submit();
+            });
+            $('#sidebar-nav #uploadReportMng').toggleClass("active");
+            $('#sidebar-nav #uploadReportMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#ur-li-1').toggleClass("active");
+            $('#sidebar-nav a#ur-li-1').parent().siblings().removeClass("active");
+        });
+
+    </script>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left col-sm-8">Chi tiết Upload</h2>
+                <div class="pull-right col-sm-4">
+                    <div class="form-group vd-ctg-report">
+                       @using (Html.BeginForm("Details", "UploadReport", FormMethod.Get, new { id = "myform", _class = "form-horizontal" }))
+                       {
+                            <div class="form-group">
+                                <label class="col-sm-2">Ngày</label>
+                                <div class="form-inline col-sm-10">
+                                    <a href="/UploadReport/Details?date=@(date.AddDays(-1).ToShortDateString())"><i class="fa fa-arrow-left"></i></a>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" name="date" id="datepicker" value="@(date.ToShortDateString())" />
+                                        <div class="input-group-addon">
+                                            <a href="/UploadReport/Details?date=@(DateTime.Now.ToShortDateString())"><i class="fa fa-home"></i></a>
+                                        </div>
+                                    </div>
+                                    <a href="/UploadReport/Details?date=@(date.AddDays(1).ToShortDateString())"><i class="fa fa-arrow-right"></i></a>
+                                </div>
+                                @*<div class="fc-header-right">
+                                    <span class="fc-button fc-button-prev fc-state-default fc-corner-left" unselectable="on"><i class="fa fa-chevron-left"></i></span>
+                                    <span class="fc-button fc-button-next fc-state-default fc-corner-right" unselectable="on"><i class="fa fa-chevron-right"></i></span>
+                                </div>*@
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2">Nhân viên</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="sel2" tabindex="-1" name="emp">
+                                        <option value="" @(String.IsNullOrEmpty(ViewBag.employeeid) ? "selected" : "")>Tất cả</option>
+                                        @foreach (var user in (List<ApplicationUser>)ViewBag.users)
+                                        {
+                                            if (ViewBag.employeeid == user.Id)
+                                            {
+                                                <option value="@user.Id" selected>@user.UserName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@user.Id">@user.UserName</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+
+                            </div>
+        }
+    </div>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <h2>Thống kê video</h2>
+                    <table class="table table-bordered dataTable" id="tablecombine">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Người đăng</th>
+                                <th>Video</th>
+                                <th>Chương trình</th>
+                                <th>Giờ phát sóng</th>
+                                <th>Giờ đăng</th>
+                                <th>Giờ hẹn đăng</th>
+                                <th></th>
+                            </tr>
+                            
+                        </thead>
+
+                        <tbody>
+                            @foreach (var video in Model)
+                            {
+                                <tr>
+                                    <td><a href="/UploadReport/Details?date=@(date.ToShortDateString())&emp=@video.empId" class="employee" data-empid="@video.empId">@video.Name</a></td>
+                                    <td>@video.Title</td>
+                                    <td>@video.CategoryName</td>
+                                    <td>@video.DisplayTime</td>
+                                    <td>@video.UploadTime</td>
+                                    <td>@video.PublishTime</td>
+                                    @if(video.IsCheck)
+                                    {
+                                        <td>
+                                            <div class="table-link green">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    }else
+                                    {
+                                        <td>
+                                            <div class="table-link red">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-close fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

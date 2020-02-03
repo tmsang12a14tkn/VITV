@@ -1,0 +1,17 @@
+﻿@model PersonalDayoffModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">
+        Nghỉ ngày @Model.Date.ToShortDateString()
+    </h4>
+</div>
+
+<form action="/PersonalDayoff/Edit" method="post" class="form-horizontal">
+    @Html.HiddenFor(model => model.Id)
+    @Html.Partial("_CreateOrEdit", Model)
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-primary">Xong</button>
+    </div>
+</form>

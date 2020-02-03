@@ -1,0 +1,35 @@
+﻿@model List<VideoCategorySponsor>
+
+@foreach (VideoCategorySponsor vd in Model)
+{
+    <tr class="tbodyvideo" id="tvc-@vd.Id">
+        <td>
+            <img src="@vd.Thumbnail" alt="" width="70" height="50">
+            <p style="word-wrap: break-word;font-size: 15px"><b>@vd.Name</b></p>
+        </td>
+
+        <td style="width: 20%;">
+            <a href="/VideoCatSponsor/Edit/@vd.Id" class="table-link gray" data-backdrop="static" title="Chỉnh sửa" data-toggle="modal" data-target="#sponsorModal"
+               data-ajax="true"
+               data-ajax-complete=""
+               data-ajax-mode="replace"
+               data-ajax-update="#sponsorContent">
+                <span class="fa-stack">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+
+            <a href="/VideoCatSponsor/Delete/@vd.Id" class="table-link danger" title="Xóa" data-backdrop="static" data-toggle="modal" data-target="#sponsorModal"
+               data-ajax="true"
+               data-ajax-complete=""
+               data-ajax-mode="replace"
+               data-ajax-update="#sponsorContent">
+                <span class="fa-stack">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+        </td>
+    </tr>
+}

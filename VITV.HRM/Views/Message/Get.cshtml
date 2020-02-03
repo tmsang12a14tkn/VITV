@@ -1,0 +1,40 @@
+﻿@model List<ListNotiChatModel>
+<a data-toggle="dropdown" class="dropdown-toggle" href="#" id="clicknotichat">
+    <i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
+    @if (ViewBag.count > 0)
+    {
+        <span class="badge badge-success" id="countnotichat">@ViewBag.count</span>
+    }
+    else
+    {
+        <span class="badge badge-success" id="countnotichat"></span>
+    }
+    
+</a>
+<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+    <li class="dropdown-header">
+        <i class="ace-icon fa fa-envelope-o"></i>
+        @if (ViewBag.count > 0)
+        {
+            <span id="countnotichatsecond">@(ViewBag.count) Tin nhắn</span>
+        }
+        else
+        {
+            <span id="countnotichatsecond">Tin nhắn</span>
+        }
+        
+    </li>
+    <li class="dropdown-content">
+        <ul class="dropdown-menu dropdown-navbar" id="listnotichat">
+            @Html.Partial("GetListNotiMessage", Model)
+        </ul>
+    </li>
+
+    <li class="dropdown-footer">
+        <a href="inbox.html">
+            Tất cả
+            <i class="ace-icon fa fa-arrow-right"></i>
+        </a>
+    </li>
+</ul>
+    

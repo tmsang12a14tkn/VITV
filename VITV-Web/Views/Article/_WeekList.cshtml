@@ -1,0 +1,17 @@
+﻿@model ArticleCustomDateView
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Danh sách bài viết tuần @Model.Week (@Model.StartDate.ToString("dd-MM-yyyy") - @Model.EndDate.ToString("dd-MM-yyyy"))</h2>
+                
+            </header>
+            <div class="main-box-body clearfix">
+                <div id="tableDetail@(Model.Week)">
+                    @Html.Partial("_ListEdit", Model.Articles, new ViewDataDictionary { { "week", Model.Week } })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿@model Equipment
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Xóa thiết bị</h4>
+</div>
+@using (Ajax.BeginForm("Delete", "Equipment", new { }, new AjaxOptions
+{
+    OnSuccess = "OnDeleteEquipmentSuccess",
+    HttpMethod = "Post"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Bạn có chắc muốn xóa thiết bị này không?</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary">Xóa</button>
+    </div>
+}

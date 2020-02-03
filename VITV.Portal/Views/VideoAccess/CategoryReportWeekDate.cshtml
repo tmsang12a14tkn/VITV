@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "Báo cáo theo video";
+    var catTypes = ViewBag.CatTypes as List<VideoCatType>;
+}
+<div class="row">
+   
+    <div class="col-md-12">
+        @*<div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary">
+                <input type="radio" name="radiocharttype" value="column">
+                <img src="~/Content/Images/bieudo-03.png" />
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="radiocharttype" value="line">
+                <img src="~/Content/Images/bieudo-01.png" />
+            </label>
+            <label class="btn btn-primary active">
+                <input type="radio" name="radiocharttype" value="spline" checked>
+                <img src="~/Content/Images/bieudo-02.png" />
+            </label>
+        </div>
+        <div id="column_option">
+            <input type="checkbox" value="false" id="cb_stackcolumn" /> <label for="cb_stackcolumn">Gom cột</label>
+        </div>*@
+        <select id="cb_cattype">
+            <option>Chọn</option>
+                @foreach (var catType in catTypes)
+                {
+                    <option value="@string.Join(",",catType.VideoCategories.Select(c=>c.Id))">@catType.Name</option>
+                }
+               
+        </select>
+    </div>
+</div>
+<div class="row" id="chart-container">
+    @*<div class="col-md-6" id="container"></div>*@
+</div>
+@*<div class="row">
+    <div class="col-md-12">
+        <table id="table-videoreport" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <td>Thời gian</td>
+                    <td>Xem không trùng</td>
+                    <td>Xem trùng</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>*@
+@section styles
+{
+    <link href="~/Content/DataTable/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/DataTable/buttons.dataTables.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+}
+@section scripts
+{
+    <script src="~/Scripts/DataTable/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.buttons.js"></script>
+    <script src="~/Scripts/DataTable/jszip.min.js"></script>
+    <script src="~/Scripts/DataTable/buttons.html5.js"></script>
+    <script src="~/Scripts/DataTable/buttons.print.js"></script>
+    <script src="~/Scripts/DataTable/buttons.colVis.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jspdf/libs/base64.js"></script>
+
+    @*<script src="~/Scripts/bootstrap-table.js"></script>
+        <script src="~/Scripts/bootstrap-table-export.js"></script>
+        <script src="~/Scripts/export/tableExport.js"></script>*@
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+
+    @*Highchart*@
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+        $(function () {
+            //$("#column_option").hide();
+            var daysofweek = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6","Thứ 7", "CN"];
+            @*var chartQuery = "/videoaccess/GetCategoryReportWeekDate?catId=@Model";*@
+            var chartOptions =
+                {
+                    chart: { type: 'column', animation: false },
+                    xAxis:
+                   {
+                       type: 'text',
+                   },
+                    yAxis:
+                        {
+                            reversedStacks: false
+                        },
+                    plotOptions: {
+                        line: { animation: false },
+                        column: { animation: false },
+                        spline: { animation: false }
+                    }
+                };
+
+            //$.getJSON(chartQuery, function (accessdata) {
+            //    var chartSeries = [];
+            //    for (var i = 0; i < accessdata.Data.length; i++) {
+            //        chartSeries[i] = {
+            //            name: daysofweek[accessdata.Data[i].DOW],
+            //            data: [[accessdata.CatName,accessdata.Data[i].IPViewCount]]
+            //        }
+            //    };
+            
+            //    chartOptions.series = chartSeries;
+            //    chartOptions.title = { text: accessdata.CatName };
+            //    chartOptions.subtitle= {
+            //            text: 'Thể hiện sự tương quan giữa các ngày trong tuần'
+            //    }
+            //    $("#container").highcharts(chartOptions);
+            //});
+
+            //$('input:radio[name="radiocharttype"]').change(function () {
+            //    var charttype = $(this).val();
+            //    chartOptions.chart.type = charttype;
+            //    if (charttype == "column") {
+            //        $("#column_option").show();
+            //    }
+            //    $('#container').highcharts(chartOptions);
+            //});
+
+            //$("#cb_stackcolumn").on("change", function (evt) {
+            //    var checked = this.checked;
+            //    if (checked == true && chartOptions.chart.type == "column") {
+            //        chartOptions.series[1].visible = false;
+            //        chartOptions.series[2].visible = true;
+            //        chartOptions.legend = { reversed: false },
+            //        chartOptions.plotOptions.series = { stacking: "normal" };
+            //    }
+            //    else {
+            //        chartOptions.series[1].visible = true;
+            //        chartOptions.series[2].visible = false;
+            //        chartOptions.plotOptions.series = { stacking: null };
+            //    }
+            //    $('#container').highcharts(chartOptions);
+            //});
+
+            $("#cb_cattype").on("change", function () {
+                $("#chart-container").empty();
+                var cats = $(this).val();
+                var catlist = cats.split(",");
+                for(var i in catlist)
+                {
+                    var catId = catlist[i];
+                    chartQuery = "/videoaccess/GetCategoryReportWeekDate?catId=" + catId;
+                    var newChartOptions = chartOptions;
+                    $.getJSON(chartQuery, function (accessdata) {
+                        var chartSeries = [];
+                        for (var i = 0; i < accessdata.Data.length; i++) {
+                            chartSeries[i] = {
+                                name: daysofweek[accessdata.Data[i].DOW],
+                                data: [[accessdata.CatName, accessdata.Data[i].IPViewCount]]
+                            }
+                        };
+
+                        newChartOptions.series = chartSeries;
+                        newChartOptions.title = { text: accessdata.CatName };
+                        newChartOptions.subtitle = {
+                            text: 'Thể hiện sự tương quan giữa các ngày trong tuần'
+                        };
+                        var $newChartDiv = $('<div class="col-md-6 chart" id="chart-' + catId + '"></div');
+                        $("#chart-container").append($newChartDiv);
+                        $newChartDiv.highcharts(newChartOptions);
+                    });
+                   
+                }
+            });
+        });
+
+        function convertToDate(unix_timestamp) {
+            var date = new Date(unix_timestamp);
+            var dateMM = moment(date);
+            return dateMM.format("DD-MM-YYYY");
+        }
+    </script>
+}

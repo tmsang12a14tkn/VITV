@@ -1,0 +1,370 @@
+﻿@model Group
+
+@{
+    ViewBag.Title = "MyGroup";
+}
+
+<h2>@Model.Name</h2>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="row header smaller lighter green">
+                    <span class="col-sm-8">
+                        <i class="ace-icon fa fa-bullhorn"></i>
+                        Thông báo
+                    </span>
+                    <span class="col-sm-4">
+                        <a class="pull-right btn" id="add-notifi" data-toggle="modal" data-target="#notifi-modal" data-href="/GroupNotification/Add?groupId=@Model.Id"><i class=" fa fa-plus"></i></a>
+                    </span>
+                </h3>
+
+                @foreach (var noti in Model.GroupNotifications)
+                {
+                    <div class="alert alert-block alert-success notification">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="ace-icon fa fa-times"></i>
+                        </button>
+
+                        <p>
+                            <strong>
+                                <i class="ace-icon fa fa-check"></i>
+                                @noti.Title
+                            </strong>
+                        </p>
+
+                        @if (noti.Content.Length < 160)
+                        {
+                            <p>@noti.Content</p>
+                        }
+                        else
+                        {
+                            <p class="notifi-content">@noti.Content.Substring(0, 160) ...</p>
+                            <p>
+                                <button class="btn btn-sm btn-success noti-readmore" data-open="false" data-content="@noti.Content">Thêm</button>
+                            </p>
+                        }
+                        <div class="tools action-buttons">
+                            <a data-href="/GroupNotification/Edit/@noti.Id" data-toggle="modal" data-target="#notifi-modal" class="blue">
+                                <i class="ace-icon fa fa-pencil bigger-125"></i>
+                            </a>
+
+                            <a data-href="/GroupNotification/Delete/@noti.Id" data-toggle="modal" data-target="#notifi-modal" class="red">
+                                <i class="ace-icon fa fa-times bigger-125"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                }
+            </div><!-- /.col -->
+
+            <div class="col-sm-6">
+                <h3 class="row header smaller lighter orange">
+                    <span class="col-sm-8">
+                        <i class="ace-icon fa fa-users"></i>
+                        Danh sách thành viên
+                    </span><!-- /.col -->
+                    <span class="col-sm-4">
+                        <i class="pull-right fa fa-plus"></i>
+                    </span>
+                </h3>
+                <div class="scroll-content" style="max-height: 200px;">
+
+                        <div class="profile-users clearfix">
+                          
+                            @foreach(var workInfo in @Model.EmployeeWorkInfos)
+                            { 
+                                <div class="itemdiv memberdiv">
+                                    <div class="inline pos-rel">
+                                        <div class="user">
+                                            <a href="/Calendar/Index/@workInfo.Employee.Id">
+                                                <img src="@workInfo.Employee.ProfilePicture" alt="avatar">
+                                            </a>
+                                        </div>
+
+                                        <div class="body">
+                                            <div class="name">
+                                                <a href="/Calendar/Index/@workInfo.Employee.Id">
+                                                    <span class="user-status status-online"></span>
+                                                    @workInfo.Employee.Name
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="popover right">
+                                            <div class="arrow"></div>
+
+                                            <div class="popover-content">
+                                                <div class="bolder">@workInfo.Group.Name</div>
+
+                                                <div class="hr dotted hr-8"></div>
+
+                                                <div class="tools action-buttons">
+                                                    <a href="/Calendar/Index/@workInfo.Employee.Id">
+                                                        <i class="ace-icon fa fa-calendar-o blue bigger-150"></i>
+                                                    </a>
+
+                                                    <a href="/Employee/ProfilePage/@workInfo.Employee.Id">
+                                                        <i class="ace-icon fa fa-user light-blue bigger-150"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="hr hr10 hr-double"></div>
+
+                        <ul class="pager pull-right">
+                            <li class="previous disabled">
+                                <a href="#">← Prev</a>
+                            </li>
+
+                            <li class="next">
+                                <a href="#">Next →</a>
+                            </li>
+                        </ul>
+
+                </div>
+            </div><!-- /.col -->
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <h3 class="row header smaller lighter red">
+            <span>
+                <i class="ace-icon fa fa-bullhorn"></i>
+                Lịch làm việc
+            </span>
+        </h3>
+        @*<div class="tabbable">
+            <ul class="nav nav-tabs">
+                @foreach(var workInfo in Model.EmployeeWorkInfos)
+                { 
+                <li>
+                    <a data-toggle="tab" href="#calendar-@workInfo.Employee.Id">
+                        <i class="green ace-icon fa fa-user bigger-120"></i>
+                        @workInfo.Employee.Name
+                    </a>
+                </li>
+                }
+            </ul>
+
+            <div class="tab-content">
+                @foreach (var workInfo in Model.EmployeeWorkInfos)
+                {
+                    <div id="calendar-@workInfo.Employee.Id" class="tab-pane calendar">
+                    </div>
+                }
+            </div>
+        </div>*@
+    </div>
+
+</div>
+
+
+<div id="notifi-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- PAGE CONTENT ENDS -->
+@section styles
+{
+    <link href="~/Content/css/jquery.gritter.min.css" rel="stylesheet" />
+    <link href="~/Content/css/fullcalendar.min.css" rel="stylesheet" />
+}
+@section scripts
+{
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+    <script src="~/Scripts/jquery.gritter.min.js"></script>
+    <script>
+        $('#notifi-modal').on("show.bs.modal", function (e)
+        {
+            $(this).find(".modal-content").load($(e.relatedTarget).data('href'));
+        });
+        $('#notifi-modal').on("hidden.bs.modal", function (e)
+        {
+            $(this).find(".modal-content").empty();
+        });
+        function OnSuccessAddNotifi(data) {
+            console.log(data);
+            if (data.success == true) {
+                $('#notifi-modal').modal("hide");
+                //reload page
+                location.reload();
+            }
+            else {
+
+            }
+        };
+        function OnSuccessEditNotifi(data) {
+            console.log(data);
+            if (data.success == true) {
+                $('#notifi-modal').modal("hide");
+                //reload page
+                location.reload();
+            }
+            else {
+
+            }
+        };
+        function OnSuccessDeleteNotifi(data) {
+            console.log(data);
+            if (data.success == true) {
+                $('#notifi-modal').modal("hide");
+                //reload page
+                location.reload();
+            }
+            else {
+
+            }
+        };
+        $(function () {
+
+            $('.noti-readmore').on(ace.click_event, function () {
+                //if ($(this).data('open') == false) {
+                //    $.gritter.add({
+                //        title: $(this).data('title'),
+                //        text: $(this).data('content'),
+                //        class_name: 'gritter-info gritter-center gritter-light'
+                //    });
+                //}
+                //else {
+                //    $.gritter.removeAll();
+                //}
+                //$(this).data('open', !$(this).data('open'));
+                $(this).parent().siblings(".notifi-content").html($(this).data('content'));
+                return false;
+            });
+
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+            var calendar = $('.calendar').fullCalendar({
+                //isRTL: true,
+                buttonHtml: {
+                    prev: '<i class="ace-icon fa fa-chevron-left"></i>',
+                    next: '<i class="ace-icon fa fa-chevron-right"></i>'
+                },
+
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                editable: true,
+                droppable: true, // this allows things to be dropped onto the calendar !!!
+                drop: function (date, allDay) { // this function is called when something is dropped
+
+                    // retrieve the dropped element's stored Event Object
+                    var originalEventObject = $(this).data('eventObject');
+                    var $extraEventClass = $(this).attr('data-class');
+
+
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject);
+
+                    // assign it the date that was reported
+                    copiedEventObject.start = date;
+                    copiedEventObject.allDay = allDay;
+                    if ($extraEventClass) copiedEventObject['className'] = [$extraEventClass];
+
+                    // render the event on the calendar
+                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                    $('.calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        $(this).remove();
+                    }
+
+                }
+		,
+                selectable: true,
+                selectHelper: true,
+                select: function (start, end, allDay) {
+
+                    bootbox.prompt("New Event Title:", function (title) {
+                        if (title !== null) {
+                            calendar.fullCalendar('renderEvent',
+                                {
+                                    title: title,
+                                    start: start,
+                                    end: end,
+                                    allDay: allDay,
+                                    className: 'label-info'
+                                },
+                                true // make the event "stick"
+                            );
+                        }
+                    });
+
+
+                    calendar.fullCalendar('unselect');
+                }
+		,
+                eventClick: function (calEvent, jsEvent, view) {
+
+                    //display a modal
+                    var modal =
+                    '<div class="modal fade">\
+			  <div class="modal-dialog">\
+			   <div class="modal-content">\
+				 <div class="modal-body">\
+				   <button type="button" class="close" data-dismiss="modal" style="margin-top:-10px;">&times;</button>\
+				   <form class="no-margin">\
+					  <label>Change event name &nbsp;</label>\
+					  <input class="middle" autocomplete="off" type="text" value="' + calEvent.title + '" />\
+					 <button type="submit" class="btn btn-sm btn-success"><i class="ace-icon fa fa-check"></i> Save</button>\
+				   </form>\
+				 </div>\
+				 <div class="modal-footer">\
+					<button type="button" class="btn btn-sm btn-danger" data-action="delete"><i class="ace-icon fa fa-trash-o"></i> Delete Event</button>\
+					<button type="button" class="btn btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times"></i> Cancel</button>\
+				 </div>\
+			  </div>\
+			 </div>\
+			</div>';
+
+
+                    var modal = $(modal).appendTo('body');
+                    modal.find('form').on('submit', function (ev) {
+                        ev.preventDefault();
+
+                        calEvent.title = $(this).find("input[type=text]").val();
+                        calendar.fullCalendar('updateEvent', calEvent);
+                        modal.modal("hide");
+                    });
+                    modal.find('button[data-action=delete]').on('click', function () {
+                        calendar.fullCalendar('removeEvents', function (ev) {
+                            return (ev._id == calEvent._id);
+                        })
+                        modal.modal("hide");
+                    });
+
+                    modal.modal('show').on('hidden', function () {
+                        modal.remove();
+                    });
+
+
+                    //console.log(calEvent.id);
+                    //console.log(jsEvent);
+                    //console.log(view);
+
+                    // change the border color just for fun
+                    //$(this).css('border-color', 'red');
+
+                }
+
+            });
+
+        });
+    </script>
+}

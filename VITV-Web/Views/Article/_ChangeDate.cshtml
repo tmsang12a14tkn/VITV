@@ -1,0 +1,28 @@
+﻿@model Article
+
+@using (Ajax.BeginForm("ChangeDate", "Article", null, new AjaxOptions
+{
+    OnSuccess = "onCDSucceed",
+    HttpMethod = "Post"
+}, new { role = "form", @class = "form-horizontal" }))
+{
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <label>Tên bài viết</label>
+            <input class="form-control" type="text" value="@Model.Title" readonly />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <label>Ngày đăng</label>
+            <input class="form-control datepicker" data-format="dd/MM/yyyy" id="PublishedTimetxt" name="PublishedTimetxt" type="text" value="@Model.PublishedTime.ToString("dd/MM/yyyy")">
+        </div>
+    </div>
+    <div class="form-group" style="text-align: right;">
+        <div class="col-lg-offset-1 col-lg-10">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-default" id="close-hl-modal">Đóng</button>
+        </div>
+    </div>
+}

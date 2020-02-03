@@ -1,0 +1,326 @@
+﻿@model ArticleFilterView
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý bài viết";
+
+    var cats = (List<ArticleCategory>)ViewBag.ArticleCat;
+    var parentCat = cats.Where(c => c.ParentId == null | c.ParentId == 0).ToList();
+    var weektab = ViewBag.weektab;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2><b>Quản lý bài viết</b></h2>
+                <div class="row">
+                    <div class="filter-block pull-left">
+                        <a href="/Article/ManagementTab" class="btn btn-info pull-right">
+                            <i class="fa fa-newspaper-o fa-lg"></i> Danh sách theo tab
+                        </a>
+                        <a href="/Article/Create" class="btn btn-primary pull-right">
+                            <i class="fa fa-plus fa-lg"></i> Tạo mới bài viết
+                        </a>
+                    </div>
+                    <div class="filter-block pull-right">
+                        @using (Html.BeginForm("Management", "Article", FormMethod.Get, new { }))
+                    {
+                            <input type="hidden" name="prevnext" value="2" />
+                            <div class="navbar-form navbar-right" role="search" id="formsearch">
+                                <div class="form-group dropdown" id="rangeDropdown">
+                                    <input type="hidden" name="begin" id="filterByBegin" value="@(Model.Begin.HasValue?Model.Begin.Value.ToShortDateString():"")" />
+                                    <input type="hidden" name="end" id="filterByEnd" value="@(Model.End.HasValue?Model.End.Value.ToShortDateString():"")" />
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="sortbycat" name="cat">
+                                        <option value="all">Tất cả</option>
+                                        @foreach (ArticleCategory cat in parentCat)
+                                    {
+                                            <option value="@cat.Id" @(cat.Id.ToString() == Model.Category ? "selected" : "")>@cat.Name</option>
+
+                                        var childs = cats.Where(c => c.ParentId == cat.Id).OrderBy(c => c.Order);
+                                        foreach (var sub in childs)
+                                        {
+                                                <option value="@sub.Id" @(sub.Id.ToString() == Model.Category ? "selected" : "")>-- @sub.Name</option>
+                                        }
+                                    }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input class="form-control" id="sortbyreporter" name="rep" placeholder="Biên tập viên" type="text" value="@Model.Reporter">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="sortbytitle" name="title" placeholder="Tiêu đề" type="text" value="@Model.Title">
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-search fa-lg"></i>
+                                        Tìm kiếm
+                                    </button>
+                                </div>
+                            </div>
+                    }
+                    </div>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li><a href="@Url.Action("Management", "Article", new { cat = Model.Category, rep = Model.Reporter, title = Model.Title })"><i class="fa fa-home"></i></a></li>
+                    <li>
+                        <a href="@Url.Action("Management", "Article", new
+                            {
+                                prevnext = -1,
+                                begin = Model.CustomArticles.FirstOrDefault().StartDate.ToString("dd-MM-yyyy"),
+                                end = Model.CustomArticles.FirstOrDefault().StartDate.ToString("dd-MM-yyyy"),
+                                cat = Model.Category,
+                                rep = Model.Reporter,
+                                title = Model.Title
+                            })">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                    </li>
+
+                    @for (int i = 0; i < Model.CustomArticles.Count; i++)
+                    {
+                        <li class="@(weektab > 0 && weektab == Model.CustomArticles[i].Week ? "active" : (weektab == 0 && i == Model.CustomArticles.Count - 1 ? "active" : ""))">
+                            <a href="#tab@(Model.CustomArticles[i].Week)" role="tab" data-toggle="tab" style="@(Model.CustomArticles[i].Articles.Count == 0 ? "color:#a09a9a;" : "")">Tuần @Model.CustomArticles[i].Week</a>
+                        </li>
+                    }
+
+                    <li>
+                        <a href="@Url.Action("Management", "Article", new
+                            {
+                                prevnext = 1,
+                                begin = Model.CustomArticles.LastOrDefault().EndDate.ToString("dd-MM-yyyy"),
+                                end = Model.CustomArticles.LastOrDefault().EndDate.ToString("dd-MM-yyyy"),
+                                cat = Model.Category,
+                                rep = Model.Reporter,
+                                title = Model.Title
+                            })">
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    @for (int i = 0; i < Model.CustomArticles.Count; i++)
+                    {
+                        <div class="tab-pane fade @(weektab > 0 && weektab == Model.CustomArticles[i].Week ? "active in" : (weektab == 0 && i == Model.CustomArticles.Count - 1 ? "active in" : ""))" id="tab@(Model.CustomArticles[i].Week)">
+                            @Html.Partial("_WeekList", Model.CustomArticles[i])
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="highlightModal" tabindex="-1" role="dialog" aria-labelledby="highlightModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="highlightModalLabel">Tin nổi bật</h4>
+            </div>
+            <div class="modal-body" id="highlightBody"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changeDateModal" tabindex="-1" role="dialog" aria-labelledby="changeDateModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="changeDateModalLabel">Thay đổi ngày đăng bài viết</h4>
+            </div>
+            <div class="modal-body" id="changeDateBody"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.vitv.js"></script>
+
+    <script>
+        function onHLSucceed(data) {
+            if (data.success == true) {
+                $("#highlightModal").modal("hide");
+                if (data.type == 0)
+                    $("#btnHLA" + data.id).addClass('success');
+                else
+                    $("#btnHLC" + data.id).addClass('success');
+            }
+            else {
+                alert(data.error);
+            }
+        }
+
+        function onCDSucceed(data) {
+            if (data.success == true) {
+                $("#changeDateModal").modal("hide");
+                location.reload();
+            }
+            else {
+                alert(data.error);
+            }
+        }
+
+        function formatDate(date) {
+            var newdate = new Date(date);
+
+            var dd = newdate.getDate();
+            var mm = newdate.getMonth() + 1;
+            var y = newdate.getFullYear();
+
+            return dd + '/' + mm + '/' + y;
+        }
+
+        $.get('/Article/GetDateHaveArticle', function (data) {
+            var SelectedDates = {};
+
+            $.each(data, function (i, val) {
+                SelectedDates[new Date(val)] = new Date(val);
+            });
+
+            $('.customdatepicker').datetimepicker({
+                format: 'd/m/Y',
+                timepicker: false,
+                beforeShowDay: function (date) {
+                    var highlight = SelectedDates[date];
+                    if (highlight) {
+                        return "dateHasArticle";
+                    } else {
+                        return '';
+                    }
+                }
+            });
+        });
+
+        function replaceUrlParam(url, paramName, paramValue) {
+            var pattern = new RegExp('\\b(' + paramName + '=).*?(&|$)')
+            if (url.search(pattern) >= 0) {
+                return url.replace(pattern, '$1' + paramValue + '$2');
+            }
+            return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue
+        }
+
+        $(document).ready(function () {
+            $('.nav-tabs a').on('click', function () {
+                var newParam = this.hash.replace('#tab', '');
+                window.location.href = replaceUrlParam(window.location.href, 'weektab', newParam);
+            });
+
+            $('#highlightModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var artId = button.data('id');
+                var hlType = button.data('hltype');
+                var title = button.data('title');
+                var url = '/Article/HighlightArticle?id=' + artId + '&hltype=' + hlType;
+                var off_url = '/Article/DeleteHighlightArticle?id=' + artId + '&hltype=' + hlType;
+                var modal = $(this);
+                $('#highlightModalLabel').text(title);
+
+                $.get(url, function (data) {
+                    modal.find('.modal-body').html(data);
+                    $('#StartDatetxt, #EndDatetxt').datetimepicker(
+                    {
+                        format: 'd/m/Y',
+                        timepicker: false
+                    });
+
+                    $('#close-hl-modal').on('click', function () {
+                        modal.modal('hide');
+                    });
+
+                    $('#hlight-off').on('click', function () {
+                        $.post(off_url, function (data) {
+                            modal.modal('hide');
+                            if (data.success == true) {
+                                if (hlType == 0)
+                                    $("#btnHLA" + artId).removeClass('success');
+                                else
+                                    $("#btnHLC" + artId).removeClass('success');
+                            } else {
+                                alert("Có lỗi xảy ra trong quá trình chọn tin nổi bật. Hoặc vượt quá số lượng tin nổi bật cho phép. Vui lòng kiểm tra lại.");
+                            }
+                        });
+                    });
+
+                    $('#HighlightType').on('change', function (e) {
+                        var optionSelected = $("option:selected", this);
+                        var valueSelected = this.value;
+                        var now = new Date();
+
+                        if (valueSelected != 0) {
+                            $('#StartDatetxt').val(formatDate(now));
+                            $('#StartDate').val($('#StartDatetxt').val());
+
+                            if (valueSelected == 1) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 1)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 2) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 7)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 3) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 30)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 4) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 365)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 5) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 3650)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+
+                            $('#StartDatetxt, #EndDatetxt').prop('disabled', true);
+                        } else {
+                            $('#StartDatetxt, #EndDatetxt').prop('disabled', false);
+                        }
+                    });
+
+                    $('#StartDatetxt').on('change', function() {
+                        $('#StartDate').val($(this).val());
+                    });
+
+                    $('#EndDatetxt').on('change', function () {
+                        $('#EndDate').val($(this).val());
+                    });
+                });
+            });
+
+            $('#changeDateModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var artId = button.data('id');
+                var url = '/Article/ChangeDate?id=' + artId;
+                var modal = $(this);
+
+                $.get(url, function (data) {
+                    modal.find('#changeDateBody').html(data);
+                    $('#PublishedTimetxt').datetimepicker(
+                    {
+                        format: 'd/m/Y',
+                        timepicker: false
+                    });
+
+                    $('#close-hl-modal').on('click', function () {
+                        modal.modal('hide');
+                    });
+                });
+            });
+
+            $('#sidebar-nav #articleMng').toggleClass("active");
+            $('#sidebar-nav #articleMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#ar-li-2').toggleClass("active");
+            $('#sidebar-nav a#ar-li-2').parent().siblings().removeClass("active");
+        })
+    </script>
+}

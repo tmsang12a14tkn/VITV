@@ -1,0 +1,83 @@
+﻿@model PollQuestion
+
+@{
+    int sumVote = Model.Answers.Sum(a => a.Count);
+    
+}
+
+<div class="row">
+    @*Type 1*@
+    @*<div class="row">
+        <hr style="height:5px; width:20%;background-color:#3f93c9; border:none ">
+    </div>
+    <div class="row poll_name_web">
+        <h4>@Model.Name</h4>
+    </div>*@
+    @*Type 2*@
+    <div class="row poll_name_web">
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="row">
+        <div class="progress" style="height:2px;margin-top:10px">
+            <div class="progress-bar" role="progressbar" style="width: 30%;">
+            </div>
+        </div>
+    </div>
+    @*Type 3*@
+    @*<div class="row poll_name_web1">
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="row">
+        <div class="progress" style="height:2px;margin-top:10px">
+            <div class="progress-bar" role="progressbar" style="width: 30%;">
+            </div>
+        </div>
+    </div>*@
+    <div class="row">
+
+        <p>@Html.Raw(Model.Question)</p>
+
+    </div>
+</div>
+
+<div class="row poll_container_answer">
+    @foreach (var answer in Model.Answers)
+    {
+        string percent = sumVote == 0 ? "0" : Math.Round((double)answer.Count / sumVote * 100, 2).ToString().Replace(',', '.');
+        <div class="row poll_single_row">
+            <div class="row">
+                <label>@Html.Raw(answer.Answer)</label>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="progress progress-4x">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: @(percent)%">
+                            @if (Model.ViewTotal)
+                            {
+                                <span style='float:right; color:#fff; margin-right: 5px'>@answer.Count</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>@(percent)%</label>
+                </div>
+            </div>
+        </div>
+    }  
+</div>
+
+@if (Model.ViewTotal)
+{
+    <div class="row">
+        <label class="pull-left">Tổng số phiếu: @sumVote</label>
+    </div>
+}
+@if (!ViewBag.useranswered)
+{
+    <div class="row">
+        <a href="#" class="questionpoll poll_btn poll_btn_primary" data-questionid="@Model.Id">Quay lại trang bỏ phiếu</a>
+    </div>
+}
+
+

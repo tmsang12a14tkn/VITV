@@ -1,0 +1,19 @@
+﻿@model IEnumerable<ArticleCategory>
+
+<p>
+    <div class="btn-group">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" id="curCat">
+            @ViewBag.curParentName <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu artcat" role="menu">
+            <li><a href="#" data-value="0">Không có danh mục</a></li>
+            @foreach (var p in Model)
+            {
+                <li>
+                    <a href="#" data-value="@p.Id">@p.Name</a>
+                    @Html.Action("DrawChildNode", new { pId = p.Id })
+                </li>
+            }
+        </ul>
+    </div>
+</p>

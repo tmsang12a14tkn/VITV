@@ -1,0 +1,153 @@
+﻿@model IEnumerable<VITV.Data.Models.Article>
+
+@{
+    IEnumerable<VITV.Data.Models.ArticleCategory> categories = ViewBag.artCategory;
+    List<VITV.Data.Models.Article> highlights = ViewBag.Highlights;
+    int groupId = ViewBag.CurrentGrpId;
+}
+
+@if (highlights.Count > 0)
+{
+    <div class="row recent_news">
+        <div class="col-md-8 lg_news">
+            <div class="">
+                <a href="@Url.Action("Details", "Article", new { id = highlights.ElementAt(0).Id, title = highlights.ElementAt(0).UniqueTitle, date = highlights.ElementAt(0).PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                    <div style="background:url('@(highlights.ElementAt(0).Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%">
+                        <span>
+                            @(highlights.ElementAt(0).Title)
+                            <p class="tm">@(String.Join(",", highlights.ElementAt(0).Reporters.Select(r => r.Name))) - @(highlights.ElementAt(0).PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 sm_news">
+            @for (int i = 1; i < highlights.Count(); i++)
+            {
+                VITV.Data.Models.Article hl = highlights.ElementAt(i);
+                <div class="sm" data-order="@i">
+                    <a href="@Url.Action("Details", "Article", new { id = hl.Id, title = hl.UniqueTitle, date = hl.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                        <div style="background:url('@(hl.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;">
+                            <span>
+                                @(hl.Title)
+                                <p class="tm">@(String.Join(",", hl.Reporters.Select(r => r.Name))) - @(hl.PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="row hr_line">
+    <div class="col-xs-12 catdropdown">
+        <div class="form-group dropdown">
+            <button id="catLabel" class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                <span class="text-value">@ViewBag.CurrentGrpName</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="catLabel">
+                <li role="presentation" class="@(groupId == 0 ? "active" : "")" onclick="filter(0)">Tất cả</li>
+
+                @foreach (var catlg in categories)
+                {
+                    <li role="presentation" class="@(groupId == catlg.Id ? "active" : "")" onclick="filter(@(catlg.Id))">@(catlg.Name)</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="row catlg">
+        <div class="col-xs-6 col-md-4 all left @(groupId == 0 ? "current" : "")" data-id="0" onclick="filter(0)"><h5><span>Tất cả</span></h5></div>
+        <div class="col-xs-12 col-sm-6 col-md-8 right">
+            <a href="#" class="dropdown-toggle @(groupId != 0 ? "current" : "")" data-toggle="dropdown" role="button">@(groupId == 0 ? "Lọc theo" : ViewBag.CurrentGrpName) <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                @foreach (var catsm in categories)
+                {
+                    <li onclick="filter(@(catsm.Id))">@(catsm.Name)</li>
+                }
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="related_article_content">
+        @if (highlights.Count > 0)
+        {
+            <div class="non_pc_hl_area">
+                @for (int j = 0; j < highlights.Count(); j++)
+                {
+                    <div class="row single_related">
+                        <div class="single_article">
+                            <div class="col col-xs-4">
+                                <div class="article_image">
+                                    <a href="@Url.Action("Details", "Article", new { id = highlights[j].Id, title = highlights[j].UniqueTitle, date = highlights[j].PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                        <div class="poster" style="background:url('@(highlights[j].Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col col-xs-8">
+                                <div class="article_info">
+                                    <h3><a href="@Url.Action("Details", "Article", new { id = highlights[j].Id, title = highlights[j].UniqueTitle, date = highlights[j].PublishedTime.Value.ToString("dd-MM-yyyy") })">@(highlights[j].Title)</a></h3>
+                                    <p class="cn">@(highlights[j].ShortBrief)</p>
+                                    <p class="tm">
+                                        @(String.Join(",", highlights[j].Reporters.Select(r => r.Name))) - @(highlights[j].PublishedTime.Value.ToString("dd/MM/yyyy"))
+                                    </p>
+                                    <p class="rp">
+                                        @foreach (var rp in highlights[j].Reporters)
+                                        {
+                                            if(rp.IsShow)
+                                            {
+                                                <img class="sm_reporter" src="@rp.ProfilePicture" />    
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @foreach (var art in Model.Take(10))
+        {
+            <div class="row single_related" data-groupid="@(string.Join<string>(",", art.Categories.Select(a => a.Id.ToString())))">
+                <div class="single_article">
+                    <div class="col col-xs-4">
+                        <div class="article_image">
+                            <a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                <div class="poster" style="background:url('@(art.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col col-xs-8">
+                        <div class="article_info">
+                            <h3><a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">@(art.Title)</a></h3>
+                            <p class="cn">@(art.ShortBrief)</p>
+                            <p class="tm">@(String.Join(",", art.Reporters.Select(r => r.Name))) - @(art.PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                            <p class="rp">
+                                @foreach (var rp in art.Reporters)
+                                {
+                                    <img class="sm_reporter" src="@rp.ProfilePicture" />
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.Count() > 10)
+    {
+        <div class="row news_viewmore">
+            <p class="divine_line">
+                <a href="" class="btn btn-default vm">Xem thêm</a>
+                <input type="hidden" id="current_record" value="10" />
+            </p>
+        </div>
+    }
+</div>

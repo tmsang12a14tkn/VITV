@@ -1,0 +1,96 @@
+﻿@model List<Project>
+
+<div class="row">
+    @foreach (var project in Model)
+    {
+        var requests = project.TaskRequests.Where(p => !p.IsDeleted).ToList();
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title smaller"><a href="/Project/Details/@project.Id">@project.Title</a></h4>
+                    <div class="widget-toolbar">
+                        <div class="tools action-buttons">
+                            <a data-href="/Project/Edit/@project.Id" class="blue" data-toggle="modal" data-target="#project-modal">
+                                <i class="ace-icon fa fa-pencil bigger-125"></i>
+                            </a>
+
+                            <a data-href="/Project/Delete/@project.Id" class="red" data-toggle="modal" data-target="#project-delete-modal">
+                                <i class="ace-icon fa fa-times bigger-125"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <p>
+                            @project.Content
+                        </p>
+                        <div class="row">
+                            <ul class="attachment-list pull-left list-unstyled">
+                                @foreach (var attachment in project.Attachments)
+                                {
+                                    <li>
+                                        <a href="#" class="attached-file">
+                                            <i class="ace-icon fa fa-file-o bigger-110"></i>
+                                            <span class="attached-name">@Path.GetFileName(attachment.AttachmentLink)</span>
+                                        </a>
+
+                                        <span class="action-buttons">
+                                            <a href="@attachment.AttachmentLink" download>
+                                                <i class="ace-icon fa fa-download bigger-125 blue"></i>
+                                            </a>
+
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-trash-o bigger-125 red"></i>
+                                            </a>
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-10">
+                                @requests.Count công việc
+                            </div>
+                            <div class="col-sm-2">
+                                <a href="#" class="pull-right btn btn-danger btn-xs" data-action="add" data-toggle="modal" data-target="#request-modal" data-href="/TaskRequest/Add?projectId=@project.Id"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></a>
+                            </div>
+
+                        </div>
+                        <div class="space-4"></div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @foreach (var request in requests)
+                                {
+                                    <div class="profile-activity clearfix">
+                                        <div>
+                                            <img class="pull-left" alt="avatar" src="@request.RequestedEmployee.ProfilePicture">
+                                            <a href="/TaskRequest/Details/@request.Id">@request.Title</a>
+                                            <div class="time">
+                                                <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                @request.CreatedTime.PassTimeString()
+                                            </div>
+                                        </div>
+                                       
+                                        @*<div class="tools action-buttons">
+                                            <a href="#" class="blue" data-toggle="modal" data-target="#request-modal" data-href="/TaskRequest/Edit/@request.Id">
+                                                <i class="ace-icon fa fa-pencil bigger-125"></i>
+                                            </a>
+
+                                            <a href="#" class="red">
+                                                <i class="ace-icon fa fa-times bigger-125"></i>
+                                            </a>
+                                        </div>*@
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

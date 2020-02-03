@@ -1,0 +1,391 @@
+﻿@model ArticleModel
+
+@{
+    var reporters = ViewBag.PossibleReporters as List<Employee>;
+    //var comments = ViewBag.Comments as List<ArticleComment>;
+}
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.CategoryIds)
+@Html.HiddenFor(model => model.Order)
+<input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
+
+                @Html.ValidationSummary(true)
+
+<div class="panel panel-default">
+    @*<div class="panel-heading">
+        <h4 class="panel-title">Thông tin cơ bản</h4>
+    </div>*@
+    <div class="panel-body clearfix">
+        <div class="col-md-2">
+            @Html.HiddenFor(model => model.Thumbnail)
+            <div class="col-lg-12">
+                <label for="photoinput">
+                    <img id="photoView" class="img-responsive img-thumbnail" src="@(Model != null && !String.IsNullOrEmpty(Model.Thumbnail) ? Model.Thumbnail : "/Images/NoImage.png")" />
+                </label>
+            </div>
+
+            <input id="photoinput" type="file" name="thumbnail" accept="image/*" class="hidden">
+            @Html.ValidationMessageFor(model => model.Thumbnail, string.Empty, new { @class = "help-block" })
+
+        </div>
+        <div class="col-md-7">
+            <div>
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder="Tiêu đề" })
+                        @Html.ValidationMessageFor(model => model.Title, string.Empty, new { @class = "help-block" })
+                    </div>
+            <div>
+                <span>Trạng thái:</span>
+                <span>
+                    @(Model.ArticleStatus <= 0 ? "Cần đánh giá" : Model.ArticleStatus == 1 ? "Cần duyệt" : Model.ArticleStatus == 2 ? "Cần chỉnh sửa" : Model.ArticleStatus == 3 ? "Loại bỏ" : Model.ArticleStatus == 4 ? "Tốt" : "")
+                </span>
+            </div>
+           
+            <div>
+                @Html.HiddenFor(model => model.PublishedTime)
+                <span>Ngày đăng:</span>
+                @if (Model.PublishedTime.HasValue)
+                {
+                    <span id="PublishedTime-label">@Model.PublishedTime.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                }
+                else
+                {
+                    <span id="PublishedTime-label">Chưa xác định</span>
+                }
+                @if(User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                { 
+                    <a href="#published-time-edit" data-toggle="collapse">Sửa</a>
+                }
+            </div>
+            @if (User.IsInRole("Publisher") || User.IsInRole("Admin"))
+            { 
+            <div class="form-group collapse" id="published-time-edit">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    @Html.TextBox("PublishedTime-txt", Model.PublishedTime.HasValue ? Model.PublishedTime.Value.ToString("dd/MM/yyyy HH:mm") : DateTime.Now.ToString("dd/MM/yyyy HH:mm"), new { @class = "form-control datetimepicker" })
+                    @Html.ValidationMessageFor(model => model.PublishedTime, string.Empty, new { @class = "help-block" })
+                </div>
+                <div class="input-group">
+                    <input type="button" class="btn btn-default" id="changePublishedTime-btn" value="OK" />
+                    <a class="btn btn-default" data-toggle="collapse" href="#published-time-edit">Hủy</a>
+                </div>
+            </div>
+            }
+
+            <div>
+                    <span>Người thực hiện:</span>
+                    @Html.HiddenFor(model => model.ReporterIds)
+                    @{
+                        var chkIds = new List<int>();
+                        if (!string.IsNullOrEmpty(Model.ReporterIds))
+                        {
+                            var arrIds = Model.ReporterIds.Split(',');
+                            foreach (string id in arrIds)
+                            {
+                                if (!string.IsNullOrWhiteSpace(id))
+                                {
+                                    var idNormalize = id.Trim();
+                                    chkIds.Add(Convert.ToInt32(idNormalize));
+                                }
+                            }
+                        }
+                    }
+                    <select data-placeholder="..." multiple="multiple" id="tbReporters" name="tbReporters" class="form-control">
+                        @foreach (var rp in reporters)
+                        {
+                            <option value="@rp.Id" @(chkIds.Contains(rp.Id) ? "selected" : "") data-img-src="@rp.ProfilePicture">@rp.Name</option>
+                        }
+                    </select>
+                    @*<div>
+                        @foreach (var rpId in chkIds)
+                        {
+                            var rp = reporters.Find(r => r.Id == rpId);
+                            <img class="img-thumbnail img-reporter" src="@rp.ProfilePicture" alt="@rp.Name"/>
+                        }
+                        <button type="button" class="btn-img" data-toggle="modal" data-target="#rpModal">
+                            <img class="img-thumbnail img-reporter" src="" />
+                        </button>
+                    </div>*@
+                    @Html.ValidationMessageFor(model => model.ReporterIds, string.Empty, new { @class = "help-block" })
+                
+            </div>
+
+        </div>
+        <div class="col-md-3">
+
+            
+            @*@if (Model.ArticleStatus == 0)
+            {
+                <button type="button" id="saveDraft-btn" class="btn btn-primary" name="IsPublished" value="False">Lưu nháp</button>
+                <button type="button" id="preview-btn" class="btn btn-primary" name="IsPublished" value="False">Xem trước</button>
+                <button type="submit" id="save-btn" class="btn btn-success" name="IsPublished" value="True">Đăng</button>
+            }
+            else if (Model.ArticleStatus != (int)ArticleStatus.Good && (bool)ViewBag.IsApprove)
+            {
+                <button type="submit" id="approve-btn" class="btn btn-success" name="IsPublished" value="True" style="display:none;">Duyệt</button>
+            }
+            else
+            {
+                <button type="submit" id="save-btn" class="btn btn-success" name="IsPublished" value="True">Cập nhật</button>
+            }*@
+        </div>
+    </div>
+</div>
+@*<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">Tóm tắt</h4>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.ShortBrief, new { @class = "form-control", placeholder = "Tóm tắt" })
+                        @Html.ValidationMessageFor(model => model.ShortBrief, string.Empty, new { @class = "help-block" })
+                    </div>
+            <div class="col-md-3">
+
+            </div>
+        </div>
+       
+                </div>
+
+</div>*@
+                <div class="row">
+    
+    <div class="col-md-9 col-lg-9">
+        <div class="panel panel-default">
+            @*<div class="panel-heading">
+                <h4 class="panel-title">Nội dung</h4>
+            </div>*@
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h4>Tóm tắt</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="comment-display-ctrl">
+                            <option value="show">Hiện bình luận</option>
+                            <option value="hide" selected>Ẩn bình luận</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 description-wrapper">
+                        @Html.TextAreaFor(model => model.ShortBrief, new { @class = "form-control", placeholder = "Tóm tắt", rows = "4" })
+                        @Html.ValidationMessageFor(model => model.ShortBrief, string.Empty, new { @class = "help-block" })
+                    </div>
+                    
+                    
+                    <div class="col-md-12 articlecontent">
+                        <h4>Nội dung</h4>
+                        @Html.TextAreaFor(model => model.ArticleDraft, new { @class = "form-control article-editable" })
+                        @Html.ValidationMessageFor(model => model.ArticleDraft, string.Empty, new { @class = "help-block" })
+                        <div class="pull-left">
+
+                            @if (User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                            {
+                                if (Model.IsPublished)
+                                {
+                                    <button type="submit" class="btn btn-danger" name="Published" value="false">Ngừng đăng</button>
+                                    <button type="submit" class="btn btn-success" name="Published" value="true">Cập nhật bản đăng</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-success" name="Published" value="true">Đăng</button>
+                                }
+                            }
+                            <input type="hidden" name="Published" value="@Model.IsPublished.ToString()"/>
+                            @Html.HiddenFor(model => model.IsPublished)
+                        </div>
+                        @Html.HiddenFor(model=> model.ArticleContent)
+                        <div class="pull-right">
+                            <div class="form-group form-inline">
+                                @*@Html.HiddenFor(model => model.ArticleStatus)*@
+                                <select name="ArticleStatus" class="form-control">
+                                    @if (User.IsInRole("Writter"))
+                                    {
+                                        //Lưu nháp - Lưu toàn bộ
+                                        <option value="2" id="saveDraftBtn">Đang làm</option>
+                                        <option value="1" id="needReviewBtn" selected>Cần duyệt</option>
+
+                                    }
+                                    else if (User.IsInRole("Reviewer") || User.IsInRole("Publisher") || User.IsInRole("Admin"))
+                                    {
+                                        //Loại bỏ - Cần chỉnh sửa - Tốt
+                                        <option type="submit" name="ArticleStatus" value="3" id="rejectBtn" @(Model.ArticleStatus==3?"selected":"")>Loại bỏ</option>
+                                        <option type="submit" name="ArticleStatus" value="2" id="needEditBtn" @(Model.ArticleStatus != 3 && Model.ArticleStatus != 4 ?"selected":"")>Cần chỉnh sửa</option>
+                                        <option type="submit" name="ArticleStatus" value="4" id="goodBtn" @(Model.ArticleStatus==4?"selected":"")>Tốt</option>
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </div>
+                        @*@if (Model.Id > 0 && (bool)ViewBag.IsApprove)
+                        {
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="btnArtStatus">
+                                    @(Model.ArticleStatus <= 0 ? "Đánh giá bài viết" : Model.ArticleStatus == 1 ? "Vừa mới đăng" : Model.ArticleStatus == 2 ? "Cần chỉnh sửa" : Model.ArticleStatus == 3 ? "Loại bỏ" : Model.ArticleStatus == 4 ? "Tốt" : "") <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" id="dmArtStatus">
+                                    <li><a href="#" data-id="2">Cần chỉnh sửa</a></li>
+                                    <li><a href="#" data-id="3">Loại bỏ</a></li>
+                                    <li><a href="#" data-id="4">Tốt</a></li>
+                                </ul>
+                            </div>
+                        }*@
+
+                    </div>
+                    <div class="col-md-3 hidden" id="comments">
+                        <h4>Bình luận</h4>
+                        <ul id="cmtList" class="list-unstyled">
+                            @*@foreach (var comment in comments)
+                            {
+                            <li class='clearfix' data-id="@comment.Id">
+                                <div class='main-box'>
+                                    <div class='main-box-header clearfix'>
+                                        <div class='img'>
+                                            <img src='http://centaurus.adbee.technology/img/samples/scarlet.png'>
+                                        </div>
+                                       <div class='comment-author'> @comment.User.UserName </div>
+                                        <div class='comment-content'> @comment.Content</div>
+                                        <div class='icon-box pull-right'><a href='#' class='btn pull-left btn-delcmt'><i class='fa fa-trash'></i></a></div>
+                                    </div>
+                                    <div class='main-box-body'>
+                                        <ul class='list-unstyled reply-list'></ul>
+                                        <div class='form-group'>
+                                            <div class='input-group'>
+                                                <input type='text' class='form-control'>
+                                                <span class='input-group-btn'>
+                                                    <button class='btn btn-primary btn-replycmt' type='button'>Reply</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            }*@
+                        </ul>
+                        <div class="hidden" id="new-comments">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <span id="draftSaveTime"></span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-group accordion" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">SEO</a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Focus keywords:</label>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.SEO_FocusKeywords, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">SEO Title:</label>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.SEO_Title, new { @class = "form-control", placeholder = "Model.Title  - VITV" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Meta description:</label>
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.SEO_MetaDescription, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <h4>Chuyên mục</h4>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.Action("GetParentCheckNode", "ArticleCategory")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Id == 0)
+        {
+            <div class="main-box">
+                <header class="main-box-header clearfix">
+                    Series bài
+                </header>
+                <div class="main-box-body">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @if (Model.ArticleSeriesId.HasValue)
+                            {
+                                <div class="radio">
+                                    <input type="radio" name="ArticleSeriesId" id="ArticleSeriesId@(Model.ArticleSeriesId)" value="@(Model.ArticleSeriesId)" checked>
+                                    <label for="ArticleSeriesId@(Model.ArticleSeriesId)">@Model.SeriesName</label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="new-series" class="form-inline icon-box">
+                                    <input id="new-series-name" class="form-control" />
+                                    <a href="" class="btn" id="add-series">Thêm mới</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.ArticleSeriesId)
+        }
+        
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Từ khóa</h4>
+                @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Keywords, string.Empty, new { @class = "help-block" })
+        </div>
+                </div>
+            </div>
+            </div>
+
+<div class="modal" role="dialog" id="rpModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Lựa chọn </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="Tìm kiếm theo tên"/>
+                @foreach(var rp in reporters)
+                {
+                    if (chkIds.Contains(rp.Id))
+                    {
+                        <button class="btn-img" type="button" data-id="@rp.Id" onclick="toggleSelectReporter(this)">
+                            <img class="img img-thumbnail img-reporter" src="@rp.ProfilePicture" title="@rp.Name" alt="@rp.Name" />
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn-img rp-unselected" type="button" data-id="@rp.Id" onclick="toggleSelectReporter(this)">
+                            <img class="img img-thumbnail img-reporter" src="@rp.ProfilePicture" title="@rp.Name" alt="@rp.Name" />
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<CategoryIntro>
+
+<h2>&nbsp;</h2>
+
+<header class="main-box-header clearfix">
+    <h2 class="pull-left">Quản lý video hình hiệu</h2>
+    <div class="filter-block pull-right">
+        <a href="/CategoryIntro/Create?catId=@ViewBag.catId" class="btn btn-success pull-right" data-toggle="modal" data-backdrop="static" data-target="#introModal" title="Tạo mới video hình hiệu"
+           data-ajax="true"
+           data-ajax-complete=""
+           data-ajax-mode="replace"
+           data-ajax-update="#introContent">
+            <i class="fa fa-plus fa-lg"></i> Tạo mới video hình hiệu
+        </a>
+    </div>
+</header>
+<div class="main-box-body clearfix">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table user-list table-hover intro-list">
+                <tbody id="tbodyintro_@ViewBag.catId">
+                    @Html.Partial("_List", Model)
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="introModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="introContent">
+        </div>
+    </div>
+</div>
+
+
+

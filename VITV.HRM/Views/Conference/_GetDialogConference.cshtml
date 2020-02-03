@@ -1,0 +1,136 @@
+﻿@{
+    var context = new VITVSecondContext();
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Nội dung họp</label>
+                <div class="col-md-4">
+                    <input id="name" name="name" type="text" placeholder="Nội dung" class="form-control input-md">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Tìm kiếm</label>
+                <div class="col-md-4">
+                    <input id="pluginsearch" name="name" type="text" placeholder="Tìm kiếm" class="form-control input-md">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Chọn nhân viên</label>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div id="jstree">
+                            <ul>
+                                @{
+                                    var deparments = context.Departments.ToList();
+                                    foreach (var dep in deparments)
+                                    {
+                                        <li>
+                                            @dep.Name
+                                            @{
+                                        var groups = context.Groups.Where(g => g.DepartmentId == dep.Id).ToList();
+                                        if (groups != null && groups.Count > 0)
+                                        {
+                                            <ul>
+                                                @foreach (var group in groups)
+                                                {
+                                                    <li>
+                                                        @group.Name
+                                                        @{
+                                                    var employees = context.Employees.Where(e => e.WorkInfo.GroupId == group.Id).ToList();
+                                                    if (employees != null && employees.Count > 0)
+                                                    {
+                                                        <ul>
+                                                            @foreach (var emp in employees)
+                                                            {
+                                                                <li class="employee" data-id="@emp.Id">@emp.Name</li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                        }
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                            }
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+
+    <script src="~/Scripts/jstree.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        // 6 create an instance when the DOM is ready
+        $('#jstree').jstree({
+            "whole_node": true,
+            "plugins": [
+                    "checkbox", "wholerow", , "search"
+            ]
+
+        });
+
+
+        var to = false;
+        $('#pluginsearch').keyup(function () {
+            if (to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#pluginsearch').val();
+                $('#jstree').jstree(true).search(v);
+            }, 250);
+        });
+
+        //$('#jstree').on("changed.jstree", function (e, data) {
+        //    console.log("change");
+        //    var i, j, r = [];
+        //    for (i = 0, j = data.selected.length; i < j; i++) {
+        //        //r.push(data.instance.get_node(data.selected[i]).text);
+        //        $("#jstree").jstree('open_node', data.node);
+        //        //console.log("ra day: " + data.instance.get_node(data.selected[i]));
+        //    }
+        //});
+            //for(var i = 0; i < r.length; i++)
+            //{
+            //    //$("#jstree").jstree("open_node", $('#' + r[i]));
+            //    console.log("ra day: " + r[i]);
+            //}
+            
+        //});
+
+        $("#jstree").bind("select_node.jstree", function (e, data) {
+            console.log(data.node);
+            $("#jstree").jstree('open_node', data.node);
+            for (i = 0; i < data.node.children_d.length; i++)
+            {
+                $("#jstree").jstree('open_node', $('#' + data.node.children_d[i]));
+            }
+            //var a = $.jstree.focused().get_selected();
+            //console.log(a);
+        });
+
+        //$("#jstree").bind("open_node.jstree", function (event, data) {
+        //    if ((data.inst._get_parent(data.rslt.obj)).length) {
+        //        data.inst._get_parent(data.rslt.obj).open_node(this, false);
+        //    }
+        //});
+
+
+        //// 8 interact with the tree - either way is OK
+        //$('button').on('click', function () {
+        //    $('#jstree').jstree(true).select_node('child_node_1');
+        //    $('#jstree').jstree('select_node', 'child_node_1');
+        //    $.jstree.reference('#jstree').select_node('child_node_1');
+        //});
+    });
+    </script>
+

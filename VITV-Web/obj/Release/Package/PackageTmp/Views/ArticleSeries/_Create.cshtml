@@ -1,0 +1,15 @@
+﻿@model ArticleSeries
+
+@using (Html.BeginForm("Create", "ArticleSeries", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.Partial("_CreateOrEdit", Model)
+
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <button type="submit" class="btn btn-success">
+                <i class="fa fa-save fa-lg"></i>
+            Lưu</button>
+        </div>
+    </div>
+}

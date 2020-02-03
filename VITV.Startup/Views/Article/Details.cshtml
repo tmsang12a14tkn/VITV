@@ -1,0 +1,211 @@
+﻿@using VITV.Data.DAL;
+@model VITV.Data.Models.Article
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+    var artCat = Model.Categories.Where(a => a.ParentId == null || a.ParentId == 0).OrderBy(a => a.Order).FirstOrDefault();
+    if (artCat == null) {
+        var childCat = Model.Categories.Where(a => a.ParentId > 0).OrderBy(a => a.ParentId).First();
+        artCat = (new VITVContext()).ArticleCategories.Find(childCat.ParentId);
+    }
+
+    List<VITV.Data.Models.Article> lstArticle = ViewBag.RelativeArticles;
+    var lastArticle = lstArticle.Last();
+}
+
+<div class="row main_article">
+    <input type="hidden" id="article_series_id" value="@Model.ArticleSeriesId">
+    <ol class="breadcrumb">
+        <li><a href="/">Cổng công nghệ</a></li>
+        <li><a href="@Url.Action("Index", "Article")">Tin tức - bài viết</a></li>
+        <li class="active"><a href="@Url.Action("CategoryDetails", "Article", new { id = artCat.Id, title = artCat.UniqueTitle })">@artCat.Name</a></li>
+    </ol>
+    <h2>@Model.Title</h2>
+    <h5 class="tm">@(String.Join(", ", Model.Reporters.Select(r => r.Name))) - @Model.PublishedTime.Value.ToString("dd/MM/yyyy")</h5>
+
+    <input type="hidden" id="mainUri" value="@Request.Url.ToString()" />
+    <ul class="list-inline">
+        <li><a class="social-btn" data-social="fb" href="#"><img src="~/Content/img/fb.png"></a></li>
+        <li><a class="social-btn" data-social="gp" href="#"><img src="~/Content/img/gp.png"></a></li>
+        <li><div class="divider"></div></li>
+        <li><div class="font-btn nm current" data-size="12" title="Cỡ chữ thường"></div></li>
+        <li><div class="font-btn lgr" data-size="15" title="Cỡ chữ to hơn"></div></li>
+        <li><div class="font-btn lgs" data-size="18" title="Cỡ chữ to nhất"></div></li>
+    </ul>
+
+    <div class="article_content">
+        <p class="short_brief">@Html.Raw(Html.Encode(Model.ShortBrief).Replace("\n", "<br />"))</p>
+        @Html.Raw(@Model.ArticleContent)
+
+        @if (Model.Keywords.Count > 0)
+        {
+            <ul class="list-inline keyword">
+                @foreach (var kw in Model.Keywords)
+                {
+                    <li class="kw_item"><a href="@Url.Action("GetArticleByKeyword", "Article", new { id = kw.Id })">@kw.Value</a></li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+<div class="row text_news_reporter">
+    @{ int row = (int)Math.Ceiling((double)Model.Reporters.Count / 5); int cnt = 0; int length = Model.Reporters.Count; }
+    @if (length > 0)
+    {
+        <h4 class="product-by">Thực hiện: </h4>
+        for (int n = 0; n < row; n++)
+        {
+            <div class="row product-by-img">
+                @for (int k = 0; k < 5; k++)
+                {
+                    if (cnt == length)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        var reporter = Model.Reporters.ElementAt(cnt);
+                        <div class="col-sm-3 single-product-by">
+                            <div class="single_person">
+                                <div class="person_image">
+                                    <a href="http://vitv.vn/btv/@reporter.UniqueTitle">
+                                        <span class="thumb">
+                                            <span class="thumb_sizer">
+                                                <span class="thumb_tugger vid_repoter_img">
+                                                    <img src="@reporter.ProfilePicture" alt="">
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="person_info">
+                                    <h5><a href="http://vitv.vn/btv/@reporter.UniqueTitle">@reporter.Name</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    cnt++;
+                }
+            </div>
+        }
+    }
+</div>
+
+<div class="row text_news_area detail m4">
+    <div class="row hr_line">
+        <h4>TIN LIÊN QUAN</h4>
+    </div>
+    <div class="row">
+        <div class="related_article_content">
+            @foreach (var art in lstArticle)
+            {
+                <div class="col col-md-4 single_related details @(art.Equals(lastArticle) ? "last" : "")">
+                    <div class="single_article">
+                        <div class="article_image">
+                            <a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                <div class="poster" style="background:url('@(art.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                            </a>
+                        </div>
+                        <div class="article_info related-3">
+                            <h3><a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">@art.Title</a></h3>
+                            <p class="cn">@art.ShortBrief</p>
+                            <p class="tm">@(String.Join(", ", art.Reporters.Select(r => r.Name))) - @art.PublishedTime.Value.ToString("dd/MM/yyyy")</p>
+                            <p class="rp">
+                                @foreach (var rp in art.Reporters)
+                                {
+                                    <img class="sm_reporter" src="@rp.ProfilePicture" />
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section styles {
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,600,600italic,700,700italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+}
+
+@section scripts {
+
+    <script src="~/Scripts/ua-parser.min.js"></script>
+    <script>
+        $('.font-btn').on('click', function () {
+            $(this).parent().siblings().find('.font-btn').removeClass('current');
+            $(this).addClass('current');
+            $(".main_article p").css('font-size', $(this).data('size') + 'pt');
+        });
+
+        $('.social-btn').on('click', function () {
+            var mainUri = $('#mainUri').val().split('?')[0];
+            var social_selected = $(this).data('social');
+            if (social_selected == 'fb') {
+                var fb = 'https://www.facebook.com/sharer/sharer.php?u=' + mainUri;
+                window.open(fb, 'VITV | vitv.vn', 'width=600,resizable=yes,height=650');
+            } else if (social_selected == 'gp') {
+                var gp = 'https://plus.google.com/share?url=' + mainUri;
+                window.open(gp, 'VITV | vitv.vn', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+            } else if (social_selected == 'twitter') {
+                var tw = 'https://twitter.com/share?url=' + mainUri + '&text=@(Model.Title)';
+                window.open(tw, 'popupwindow', 'scrollbars=yes,width=600,height=400');
+            }
+
+            return false;
+        });
+
+        function analyticPage(thumbnail, title, vId, vCatId, aId, aCatId) {
+            var loc = window.location;
+            var url = loc.pathname + loc.search + loc.hash;
+
+            var parser = new UAParser();
+            var result = parser.getResult();
+
+            var os = result.os.name;
+            var deviceType = result.device.type;
+            var deviceVendor = result.device.vendor;
+            var deviceModel = result.device.model;
+
+            var params = "/home/analyticpages?url=" + url + "&thumbnail=" + thumbnail + "&title=" + title;
+            if (vId != null) params = params + "&vId=" + vId;
+            if (vCatId != null) params = params + "&vcatId=" + vCatId;
+            if (aId != null) params = params + "&aId=" + aId;
+            if (aCatId != null) params = params + "&acatId=" + aCatId;
+            params = params + "&os=" + os + "&dvmodel=" + deviceModel + "&dvtype=" + deviceType + "&dvvendor=" + deviceVendor
+
+            $.post(params, function () { });
+        }
+
+        $(document).on('ready', function () {
+            var seriesId = $('#article_series_id').val();
+            if (seriesId > 0) {
+                $.get('/Article/GetArticleBySeries?id=' + seriesId + '&crArtId=' + @Model.Id, function (data) {
+                    $('#article_series').html(data);
+                    $('#article_series').show();
+                });
+            };
+
+            $('.article_content').find('img').each(function() { 
+                if ($(this).width() == 300) {
+                    $(this).css('width', '100%');
+                }
+            });
+
+            analyticPage($("meta[property='og:image']").attr("content"), document.title, null, null, @Model.Id, null);
+        });
+    </script>
+}
+
+@section seo {
+    <meta name="description" content="@Model.ShortBrief">
+    <meta name="keywords" content="@Model.Title - @(String.Join(" - ", Model.Categories.Select(r => r.Name)))">
+    <meta property="og:title" content="@(Model.Title)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="@(Request.Url.AbsoluteUri)">
+    <meta property="og:image" content="@(Model.Thumbnail)" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="544" />
+}

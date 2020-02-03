@@ -1,0 +1,71 @@
+﻿@model int
+
+<table class="table">
+    <thead>
+        <tr>
+            <td class="text-center"><img src="@ViewBag.image" class="img-responsive img-thumbnail" width="350" height="300"/></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div class="containerCombine" style="width: 500px; height: 300px; margin: 0 auto" data-pid="@Model" data-from="@ViewBag.fromDate" data-to="@ViewBag.toDate" data-datetype="@ViewBag.dateType"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script src="~/Content/HighStock/js/highstock.js"></script>
+<script src="~/Content/HighStock/js/modules/exporting.js"></script>
+<script>
+    $(document).ready(function () {
+        var id = '@Model';
+        var from = $('.containerCombine').data('from');
+        var to = $('.containerCombine').data('to');
+        var datetype = $('.containerCombine').data('datetype');
+        $.post('/VideoAccess/GetItemCombineReportPost', { id: id, from: from, to: to, dateType: datetype }, function (result, status) {
+            var seriesData = [];
+            var data = result.data;
+            $.each(data, function (k, v) {
+                seriesData.push([data[k].Title, data[k].PercentIPViewCount]);
+            });
+            console.log(seriesData);
+            $(".containerCombine").each(function () {
+                $(this).highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        },
+                        width: 500,
+                        height: 300,
+                    },
+                    exporting: {
+                        buttons: {
+                            contextButtons: {
+                                enabled: false,
+                                menuItems: null
+                            }
+                        },
+                        enabled: false
+                    },
+                    title: {
+                        text: result.name
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 1,
+                            depth: 100
+                        }
+                    },
+                    series: [{
+                        name: '%',
+                        data: seriesData
+                    }]
+                });
+            });
+        });
+
+    });
+</script>

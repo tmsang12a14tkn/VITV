@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý danh sách ngân hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row" ng-app="indexBankModule" ng-controller="IndexBankModuleCtrl">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Quản lý danh sách ngân hàng</h2>
+                <div class="filter-block pull-right">
+                    <div class="form-group pull-left">
+                        <input ng-model="query" ng-change="filter()" type="text" class="form-control" placeholder="Search...">
+                        <i class="fa fa-search search-icon"></i>
+                    </div>
+                    <a href="/Bank/Create" class="btn btn-success pull-right">
+                        <i class="fa fa-plus fa-lg"></i> Tạo mới ngân hàng
+                    </a>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><a href="#" ng-click="sort_by('Name', $event)"><span>Tên</span></a></th>
+                                <th class="text-center"><span>Hình</span></th>
+                                <th class="text-center"><span>Ngày cấp phép</span></th>
+                                <th class="text-center"><span>Ngày cập nhật</span></th>
+                                <th class="text-center"><span>Vốn điều lệ (Tỷ đồng)</span></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="rp in Banks = (list | filter:query | orderBy : predicate :reverse) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage">
+                                <td><a href="#" class="table-link" ng-click="editBank(rp)">{{rp.Name}}</a></td>
+                                <td><img id="photoView1" src="{{rp.Thumbnail}}"></td>
+                                <td>{{rp.IssueDate}}</td>
+                                <td>{{rp.UpdateTime}}</td>
+                                <td>{{rp.CharterCapital}}</td>
+                                <td style="width: 15%;">
+                                    <a href="/Bank/Delete/{{rp.Id}}" class="table-link danger" data-toggle="modal" data-target="#deleteBankModal"
+                                       data-ajax="true"
+                                       data-ajax-complete=""
+                                       data-ajax-mode="replace"
+                                       data-ajax-update="#deleteBankContent">
+                                        <span class="fa-stack">
+                                            <i class="fa fa-square fa-stack-2x"></i>
+                                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ul class="pagination pull-right">
+                    <li><a href="#" ng-click="prevPage()"><i class="fa fa-chevron-left"></i></a></li>
+                    <li ng-repeat="n in range()" ng-click="setPage(n)">
+                        <a href="#">{{n+1}}</a>
+                    </li>
+                    <li><a href="#" ng-click="nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deleteBankModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="deleteBankContent">
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/app/Bank/index.js"></script>
+    <script>
+        function OnDeleteSuccess(data)
+        {
+            if (data.success == true) {
+                $("#deleteBankModal").modal("hide");
+                $("#bank_" + data.id).remove();
+            }
+            else {
+                alert(data.error);
+            }
+        }
+
+    </script>
+}
+

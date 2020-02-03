@@ -1,0 +1,191 @@
+﻿@model VideoFilterView
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "ManagementTab";
+    DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+    Calendar cal = dfi.Calendar;
+    var weektab = ViewBag.weektab;
+}
+
+<div class="row" ng-app="indexVideoModule" ng-controller="IndexVideoModuleCtrl">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <div class="row">
+                    <a href="#" class="navbar-form navbar-left btn btn-success" style="margin-right:10px"><b>Quản lý video theo tuần</b></a>
+                    <a href="/Video/Management" class="navbar-form navbar-left btn btn-default">Quản lý video theo dạng tìm kiếm</a>
+                    @using (Html.BeginForm("ManagementTab", "Video", FormMethod.Get, new { page = 1 }))
+                    {
+                        <div class="navbar-form navbar-right" role="search" id="formsearch">
+                            <div class="form-group dropdown" id="rangeDropdown">
+                                <input type="hidden" name="date" id="filterByBegin" value="@(Model.DateSelected.ToShortDateString())" />
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="sortbyevent" name="evtId">
+                                    <option value="all">Tất cả</option>
+                                    @foreach (var evt in ViewBag.SpecialEvents)
+                                    {
+                                        <option value="@evt.Id" @(evt.Id == Model.EventId ? "selected" : "")>@evt.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" id="sortbycat" name="cat">
+                                    <option value="all">Tất cả chương trình</option>
+                                    @foreach (VideoCatGroup grp in ViewBag.VideoCatGroups)
+                                    {
+                                        <optgroup label="@(grp.Name)">
+                                            @foreach (var cat in grp.VideoCats.OrderBy(c => c.Order))
+                                            {
+                                                <option value="@cat.Id" @(cat.Id.ToString() == Model.Category ? "selected" : "")>@cat.Name</option>
+                                            }
+                                        </optgroup>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control" id="sortbyreporter" name="rep" placeholder="Biên tập viên" type="text" value="@Model.Reporter">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="sortbytitle" name="title" placeholder="Tiêu đề" type="text" value="@Model.Title">
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" id="filterBtn">
+                                    <span class="fa fa-search"></span> Tìm kiếm
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                    
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <ul id="myTab" class="nav nav-tabs" role="tablist">
+                        <li class="">
+                            <a href="/Video/ManagementTab" class="glyphicon glyphicon-home"></a></li>
+                        <li><input readonly id="dateselect" type="text" data-dateselected="@(Model.DateSelected.Day)@(Model.DateSelected.Month)@(Model.DateSelected.Year)" value=""></li>
+                        
+                        @if(Model.VideosTab.Count() > 0)
+                        {
+                            if (Model.VideosTab.Count() > 0 && Model.VideosTab.FirstOrDefault().Videos.Count() > 0)
+                            {
+                                <li class="">
+                                    <a href="/Video/ManagementTab?date=@(Model.End.Value.AddDays(-36).ToShortDateString())&evtId=@(Model.EventId)&cat=@(Model.Category)&rep=@(Model.Reporter)&title=@(Model.Title)" class="glyphicon glyphicon-chevron-left"></a>
+                                </li>
+                            }
+
+                            for (int i = 0; i < Model.VideosTab.Count(); i++)
+                            {
+                                var week = cal.GetWeekOfYear(Model.VideosTab[i].Begin, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+                                <li class="@(weektab > 0 && weektab == week ? "active" : (weektab == 0 && i == Model.VideosTab.Count() - 1 ? "active" : ""))">
+                                    <a href="#videotab@(week)" role="tab" data-toggle="tab"><b>Tuần @week</b>
+                                        @if (Model.VideosTab[i].Videos.Count() > 0)
+                                        {
+                                            <span style="font-size: 14px"> (@Model.VideosTab[i].Videos.FirstOrDefault().DisplayTime.ToShortDateString() - @Model.VideosTab[i].Videos.FirstOrDefault().DisplayTime.AddDays(6).ToShortDateString())</span>
+                                        }
+                                    </a>
+                                </li>
+                            }
+                            if (Model.VideosTab.Count() > 0 && Model.VideosTab.FirstOrDefault().Videos.Count() > 0)
+                            {
+                                <li class="">
+                                    <a href="/Video/ManagementTab?date=@(Model.End.Value.AddDays(34).ToShortDateString())&evtId=@(Model.EventId)&cat=@(Model.Category)&rep=@(Model.Reporter)&title=@(Model.Title)" class="glyphicon glyphicon-chevron-right"></a>
+                                </li>
+                            }
+                        }else
+                        {
+                            <li class="">
+                                <a><b>Không có dữ liệu !</b></a></li>
+                        }
+                        
+                        
+                    </ul>
+
+                    <div id="myTabContent" class="tab-content">
+                        @for (int i = 0; i < Model.VideosTab.Count(); i++)
+                        {
+                            var week = cal.GetWeekOfYear(Model.VideosTab[i].Begin, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+                            <div class="tab-pane fade @(weektab > 0 && weektab == week ? "active in" : (weektab == 0 && i == Model.VideosTab.Count() - 1 ? "active in" : ""))" id="videotab@(week)">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table class="table user-list table-hover" id="manage_video">
+                                            <thead>
+                                                <tr>
+                                                    <th><span>Tên</span></th>
+                                                    <th><span>Thể loại</span></th>
+                                                    <th><span>Phát sóng</span></th>
+                                                    <th><span>Tải lên</span></th>
+                                                    <th><span>Lượt xem</span></th>
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            @Html.Partial("_ListVideo", Model.VideosTab[i].Videos, new ViewDataDictionary { { "week", week } })
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="listvideoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="listvideoModalContent">
+
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/Content/tooltipster/tooltipster.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/tooltipster/themes/tooltipster-shadow.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/datepicker3/bootstrap-datepicker3.min.css">
+}
+
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/tooltipster/jquery.tooltipster.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/datepicker3/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="~/Scripts/app/Video/management.js"></script>
+    <script>
+        $(document).ready(function () {
+            var date = $('#dateselect').data('dateselected');
+            var target = $('#theadvideo' + date).offset();
+            if (target != null)
+            {
+                $('html, body').animate({
+                    scrollTop: target.top
+                }, 1000);
+            }
+            
+            //https://bootstrap-datepicker.readthedocs.org/en/latest/options.html
+            $('#dateselect').datepicker({
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                autoclose: true,
+            });
+
+            $('#dateselect').datepicker()
+            .on('changeDate', function (e) {
+                var date = $(this).val();
+                $(this).val("");
+                window.location.href = "/Video/ManagementTab?date=" + date;
+            });
+
+            $('#dateselect').focus(function () {
+                this.blur();
+            });
+        });
+        
+        
+    </script>
+}
+
+
+

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="VITVContext-Web.config Connection String" description="VITVContext Connection String used in web.config by the application to access the database." defaultValue="Data Source=192.168.0.240;Initial Catalog=VITV;Persist Security Info=True;User ID=vitv;Password=Abc@@123;MultipleActiveResultSets=True" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.WebApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='VITVContext']/@connectionString" />
+  </parameter>
+  <parameter name="GoogleAnalyticContext-Web.config Connection String" description="GoogleAnalyticContext Connection String used in web.config by the application to access the database." defaultValue="GoogleAnalyticContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.WebApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='GoogleAnalyticContext']/@connectionString" />
+  </parameter>
+  <parameter name="StoreInfoContext-Web.config Connection String" description="StoreInfoContext Connection String used in web.config by the application to access the database." defaultValue="StoreInfoContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV\.WebApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StoreInfoContext']/@connectionString" />
+  </parameter>
+</parameters>

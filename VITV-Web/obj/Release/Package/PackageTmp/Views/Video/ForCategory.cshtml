@@ -1,0 +1,192 @@
+﻿@using System.Globalization;
+@model VITV_Web.ViewModels.VideoGroup
+
+@{
+    DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+    Calendar cal = dfi.Calendar;
+    var groupBy = Model.Type == 0 ? "week" : Model.Type == 1 ? "month" : "year";
+}
+<h2>&nbsp;</h2>
+<ul id="videoTab" class="nav nav-tabs" role="tablist">
+    <li>
+        <a href="/Video/ForCategory?catId=@Model.CatId" class="glyphicon glyphicon-home"
+           data-ajax="true"
+           data-ajax-complete="registerVideosTab"
+           data-ajax-mode="replace"
+           data-ajax-update="#videos"></a>
+    </li>
+    <li><input readonly="" id="dateselect" name="end" type="text" data-dateselected="2822016" value=""></li>
+    <li>
+        <a href="#" class="fa fa-cog" id="settingForCategory" title="Chế độ xem" data-type="@Model.Type"></a>
+    </li>
+    @*<li>
+        <select id="groupBy" class="form-control">
+            <option value="week" @(Model.Type==0?"selected":"")>Theo tuần</option>
+            <option value="month" @(Model.Type==1?"selected":"")>Theo tháng</option>
+        </select>
+    </li>*@
+    @if (Model.Type == 0) //bản tin
+    {
+        <li class="">
+            <a href="/Video/ForCategory?date=@Model.Date.AddDays(-35).ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" class="glyphicon glyphicon-chevron-left"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTab"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos"></a>
+        </li>
+        for (int i = 4; i > 0; i--)
+        {
+            var begin = Model.Date.AddDays(-i * 7);
+            var end = begin.AddDays(6);
+
+            <li role="presentation">
+                <a href="/Video/ForCategoryContent?date=@begin.ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" role="tab" data-toggle="tab"
+                   data-ajax="true"
+                   data-ajax-complete="registerVideosTabContent"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#videos-body">
+                    <b>Tuần @cal.GetWeekOfYear(begin, dfi.CalendarWeekRule, dfi.FirstDayOfWeek)</b>
+                    <span style="font-size: 14px"> (@(begin.Year != end.Year ? begin.ToString("dd/MM/yyyy") : begin.ToString("dd/MM")) - @end.ToString("dd/MM/yyyy"))</span>
+                </a>
+
+            </li>
+        }
+        { 
+            var begin = Model.Date;
+            var end = begin.AddDays(6);
+            <li class="active">
+                <a href="/Video/ForCategoryContent?date=@Model.Date.ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" role="tab" data-toggle="tab"
+                   data-ajax="true"
+                   data-ajax-complete="registerVideosTabContent"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#videos-body">
+
+                    <b>Tuần @cal.GetWeekOfYear(Model.Date, dfi.CalendarWeekRule, dfi.FirstDayOfWeek)</b>
+                    <span style="font-size: 14px"> (@(begin.Year != end.Year ? begin.ToString("dd/MM/yyyy") : begin.ToString("dd/MM")) - @end.ToString("dd/MM/yyyy"))</span>
+                </a>
+            </li>
+            }
+        <li class="">
+            <a href="/Video/ForCategory?date=@Model.Date.AddDays(35).ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" class="glyphicon glyphicon-chevron-right"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTab"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos"></a>
+        </li>
+    }
+    else if (Model.Type == 1)
+    {
+        <li class="">
+            <a href="/Video/ForCategory?date=@Model.Date.AddMonths(-5).ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" class="glyphicon glyphicon-chevron-left"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTab"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos"></a>
+        </li>
+        for (int i = 4; i > 0; i--)
+        {
+            var begin = Model.Date.AddMonths(-i);
+            var end = begin.AddMonths(1).AddDays(-1);
+        
+            <li class="">
+                <a href="/Video/ForCategoryContent?date=@begin.ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" role="tab" data-toggle="tab"
+                   data-ajax="true"
+                   data-ajax-complete="registerVideosTabContent"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#videos-body">
+
+                    <b>Tháng @begin.Month/@begin.Year</b>
+
+                </a>
+
+            </li>
+        }
+        <li class="active">
+            <a href="/Video/ForCategoryContent?date=@Model.Date.ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" role="tab" data-toggle="tab"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTabContent"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos-body">
+                <b>Tháng @Model.Date.Month/@Model.Date.Year</b>
+            </a>
+        </li>
+        <li class="">
+            <a href="/Video/ForCategory?date=@Model.Date.AddMonths(5).ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" class="glyphicon glyphicon-chevron-right"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTab"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos"></a>
+        </li>
+    }
+    else
+    {
+        <li class="">
+            <a href="/Video/ForCategory?date=@Model.Date.AddYears(-1).ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" class="glyphicon glyphicon-chevron-left"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTab"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos"></a>
+        </li>
+        for (int i = 4; i > 0; i--)
+        {
+            var begin = Model.Date.AddYears(-i);
+
+            <li class="">
+                <a href="/Video/ForCategoryContent?date=@begin.ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" role="tab" data-toggle="tab"
+                   data-ajax="true"
+                   data-ajax-complete="registerVideosTabContent"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#videos-body">
+
+                    <b>Năm @begin.Year</b>
+
+                </a>
+
+            </li>
+        }
+        <li class="active">
+            <a href="/Video/ForCategoryContent?date=@Model.Date.ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" role="tab" data-toggle="tab"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTabContent"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos-body">
+                <b>Năm @Model.Date.Year</b>
+            </a>
+        </li>
+        <li class="">
+            <a href="/Video/ForCategory?date=@Model.Date.AddYears(1).ToString("dd/MM/yyyy")&catId=@Model.CatId&groupBy=@groupBy" class="glyphicon glyphicon-chevron-right"
+               data-ajax="true"
+               data-ajax-complete="registerVideosTab"
+               data-ajax-mode="replace"
+               data-ajax-update="#videos"></a>
+        </li>
+    }
+</ul>
+
+<table class="table user-list table-hover" id="manage_video">
+    <thead>
+        <tr>
+            @*<th><span>Tên</span></th>
+                <th><span>Thể loại</span></th>
+                <th><span>Ngày đăng</span></th>
+                <th><span>Giờ phát sóng</span></th>
+                <th><span>Người đăng</span></th>
+                <th><span>Tình trạng</span></th>
+                <th>&nbsp;</th>*@
+            <th><span>Tên</span></th>
+            <th><span>Thể loại</span></th>
+            <th><span>Phát sóng</span></th>
+            <th><span>Tải lên</span></th>
+            <th><span>Lượt xem</span></th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    
+    <tbody id="videos-body">
+        @Html.Partial("ForCategoryContent", Model)
+    </tbody>
+</table>
+<script>
+    var groupBy = "@groupBy";
+    var date = "@Model.Date.ToString("dd/MM/yyyy")";
+</script>

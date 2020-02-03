@@ -1,0 +1,24 @@
+﻿@model VITV.Data.Models.SitePage
+
+@{
+    ViewBag.Title = @Model.Title + " | VITV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page_detail">
+    <div class="row">
+        <div class="container">
+            @Html.Raw(Model.MainContent)
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function()
+        {
+            var minH = window.innerHeight - 165;
+            $(".page_detail").css("min-height", minH);
+        })
+    </script>
+}

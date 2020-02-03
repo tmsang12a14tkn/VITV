@@ -1,0 +1,91 @@
+﻿@model VideoFilterView
+
+@for (int i = 0; i < 5; i++)
+{
+    //allvideo_content
+    <div class="row single_related">
+        @for (int j = 0; j < 4; j++)
+        {
+            var vIndex = i * 4 + j;
+            if (vIndex < Model.Videos.Count)
+            {
+                var item = Model.Videos[vIndex];
+                <div class="col-sm-3">
+                    <div class="single_video">
+                        <div class="video_image">
+                            <a href="@Url.Action("Details", "Video", new { id = item.Id, title = item.UniqueTitle, date = item.PublishedTime.ToString("dd-MM-yyyy") })">
+                                <span class="thumb">
+                                    <span class="thumb_sizer">
+                                        <span class="thumb_tugger">
+                                            <img class="poster" src="@item.Thumbnail">
+                                            <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(@item.Category.ProfilePhoto) no-repeat center;"></span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="video_info">
+                            <p><a href="@Url.Action("Details", "VideoCategory", new { title = @item.Category.UniqueTitle})"><span>@item.Category.Name</span></a></p>
+                            @if (item.Category.GroupId != 2)
+                            {
+                                <h4><a href="@Url.Action("Details", "Video", new { id = item.Id, title = item.UniqueTitle, date = item.PublishedTime.ToString("dd-MM-yyyy") })">@item.Title</a></h4>
+                            }
+                            <p>Phát sóng @item.DisplayTime.ToString("HH:mm") ngày @item.DisplayTime.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+
+<div class="results__pagination">
+
+
+    <div class="pagination">
+        @if (Model.Page > 1)
+        {
+            @Html.ActionLink("Trước", "Index", "Video", new { page = Model.Page - 1, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "pagination__item pagination__link" });
+        }
+        else
+        {
+            <span>Trước</span>
+        }
+
+        <span class="pagination__separator">|</span>
+        @{
+            int startPag = Math.Max(1, Model.Page - 2);
+            int endPag = Math.Min(startPag + 4, Model.PageCount);
+            for (int pag = startPag; pag <= endPag; pag++)
+            {
+                if (pag == Model.Page)
+                {
+                    <span class="">@pag</span>
+                    <span class="">|</span>
+                }
+                else
+                {
+                    @Html.ActionLink(pag.ToString(), "Index", "Video", new { page = pag, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+                    <span class="pagination__separator">|</span>
+                }
+            }
+            if (endPag != Model.PageCount)
+            {
+                <span class="">…</span>
+                @Html.ActionLink(Model.PageCount.ToString(), "Index", "Video", new { page = Model.PageCount, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+
+                <span class="">|</span>
+            }
+        }
+        @if (Model.Page < Model.PageCount)
+        {
+            @Html.ActionLink("Sau", "Index", "Video", new { page = Model.Page + 1, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+        }
+        else
+        {
+            <span>Sau</span>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,115 @@
+﻿@model JobList
+<div class="widget-box transparent">
+    <div class="widget-header">
+        <h5 class="widget-title">
+            <i class="fa fa-check-square-o"></i>
+            <span class="@(ViewBag.CanEdit==true?"joblist-editable":"")" data-type="text" data-name="Title" data-pk="@Model.Id" data-url="/Checklist/EditProperty">@Model.Title</span>
+        </h5>
+        <div class="widget-toolbar">
+            <div class="btn-group pull-right">
+                @if (ViewBag.CanEdit == true)
+                {
+                    <button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle" aria-expanded="true">
+                        <i class="ace-icon fa fa-trash-o icon-only"></i>
+                    </button>
+               
+                    <div class="dropdown-menu dropdown-warning">
+                        <form action="/Checklist/Delete/@Model.Id" method="post" class="delete-checklist-form">
+                            <div class="form-group form-inline">
+                                <input class="btn btn-success btn-block" type="submit" value="Xóa" />
+                            </div>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="widget-toolbar no-border">
+            <span class="label label-success">
+                <span id="checklist-count-@Model.Id">@Model.Jobs.Count(i=>i.Done)/@Model.Jobs.Count()</span>
+                <i class="ace-icon fa fa-arrow-up"></i>
+            </span>
+        </div>
+    </div>
+    <div class="widget-body">
+        @*<div class="progress progress-mini">
+            <div class="progress-bar progress-danger" style="width: 35%;"></div>
+        </div>*@
+
+        <table class="table table-responsive table-striped" id="checklist-items-@Model.Id">
+            <thead>
+                <tr>
+                    <th>Hoàn thành</th>
+                    <th>Công việc</th>
+                    <th>Bắt đầu</th>
+                    <th>Kết thúc</th>
+                    <th>Nhân sự</th>
+                    <th>Thiết bị</th>
+                    <th>Ghi chú</th>
+                    <td></td>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Jobs)
+                {
+                    @Html.Partial("~/Views/Checklist/Item.cshtml", item)
+                }
+                
+                @if (ViewBag.CanEdit == true)
+                { 
+                    <tr class="checklist-item">
+                        <td>
+                            <a class="new-item-editable hidden" data-listid="@Model.Id" data-name="JobListId" data-disabled="true" data-display="false">@Model.Id</a>
+                            @*<label>
+                                <input name="form-field-checkbox" type="checkbox" class="ace input-lg item-checkbox" >
+                                <span class="lbl bigger-120"> </span>
+                            </label>*@
+                        </td>
+                    
+                        <td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="Title" data-type="text" data-mode="inline" data-onblur="submit"></span>
+                        </td>
+                        <td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="StartTime" data-type="datetime" data-template="DD MM YYYY  HH:mm" data-format="d.m.Y H:i" data-viewformat="dd/MM/yyyy HH:mm" data-value="" data-onblur="submit"></span>
+                        </td>
+                  
+                        <td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="EndTime" data-type="datetime" data-template="DD MM YYYY  HH:mm" data-format="d.m.Y H:i" data-viewformat="dd/MM/yyyy HH:mm" data-value="" data-onblur="submit"></span>
+                        </td>
+                        <td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="EmployeeIds" data-type="select2" data-sourcetype="employees" data-mode="inline" data-onblur="submit"></span>
+                        </td>
+                        <td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="EquipmentIds" data-type="select2" data-sourcetype="equipments" data-mode="inline" data-onblur="submit"></span>
+                        </td>
+                        <td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="ShortDescription" data-type="text" data-mode="inline" data-onblur="submit"></span>
+                        </td>
+                        @*<td>
+                            <span class="new-item-editable" data-listid="@Model.Id" data-name="EquipmentIds" data-type="select2" data-mode="inline"></span>
+                        </td>*@
+                        <td></td>
+                        <td>
+                            <button class="btn btn-xs btn-success add-item-btn" data-listid="@Model.Id">
+                                Thêm
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+           
+            
+        </table>
+        @*<ul class="list-unstyled">
+            <li>
+                <form role="form" action="/Checklist/AddItem" method="post" class="add-checkitem-form">
+                    <input type="hidden" name="ChecklistId" value="@Model.Id" />
+                    <div class="form-group form-inline">
+                        <input type="text" class="form-control" name="Title" placeholder="Thêm..." />
+                        <input type="submit" class="btn btn-success btn-sm" value="Thêm" />
+                    </div>
+                </form>
+            </li>
+        </ul>*@
+    </div>
+</div>

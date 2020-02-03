@@ -1,0 +1,29 @@
+﻿@model List<ChatClient>
+
+@*@foreach (var chatClient in Model)
+{//onclick="openChatWindow('@chatClient.UserId', '@chatClient.DisplayName')
+    <div class="ace-settings-item chat-user-item" data-userid="@chatClient.UserId" data-displayname="@chatClient.DisplayName" >
+        <img src="#" alt="contact" class="img-circle user-avatar">
+        <span>@chatClient.DisplayName</span>
+    </div>
+}*@
+@foreach (var chatClient in Model)
+{
+    if (ViewBag.userlogin != chatClient.UserId)
+    {
+        <tr class="chat-user-item" data-userid="@chatClient.UserId" data-displayname="@chatClient.DisplayName">
+            <td>
+                <a href="#" class="no-underline">
+                    @* @(String.IsNullOrEmpty(chatClient.Avatar) ? "/Upload/Avatar/binh.jpg" : chatClient.Avatar) *@
+                    <img src="@(String.IsNullOrEmpty(chatClient.Avatar) ? "/Upload/Avatar/binh.jpg" : chatClient.Avatar)" alt="contact" class="img-circle user-avatar" style="width:50px; height:50px;">
+                    <span>@chatClient.DisplayName</span>
+                </a>
+            </td>
+            <td>
+                <i class="fa fa-circle offline pull-right status_chat"></i>
+            </td>
+        </tr>
+    }
+
+}
+

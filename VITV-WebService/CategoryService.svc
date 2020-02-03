@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="VITV.DataService.CategoryService" CodeBehind="CategoryService.svc.cs" %>

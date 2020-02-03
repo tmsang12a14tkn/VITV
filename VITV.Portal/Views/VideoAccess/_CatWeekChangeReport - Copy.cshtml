@@ -1,0 +1,42 @@
+﻿@model CatWeekChangeReport
+@{
+    var daysOfWeek = new string[] { "CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7" };
+}
+
+
+<div class="chart col-sm-5" id="chart_@(Model.CatId)"></div>
+<div class="col-sm-7">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Thứ</th>
+                <th>Lượt xem</th>
+                <th>Tuần trước</th>
+                <th>Thay đổi</th>
+                <th>% Thay đổi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CatWeekChange dateData in Model.Data)
+            {
+                <tr>
+                    <td>@daysOfWeek[(int)dateData.DOW]</td>
+                    <td>@dateData.IPViewCount</td>
+                    <td>@dateData.LastIPViewCount</td>
+                    <td class="@(dateData.Change>0?"increase":(dateData.Change<0?"decrease":""))">@dateData.Change</td>
+                    <td class="@(dateData.Change>0?"increase":(dateData.Change<0?"decrease":""))">@dateData.PercentDayChange.ToString("00.00") %</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>Tổng</strong></>
+                <td>@Model.Total</td>
+                <td>@Model.LastTotal</td>
+                <td>@(Model.Total - Model.LastTotal)</td>
+                <td>@(((Model.Total - Model.LastTotal)*100D/Model.LastTotal).ToString("00.00")) %</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

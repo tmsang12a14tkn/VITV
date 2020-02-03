@@ -1,0 +1,23 @@
+﻿@model List<ReporterGroupView>
+
+<div class="container">
+    <div class="row single_filter">
+        @foreach (ReporterGroupView p in Model)
+        {
+            if (p.Reporters != null && p.Reporters.Count > 0)
+            {
+                ViewBag.isEmp = p.Id == 4;//Nhan vien
+                <div class="row single_filter">
+                    <div class="col-md-12">
+                        <h4>@p.Name</h4>
+                    </div>
+
+                    @Html.Partial("_List", p.Reporters)
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+

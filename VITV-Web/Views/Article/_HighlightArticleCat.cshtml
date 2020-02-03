@@ -1,0 +1,57 @@
+﻿@model ArticleHighlightCat
+
+@{
+    Article article = ViewBag.Article;
+}
+
+@using (Ajax.BeginForm("HighlightArticleCat", "Article", null, new AjaxOptions
+{
+    OnSuccess = "onHLSucceed",
+    HttpMethod = "Post"
+}, new { role = "form", @class = "form-horizontal" }))
+{
+    <input type="hidden" name="Id" value="@article.Id" />
+    <input type="hidden" name="Order" value="@Model.Order" />
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <label>Tên bài viết</label>
+            <input class="form-control" type="text" value="@article.Title" readonly />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <label>Loại thời gian</label>
+            <select class="form-control" name="HighlightType" id="HighlightType">
+                <option value="0" @(Model.HighlightType == 0 ? "selected" : "")>Tùy chọn</option>
+                <option value="1" @(Model.HighlightType == 1 ? "selected" : "")>Một ngày</option>
+                <option value="2" @(Model.HighlightType == 2 ? "selected" : "")>Một tuần</option>
+                <option value="3" @(Model.HighlightType == 3 ? "selected" : "")>Một tháng</option>
+                <option value="4" @(Model.HighlightType == 4 ? "selected" : "")>Một năm</option>
+                <option value="5" @(Model.HighlightType == 5 ? "selected" : "")>Vĩnh viễn</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <label>Ngày bắt đầu</label>
+            <input type="hidden" name="StartDate" id="StartDate" value="@Model.StartDate.ToString("dd/MM/yyyy")" />
+            <input class="form-control datepicker" data-format="dd/MM/yyyy" id="StartDatetxt" type="text" value="@Model.StartDate.ToString("dd/MM/yyyy")" @(Model.HighlightType != 0 ? "disabled" : "")>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-10">
+            <label>Ngày kết thúc</label>
+            <input type="hidden" name="EndDate" id="EndDate" value="@Model.EndDate.ToString("dd/MM/yyyy")" />
+            <input class="form-control datepicker" data-format="dd/MM/yyyy" id="EndDatetxt" type="text" value="@Model.EndDate.ToString("dd/MM/yyyy")" @(Model.HighlightType != 0 ? "disabled" : "")>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-danger" id="hlight-off">Tắt nổi bật</button>
+        </div>
+        <div class="col-lg-9" style="text-align: right;">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-default" id="close-hl-modal">Đóng</button>
+        </div>
+    </div>
+}

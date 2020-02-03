@@ -1,0 +1,28 @@
+@model Info
+
+@if(Model==null || Model.Id == default(string))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Id, new { @class = "col-lg-2 control-label" })
+        <div class="col-lg-10">
+            @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Id, string.Empty, new { @class = "help-block" })
+        </div>
+    </div>
+}
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Title, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Title, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Description, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Description, new { @class = "form-control editable" })
+        @Html.ValidationMessageFor(model => model.Description, string.Empty, new { @class = "help-block" })
+    </div>
+</div>

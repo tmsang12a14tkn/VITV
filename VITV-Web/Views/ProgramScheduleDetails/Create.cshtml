@@ -1,0 +1,61 @@
+﻿@model DowScheduleDetailModel
+
+@{
+    ViewBag.Title = "Lên lịch chương trình";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Lên lịch chương trình cho ngày @Model.Date.ToShortDateString()</h2>
+
+@using (Html.BeginForm("Create", "ProgramScheduleDetails", FormMethod.Post))
+{
+    <table class="table" id="tableprogramschedetail">
+        <thead>
+            <tr>
+                <th>Thời gian</th>
+                <th>Mục</th>
+                <th>Tên chương trình</th>
+                <th>Phát mới</th>
+                @*<th></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Details.Count; i++)
+            {
+                <tr>
+                    <th>@Html.TextBoxFor(model => Model.Details[i].DateTime, "{0:HH:mm}", new {@class="timepicker"})</th>
+                    <th>@Html.DropDownListFor(model => Model.Details[i].VideoCategoryId, new SelectList(ViewBag.VideoCategories, "Id", "Name", Model.Details[i].VideoCategoryId), htmlAttributes: new { @class = "form-control" })</th>
+                    <th>@Html.TextBoxFor(m => Model.Details[i].Name)</th>
+                    <th>@Html.CheckBoxFor(m => Model.Details[i].IsNew)</th>
+                    @*<th>
+                        <a href="#" class="table-link danger deleteproschedetail" title="Xóa">
+                            <span class="fa-stack">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-times fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </th>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.HiddenFor(model=>model.Date)
+    <input type="submit" value="Lưu" class="btn btn-default">
+}
+
+
+@*@section Scripts
+{
+    <script>
+        $(document).ready(function ()
+        {
+            
+            $("#tableprogramschedetail").on("click", ".deleteproschedetail", function (event)
+            {
+                event.preventDefault()
+                var row = $(this).parent().parent().remove();
+            })
+        });
+
+    </script>
+}*@

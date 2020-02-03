@@ -1,0 +1,17 @@
+@model Product
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Title, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Title, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Content, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Content, new { @class = "form-control editable" })
+        @Html.ValidationMessageFor(model => model.Content, string.Empty, new { @class = "help-block" })
+    </div>
+</div>

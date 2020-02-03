@@ -1,0 +1,60 @@
+﻿@model List<Employee>
+
+@{
+    int row = (int)Math.Ceiling((double)Model.Count() / 6);
+    int i = 0;
+    int length = Model.Count();
+}
+
+@for (int n = 0; n < row; n++)
+{
+    <div class="row">
+        @for (int k = 0; k < 6; k++)
+        {
+            if (i == length)
+            {
+                break;
+            }
+            else
+            {
+                <div class="col-sm-2 wow fadeInLeft" data-wow-duration="400ms" data-wow-delay="@((k + 1) * 200)ms">
+                    <div class="single_person">
+                        <div class="person_image">
+                            <a href="@Url.Action("Details", "Reporter", new { title = Model[i].UniqueTitle})">
+                                <span class="thumb">
+                                    <span class="thumb_sizer">
+                                        <span class="thumb_tugger">
+                                            <img src="@Model[i].ProfilePicture" alt="">
+                                        </span>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="person_info">
+                            <h5><a href="@Url.Action("Details", "Reporter", new { title = Model[i].UniqueTitle })">@Model[i].Name</a></h5>
+                            @*Nhan vien*@
+                            @if (!ViewBag.isEmp)
+                            {
+                                <h6>@Model[i].Position.Name</h6>
+                            }
+                            else
+                            {
+                                string des = "";
+                                foreach (Role r in Model[i].Roles)
+                                {
+                                    des += r.Name + ", ";
+                                }
+
+                                <h6>@des.Trim().Trim(',')</h6>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+            i++;
+        }
+    </div>
+}
+
+

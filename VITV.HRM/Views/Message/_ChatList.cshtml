@@ -1,0 +1,28 @@
+﻿@model List<MessageModel>
+@foreach (var message in Model)
+{
+    <div class="itemdiv dialogdiv" data-time="@message.CreatedTime" id="@(Utilities.URLFriendly(message.CreatedTime.ToString()))">
+        <div class="user">
+            <img alt="Alexa's Avatar" src="@message.Avatar" />
+        </div>
+
+        <div class="body">
+            <div class="time">
+                <i class="ace-icon fa fa-clock-o"></i>
+                <span class="green">@message.CreatedTime</span>
+            </div>
+
+            <div class="name">
+                <a href="#">@message.Name</a>
+            </div>
+            <div class="text">@message.MessageContent</div>
+
+            <div class="tools">
+                <a href="#" class="btn btn-minier btn-info">
+                    <i class="icon-only ace-icon fa fa-share"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+

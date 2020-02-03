@@ -1,0 +1,53 @@
+﻿@model VideoCategory
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Tạo mới chuyên mục video";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2>Tạo mới chuyên mục video</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("Create", "VideoCategory", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.ValidationSummary(true)
+                    @Html.Partial("_CreateOrEdit", Model)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/ddslick.js"></script>
+
+    <script>
+        $('#introSelect').ddslick({
+            onSelected: function (data) {
+                var val = data.selectedData.value;
+                $('#CategoryIntroId').val(val);
+            }
+        });
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#photoView').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#photoinput").change(function () {
+            readURL(this);
+        });
+    </script>
+}

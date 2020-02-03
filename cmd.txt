@@ -1,0 +1,2 @@
+ Update-Database -Script -SourceMigration: holiday -TargetMigration: removeHighlight -ConfigurationTypename Configuration
+Update-Database -Script -SourceMigration: EditUSDExchangeRate -TargetMigration: editstockworld2 -ConfigurationTypename ConfigurationStoreInfo

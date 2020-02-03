@@ -1,0 +1,106 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TextEditor</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Froala/froala_editor.min.css" rel="stylesheet" />
+    @*<link href="~/Content/Froala/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/Froala/froala_editor.css" rel="stylesheet" />
+    <link href="~/Content/Froala/froala_style.min.css" rel="stylesheet"/>*@
+    <style>
+        .articlecontent
+        {
+            padding: 10px;
+        }
+
+         /* context menu */
+        .context-menu {
+          display: none;
+          position: absolute;
+          z-index: 10;
+          padding: 12px 0;
+          width: 240px;
+          background-color: #fff;
+          border: solid 1px #dfdfdf;
+          box-shadow: 1px 1px 2px #cfcfcf;
+        }
+
+        .context-menu--active {
+          display: block;
+        }
+
+        .context-menu__items {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .context-menu__item {
+          display: block;
+          margin-bottom: 4px;
+        }
+
+        .context-menu__item:last-child {
+          margin-bottom: 0;
+        }
+
+        .context-menu__link {
+          display: block;
+          padding: 4px 12px;
+          color: #0066aa;
+          text-decoration: none;
+        }
+
+        .context-menu__link:hover {
+          color: #fff;
+          background-color: #0066aa;
+        }
+        .bordered-image{
+            border: 10px solid transparent;
+            padding: 2px;
+            -webkit-border-image: url(/Content/Images/border.png) 30 round; /* Safari 3.1-5 */
+            -o-border-image: url(/Content/Images/border.png) 30 round; /* Opera 11-12.1 */
+            border-image: url(/Content/Images/border.png) 30 round;
+        }
+    </style>
+</head>
+<body>
+    <div class="articlecontent" contenteditable="true">
+        @Html.Raw(Model.ArticleContent)
+    </div>
+
+    <nav id="context-menu" class="context-menu editor">
+        <ul class="context-menu__items">
+            <li class="context-menu__item">
+                <a href="#" class="context-menu__link" id="cmenu-comment"><i class="fa fa-eye"></i>Nhận xét</a>
+            </li>
+        </ul>
+    </nav>
+    <script src="~/Scripts/jquery-2.1.3.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/Froala/froala_editor.min.js"></script>
+    <script src="~/Scripts/contextmenu.js"></script>
+    <script>
+        $('.editable').froalaEditor({
+            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+            pluginsEnabled: null,
+            imageUploadParam: 'files',
+            imageUploadURL: '/Home/FroalaUploadImage',
+            inlineMode: false,
+            preloaderSrc: "/Content/assets/ajax-loader.gif",
+            imagesLoadURL: '/Home/FroalaMediaManager',
+            imageDeleteURL: "/Home/FroalaDelete",
+            emptytext: '',
+            height: 400,
+            maxHeight: 500
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+﻿@model Employee
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">Bạn có chắc chắn muốn xóa người dùng này không?</h4>
+</div>
+@using (Ajax.BeginForm("Delete", "Employee", new { id = Model.Id }, new AjaxOptions
+{
+    OnSuccess = "OnDeleteEmployeeSuccess",
+    HttpMethod = "Post"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="form-field-display">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="confirmText" placeholder="Nhập 'Đồng ý'" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+        <input type="submit" class="btn btn-primary btn-ok" value="Đồng ý" />
+    </div>
+}

@@ -1,0 +1,317 @@
+﻿@model List<Conference>
+@{
+    ViewBag.Title = "Index";
+    var context = new VITVSecondContext();
+}
+
+
+<div class="page-header">
+    <h1>
+        Lịch họp
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="space"></div>
+
+                <div id="calendar"></div>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+
+
+@*<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                Hello world!
+            </div>
+            <!-- dialog buttons -->
+            <div class="modal-footer"><button type="button" class="btn btn-primary">OK</button></div>
+        </div>
+    </div>
+</div>*@
+
+
+@section scripts
+{
+        <script type="text/javascript">
+            $(document).ready(function () {
+                
+                /* initialize the calendar
+        -----------------------------------------------------------------*/
+
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+
+
+                var calendar = $('#calendar').fullCalendar({
+                    minTime: '09:00',
+                    maxTime: '18:00',
+                    businessHours: {
+                        start: '09:00', // a start time (10am in this example)
+                        end: '18:00', // an end time (6pm in this example)
+
+                        dow: [ 1, 2, 3, 4 ]
+                        // days of week. an array of zero-based day of week integers (0=Sunday)
+                        // (Monday-Thursday in this example)
+                    },
+                    //isRTL: true,
+                    buttonHtml: {
+                        prev: '<i class="ace-icon fa fa-chevron-left"></i>',
+                        next: '<i class="ace-icon fa fa-chevron-right"></i>'
+                    },
+                    events: [
+                        @foreach(var confer in Model)
+                        {
+                            <text>{
+                                id : '@confer.Id',
+                                title : '@(Server.HtmlDecode(confer.Content))',
+                                start : '@confer.Start',
+                                end :  '@confer.End',                            
+                            },
+                            </text>
+                        }
+            ],
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: true,
+            droppable: true, // this allows things to be dropped onto the calendar !!!
+            eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) { 
+                $.post("/PersonalTask/CheckDayOff", { start: event.start.format(), end: event.end.format()})
+                                    .done(function (data) {
+                                        if(data.success)
+                                        {
+                                            console.log(event.title + "resize " + event.start.format());
+                                            console.log(event.title + "resize " + event.end.format());
+                                            $.post("/PersonalTask/EditTime", { id: event.id, start: event.start.format(), end: event.end.format() }) 
+                                            .done(function (data) {
+                    
+                                            });
+                                        }else
+                                        {
+                                            revertFunc();
+                                        }
+                                    });
+                
+            },
+            eventRender: function(event, element) {
+                var title = event.title;
+                $('.fc-title', element).html(title);
+            },
+            eventOverlap: function(stillEvent, movingEvent) {
+                return stillEvent.allDay && movingEvent.allDay;
+            },
+            selectable: true,
+            selectHelper: true,
+            select: function (start, end) {
+                $.post("/Conference/GetDialogAddConference")
+                    .done(function (data) {
+                        bootbox.dialog({
+                            title: "Lịch họp",
+                            message: data
+
+                            ,
+                            buttons: {
+                                success: {
+                                    label: "Save",
+                                    className: "btn-success",
+                                    callback: function () {
+                                        var title = $('#name').val();
+                                        if (title == "")
+                                            return;
+                                        var employee = [];
+                                        $('.employee').each(function (index) {
+                                            if ($(this).attr('aria-selected') == 'true')
+                                            {
+                                                employee.push($(this).data('id')); 
+                                            }
+                                        });
+                                        console.log(employee);
+                                       
+                                        var title = $('#name').val();
+                                        $.post("/Conference/Add", { content: title, start: start.format(), end: end.format(), employees: employee })
+                                            .done(function (data) {
+                                                console.log(data);
+                                                if (data.success) {
+                                                    calendar.fullCalendar('renderEvent',
+                                                        {
+                                                            id: data.id,
+                                                            title: title,
+                                                            start: start,
+                                                            end: end,
+                                                            className: 'label-info'
+                                                        },
+                                                        true // make the event "stick"
+                                                    );
+                                                }
+                                                else {
+                                                }
+                                            });//end post
+
+                                    }
+                                }
+                            }//end button
+                        });//end bootbox
+                        calendar.fullCalendar('unselect');
+                    });//end post              
+            } ,
+            eventClick: function (calEvent, jsEvent, view) {
+                $.post("/Conference/GetDialogEditDeleteConference", {id : calEvent.id, content: calEvent.title})
+                    .done(function (data) {
+                        
+                        bootbox.dialog({
+                            title: "Thay đổi lịch họp",
+                            message: data
+                            ,
+                            buttons: {
+                                success: {
+                                    label: "Lưu",
+                                    className: "btn-success",
+                                    callback: function () {
+                                        var title = $('#name').val();
+                                        if (title == "")
+                                            return;
+                                        var employee = [];
+                                        $('.employee').each(function (index) {
+                                            if ($(this).attr('aria-selected') == 'true') {
+                                                employee.push($(this).data('id'));
+                                            }
+                                        });
+                                        console.log(employee);
+
+                                        calEvent.title = $('#name').val();
+                                        $.post("/Conference/Edit", { id: calEvent.id, content: calEvent.title, employees: employee })
+                                            .done(function (data) {
+                                                console.log(data);
+                                                if (data.success) {
+                                                    calendar.fullCalendar('updateEvent', calEvent);
+                                                }
+                                                else {
+                                                }
+                                            });//end post
+
+                                    }
+                                },//end success
+                                danger: {
+                                    label: "Xóa",
+                                    className: "btn-danger",
+                                    callback: function () {
+                                        $.post("/Conference/Delete", { id: calEvent.id})
+                                            .done(function (data) {
+                                                console.log(data);
+                                                if (data.success) {
+                                                    calendar.fullCalendar('removeEvents', function (ev) {
+                                                        return (ev.id == calEvent.id);
+                                                    })
+                                                }
+                                                else {
+                                                }
+                                            });//end post
+                                    }
+                                },
+                                main: {
+                                    label: "Hủy",
+                                    className: "btn-primary",
+                                    callback: function () {
+                                        console.log("Huy");
+                                    }
+                                },
+                            }//end button
+                        });//end bootbox
+                        calendar.fullCalendar('unselect');
+
+                    });//end post
+                
+            }
+                //    modal = data;
+                //var modal = $(modal).appendTo('body');
+                //modal.find('form').on('submit', function (ev) {
+                //    //ev.preventDefault();
+                //    ////PersonalTask/Edit
+                //    //calEvent.title = $(this).find("input[type=text]").val();
+
+                //    //$.post("/PersonalTask/Edit", { id: calEvent.id, title: calEvent.title })
+                //    //.done(function (data) {
+
+                //    //});
+
+                //    //calendar.fullCalendar('updateEvent', calEvent);
+                //    modal.modal("hide");
+                //});
+                //modal.find('button[data-action=delete]').on('click', function () {
+
+                //    //PersonalTask/Delete
+                //    //$.post("/PersonalTask/Delete", { id: calEvent._id })
+                //    //.done(function (data) {
+                //    //    calendar.fullCalendar('removeEvents', function (ev) {
+                //    //        return (ev._id == calEvent._id);
+                //    //    })
+                //    //    modal.modal("hide");
+                //    //});
+
+                //});
+
+                //modal.modal('show').on('hidden', function () {
+                //    modal.remove();
+                //});
+            });//end ful calendar
+        });//end document
+    </script>
+
+}
+
+
+
+
+
+
+@*'<div class="row">
+    ' +
+    '<div class="col-md-12">
+        ' +
+        '<form class="form-horizontal">
+            ' +
+            '<div class="form-group">
+                ' +
+                '<label class="col-md-4 control-label" for="name">Công việc</label> ' +
+                '<div class="col-md-4">
+                    ' +
+                    '<input id="name" name="name" type="text" placeholder="Tên công việc" class="form-control input-md"> ' +
+                    '
+                </div> ' +
+                '
+            </div> ' +
+            '<div class="form-group">
+                ' +
+                '<label class="col-md-4 control-label" for="awesomeness">Nghỉ?</label> ' +
+                '<div class="col-md-4">
+                    <div class="checkbox">
+                        ' +
+                        '<label for="awesomeness-0">
+                            ' +
+                            '<input type="checkbox" name="absent" id="absent"> ' +
+                            '
+                        </label> ' +
+                        '
+                    </div>
+                </div>' +
+                '
+        </form>
+    </div>
+</div>'*@

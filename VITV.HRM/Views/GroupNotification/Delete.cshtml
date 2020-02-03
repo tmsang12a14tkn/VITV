@@ -1,0 +1,27 @@
+﻿@model Notification
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Sửa thông báo
+    </div>
+</div>
+@using (Ajax.BeginForm("Delete", "GroupNotification", null, new AjaxOptions
+            {
+                OnSuccess = "OnSuccessDeleteNotifi",
+            }, new { @class = "form-horizontal" }))
+{
+    <div class="modal-body">
+       Bạn có muốn xóa thông báo: <strong>@Model.Title</strong>?
+    </div>
+
+    <div class="modal-footer no-margin-top">
+        <button type="submit" class="btn btn-sm btn-danger pull-right">
+            <i class="ace-icon fa fa-times"></i>
+            Xóa
+        </button>
+
+    </div>
+}
+

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<CityView>
+
+@{
+    Layout = "~/Views/Shared/_PagesLayout.cshtml";
+    RecruitExtraInfo recruitRule = ViewBag.RecruitRule;
+}
+
+@section Title {
+    <title>Tuyển dụng | VITV</title>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <nav class="submenu" id="submenu">
+                <div class="submenu__lists">
+                    <ul class="submenu__list">
+                        <li class="submenu__item">
+                            <a class="l4 l5 submenu__link" href="/RecruitCategory/Index">Quy trình tuyển dụng</a>
+                        </li>
+                        <li class="submenu__item">
+                            <a class="l4 l5 submenu__link" href="@recruitRule.RecruitForm">Mẫu hồ sơ ứng tuyển</a>
+                        </li>
+
+                        @if (Model.Count() > 0)
+                        {
+                            <li class="submenu__item">
+                                <a class="l4 l5 submenu__link" href="#">Khu vực tuyển dụng</a>
+                                <ul class="submenu__list">
+                                    @foreach (var item in Model)
+                                    {
+                                        <li class="submenu__item">
+                                            @Ajax.ActionLink(item.Name, "Index", "Recruit", new { id = item.Id },
+                                            new AjaxOptions
+                                            {
+                                                HttpMethod = "GET",
+                                                InsertionMode = InsertionMode.Replace,
+                                                UpdateTargetId = "recruit-content"
+                                            }, new { @class = "l3 submenu__link" })
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-lg-9 pages-content">
+            <div class="m1 module" id="recruit-content">
+                <h1 class="h1 h1--alt m2 m10">Quy trình tuyển dụng</h1>
+                <div class="p2">
+                    @Html.Raw(HttpUtility.HtmlDecode(recruitRule.RecruitRule))
+                </div>
+                <div class="text-center">
+                    <a class="button button" href="@recruitRule.RecruitForm">Tải mẫu hồ sơ ứng tuyển</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

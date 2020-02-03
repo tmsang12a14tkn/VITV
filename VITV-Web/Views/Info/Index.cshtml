@@ -1,0 +1,66 @@
+﻿@model Info
+
+@{
+    Layout = "~/Views/Shared/_PagesLayout.cshtml";
+}
+
+@section Title {
+    <title>Giới thiệu | VITV</title>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <nav class="submenu" id="submenu">
+                @*<h3 class="submenu__heading"><a class="l3 submenu__link submenu__heading__link" href="#">@Model.Title</a></h3>*@
+                <div class="submenu__lists">
+                    @if (Model.Id == "scheduling" || Model.Id == "broadcasting")
+                    {
+                        <ul class="submenu__list">
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/videocategory">Tổng hợp các chương trình</a>
+                            </li>
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info/scheduling">Khung giờ</a>
+                            </li>
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info/broadcasting">Phủ sóng</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="submenu__list">
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info">Giới thiệu chung</a>
+                            </li>
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info/aboutvitmedia">Tổng quan về VIT Media</a>
+                            </li>
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info/aboutvitv">Tổng quan về kênh VITV</a>
+                            </li>
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info/msg">Thông điệp gửi khách hàng</a>
+                            </li>                        
+                            <li class="submenu__item">
+                                <a class="l4 submenu__link" href="/info/partners">Đối tác</a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-lg-9 pages-content">
+            <div class="m1 module">
+                <nav class="breadcrumb m4 show-lg">Giới thiệu&nbsp;&nbsp;›&nbsp;&nbsp;</nav>
+
+                <h1 class="h1 h1--alt m2 m10">@Model.Title</h1>
+                <div class="p2">
+                    @Html.Raw(HttpUtility.HtmlDecode(Model.Description))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

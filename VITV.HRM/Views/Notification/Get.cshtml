@@ -1,0 +1,39 @@
+﻿@model List<UserNotification>
+
+<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+    <i class="ace-icon fa fa-bell icon-animated-bell"></i>
+    <span class="badge badge-important" id="notifiCount">@Model.Count</span>
+</a>
+
+<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+    <li class="dropdown-header">
+        <i class="ace-icon fa fa-exclamation-triangle"></i>
+        @Model.Count thông báo
+    </li>
+
+    <li class="dropdown-content">
+        <ul class="dropdown-menu dropdown-navbar navbar-pink">
+            @foreach(var userNotifi in Model)
+            { 
+                <li>
+                    <a href="@userNotifi.Notification.Url">
+                        <div class="clearfix">
+                            <span class="pull-left">
+                                <img class="nav-user-photo" src="@userNotifi.Notification.From.ProfilePicture" alt="">
+                                @userNotifi.Notification.Content
+                            </span>
+                            <span class="pull-right">@userNotifi.CreatedTime.PassTimeString()</span>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+
+    <li class="dropdown-footer">
+        <a href="/Notification">
+            Tất cả thông báo
+            <i class="ace-icon fa fa-arrow-right"></i>
+        </a>
+    </li>
+</ul>

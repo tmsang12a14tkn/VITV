@@ -1,0 +1,63 @@
+﻿@model VideoTVC
+
+
+@*<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2><b>Tạo mới TVC</b></h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("Create", "VideoTVC", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.ValidationSummary(true)
+                    @Html.Partial("_CreateOrEdit", Model)
+                }
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel"><b>Tạo mới TVC</b></h4>
+</div>
+@using (Html.BeginForm("Create", "VideoTVC", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "tvcForm" }))
+{
+    @Html.Partial("_CreateOrEdit", Model)
+}
+
+@section styles {
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet" />
+}
+
+
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+    <script src="~/Scripts/videoedit.js"></script>
+
+    <script>
+        $("#CompanyId").on("change", function () {
+            var companyId = $(this).val();
+            var ddlProducts = $("#ProductId");
+            $.getJSON("/TVCProduct/FromCompany?id=" + companyId, function (data) {
+                ddlProducts.empty();
+                $.each(data, function (i, opt) {
+                    ddlProducts[0].options.add(new Option(opt.text, opt.value));
+                });
+            });
+        })
+
+        $(document).ready(function () {
+            $('#sidebar-nav #videoMng').toggleClass("active");
+            $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#vd-li-4').toggleClass("active");
+            $('#sidebar-nav a#vd-li-4').parent().siblings().removeClass("active");
+        });
+
+    </script>
+
+

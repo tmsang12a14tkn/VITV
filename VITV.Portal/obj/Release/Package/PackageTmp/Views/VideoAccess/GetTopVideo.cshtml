@@ -1,0 +1,71 @@
+﻿@model IEnumerable<VideoAccessReport>
+
+
+@*<div class="" id="chart_@(ViewBag.catid)"></div>*@
+<table class="table table-bordered">
+    <tbody>
+        @foreach (var videoReport in Model)
+        {
+            <tr>
+                <td>@videoReport.IPViewCount</td>
+                <td><a href="/VideoAccess/VideoReport?videoId=@videoReport.Id" title="Click vào để coi báo cáo chi tiết về video này">@videoReport.Title</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@*<script>
+    $("#chart_@(ViewBag.catid)").highcharts({
+        chart: {
+            type: "column",
+            animation: false,
+            style: {
+                fontSize: '8px'
+            }
+        },
+        title: { text: "Tỉ lệ lượt xem" },
+        tooltip: {
+            //pointFormat: 'Tỉ lệ: <b>{point.percentage:.1f}%</b><br/>Số lượng: <b>{point.y}</b>'
+        },
+        legend: {
+            enabled: false
+        },
+        yAxis:
+        {
+            tickInterval: 1
+        },
+        xAxis: {
+            type: 'category'
+        },
+        @*xAxis: {
+            tickInterval: 1,
+            categories: [@for(int i = 1; i < Model.Count() + 1; i++)
+                         {
+                            <text>
+                                "@i",
+                            </text>
+                         }
+
+            ]
+        },*@
+        @*series: [
+            
+                @for (int j = 0; j < Model.Count(); j++)
+                {
+                    <text>
+                    {
+                        name: "@(Html.Raw((string)Model.ElementAt(j).Title))",
+                        data: [
+                            ["@(j + 1)", @((int)Model.ElementAt(j).IPViewCount)],
+                        ]
+                    },
+                    </text>
+                }
+            
+        ],
+        plotOptions: {
+            pie: { animation: false }
+        }
+    });
+</script>*@

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<VITV.Data.Models.Article>
+
+@foreach (var art in Model)
+{
+    <div class="row single_related" data-groupid="@(string.Join<string>(",", art.Categories.Select(a => a.Id.ToString())))">
+        <div class="single_article">
+            <div class="col col-xs-4">
+                <div class="article_image">
+                    <a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                        <div class="poster" style="background:url('@(art.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="col col-xs-8">
+                <div class="article_info">
+                    <h3><a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">@(art.Title)</a></h3>
+                    <p class="cn">@(art.ShortBrief)</p>
+                    <p class="tm">@(String.Join(",", art.Reporters.Select(r => r.Name))) - @(art.PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                    <p class="rp">
+                        @foreach (var rp in art.Reporters)
+                        {
+                            <img class="sm_reporter" src="@rp.ProfilePicture" />
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<input type="hidden" id="tmp_cur_num_record" value="@(ViewBag.CurNumRecord)" />
+<input type="hidden" id="tmp_has_more_article" value="@(ViewBag.HasMoreArticle)" />

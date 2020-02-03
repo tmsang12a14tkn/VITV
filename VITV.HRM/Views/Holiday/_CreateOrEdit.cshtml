@@ -1,0 +1,32 @@
+﻿@model HolidayModel
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Note, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Note, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Note, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Begin, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group" id="datetimepicker1">
+            <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+            @Html.TextBoxFor(model => model.Begin, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "rangeBegin" })
+        </div>
+        @Html.ValidationMessageFor(model => model.Begin, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.End, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group">
+            <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+            @Html.TextBoxFor(model => model.End, "{0:dd/MM/yyyy}", new { @class = "form-control", id = "rangeEnd" })
+        </div>
+        @Html.ValidationMessageFor(model => model.End, string.Empty, new { @class = "help-block" })
+    </div>
+</div>

@@ -1,0 +1,242 @@
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - VITV Portal</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/layout.css" rel="stylesheet" />
+    <link href="~/Content/elements.css" rel="stylesheet" />
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet">
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    @RenderSection("Styles", false)
+
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<body class="theme-blue-gradient">
+    <header class="navbar" id="header-navbar">
+        <div class="container">
+            <a href="/" id="logo" class="navbar-brand text-center"><span>VITV Portal</span></a>
+            <div class="clearfix">
+                <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
+                    <ul class="nav navbar-nav pull-left">
+                        <li>
+                            <a class="btn" id="make-small-nav">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-no-collapse pull-right" id="header-nav">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="page-wrapper" class="container">
+        <div id="nav-col">
+            <section id="col-left" class="col-left-nano">
+                <div id="col-left-inner" class="col-left-nano-content">
+                    <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
+                        <img alt="" src="~/Content/Images/Flag-S-02.jpg" />
+                        <div class="user-box">
+                            <span class="name">
+                                @User.Identity.GetUserName()
+                            </span>
+                            <span class="status">
+                                <i class="fa fa-circle"></i> Online
+                            </span>
+                        </div>
+                    </div>
+                    <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li class="active">
+                                <a href="/">
+                                    <i class="fa fa-dashboard"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            @{
+                                var canAccess11 = User.CanAccess("Index", "VideoAccess", "portal");
+                                var canAccess12 = User.CanAccess("VideoCatReportByType", "VideoAccess", "portal");
+                                var canAccess13 = User.CanAccess("VideoReportByType", "UploadReport", "portal");
+                                var canAccess14 = User.CanAccess("Report", "UploadReport", "portal");
+                                var canAccess15 = User.CanAccess("DeviceReportByDate", "UploadReport", "portal");
+                            }
+                            @if(canAccess11 && canAccess12 && canAccess13 && canAccess14 && canAccess15)
+                            { 
+                            <li id="videoAccessMng">
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="fa fa-desktop"></i>
+                                    <span>THỐNG KÊ TRUY CẬP</span>
+                                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                </a>
+                                <ul class="submenu">
+                                    @if(canAccess11)
+                                    { 
+                                    <li>
+                                        <a id="vda-li-1" href="/videoaccess">
+                                            Biểu đồ chung
+                                        </a>
+                                    </li>
+                                    }
+                                    @if(canAccess12)
+                                    { 
+                                    <li>
+                                        <a id="vda-li-2" href="/videoaccess/VideoCatReportByType">
+                                            Bảng chuyên mục
+                                        </a>
+                                    </li>
+                                    }
+                                    @if(canAccess13)
+                                    { 
+                                    <li>
+                                        <a id="vda-li-3" href="/videoaccess/VideoReportByType">
+                                            Bảng video
+                                        </a>
+                                    </li>
+                                    }
+                                    @if(canAccess14)
+                                    { 
+                                    <li>
+                                        <a id="vda-li-4" href="/videoaccess/report">
+                                            Báo cáo
+                                        </a>
+                                    </li>
+                                    }
+                                    @if(canAccess15)
+                                    { 
+                                    <li>
+                                        <a id="vda-li-5" href="/videoaccess/devicereportbydate">
+                                            Báo cáo thiết bị
+                                        </a>
+                                    </li>
+                                    }
+                                    @*<li>
+                                        <a id="vda-li-6" href="/videoaccess/allreports">
+                                            Báo cáo tổng quát các chuyên mục
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id="vda-li-7" href="/videoaccess/categoryreportweekdate">
+                                            Báo cáo theo ngày trong tuần
+                                        </a>
+                                    </li>*@
+                                </ul>
+                            </li>
+                            }
+                            
+                            @{
+                                var canAccess21 = User.CanAccess("Details", "UploadReport", "portal");
+                                var canAccess22 = User.CanAccess("Summary", "UploadReport", "portal");  
+                            }
+                            @if(canAccess21 && canAccess22)
+                            { 
+                            <li id="uploadReportMng">
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="fa fa-desktop"></i>
+                                    <span>THỐNG KÊ UPLOAD</span>
+                                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                </a>
+                                <ul class="submenu">
+                                    @if(canAccess21)
+                                    { 
+                                    <li>
+                                        <a id="ur-li-1" href="/uploadreport/details">
+                                            Chi tiết Upload
+                                        </a>
+                                    </li>
+                                    }
+                                    @if(canAccess22)
+                                    {
+                                    <li>
+                                        <a id="ur-li-2" href="/uploadreport/summary">
+                                            Tổng kết Upload
+                                        </a>
+                                    </li>
+                                    }
+                                </ul>
+                            </li>
+                            }
+                            @{
+                                var canAccess1 = User.CanAccess("AllReports", "VideoAccess", "portal");
+                                var canAccess2 = User.CanAccess("AllDetailReports", "VideoAccess", "portal");
+                                var canAccess3 = User.CanAccess("DeletionLogs", "UploadReport", "portal");
+                            }
+                            @if(canAccess1 || canAccess2 || canAccess3)
+                            { 
+                            <li id="devReportMng">
+                                
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="fa fa-desktop"></i>
+                                    <span>ĐANG THỬ NGHIỆM</span>
+                                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                                </a>
+                                <ul class="submenu">
+                                    @if(canAccess1)
+                                    { 
+                                    <li>
+                                        <a id="dr-li-1" href="/videoaccess/allreports">
+                                            Tổng quát các chuyên mục
+                                        </a>
+                                    </li>
+                                    }
+                                    @if (canAccess2)
+                                    {
+                                    <li>
+                                        <a id="dr-li-2" href="/videoaccess/AllDetailReports?catId=3048">
+                                            Báo cáo chuyên mục cha
+                                        </a>
+                                    </li>
+                                    }
+                                    @if (canAccess2)
+                                    {
+                                        <li>
+                                            <a id="dr-li-3" href="/videoaccess/AllDetailReports?catId=2033">
+                                                Báo cáo chuyên mục con
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (canAccess3)
+                                    {
+                                        <li>
+                                            <a id="dr-li-4" href="/UploadReport/DeletionLogs">
+                                                Bản ghi xóa
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div id="content-wrapper">
+            @RenderBody()
+
+            <footer id="footer-bar" class="row" style="opacity: 1;">
+                <p id="footer-copyright" class="col-xs-12">
+                    © 2014 <a href="#" target="_blank">VIT Media</a>. Powered by VITSS.
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.datetimepicker.js"></script> 
+    <script src="~/Scripts/jquery.nanoscroller.min.js"></script>
+    <script src="~/Scripts/layout-scripts.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,14 @@
+﻿@model List<PositionLevelView>
+
+@foreach (var position in Model)
+{
+    <div class="row">
+        <div class="col-md-pull-12">
+            <div class="department dragdrop" data-positionid="@position.Id" data-groupid="@ViewBag.groupid">
+                @position.Name
+            </div>
+        </div>
+
+    </div>
+}
+

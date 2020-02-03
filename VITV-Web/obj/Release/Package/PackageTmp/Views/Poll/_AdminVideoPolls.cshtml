@@ -1,0 +1,15 @@
+﻿@model List<PollQuestion>
+
+@foreach (var question in Model)
+{
+    @Html.Action("AdminQuestion", "Poll", new { questionId = question.Id })
+   
+}
+
+<div class="modal" id="pollModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="pollModalContent">
+
+        </div>
+    </div>
+</div>

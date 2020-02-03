@@ -1,0 +1,43 @@
+﻿@model List<VideoTranscriptModel>
+
+<table id="table" class="table table-hover dataTable no-footer" role="grid">
+    <thead>
+        <tr role="row">
+            <th>Thời gian</th>
+            <th>Nội dung</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (VideoTranscriptModel vt in Model)
+        {
+            <tr role="row" id="vt@(vt.Id)">
+                <td class="col-time" data-jumptime="@vt.ConvertedToSeconds" style="cursor:pointer;">
+                    @((vt.HourSeek > 0) ? vt.HourSeek + ":" : "")@((vt.MinuteSeek < 10) ? "0" + vt.MinuteSeek : vt.MinuteSeek.ToString()):@((vt.SecondSeek < 10) ? "0" + vt.SecondSeek : vt.SecondSeek.ToString())
+                </td>
+                <td>@vt.Title</td>
+                <td style="width: 15%;">
+                    <a href="/VideoTranscript/Edit/@vt.Id" class="table-link" data-toggle="modal" data-target="#modal"
+                       data-ajax="true"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#modal_content"
+                       data-ajax-success="loadElements">
+                        <span class="fa-stack">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="/VideoTranscript/Delete/@vt.Id" class="table-link danger" data-toggle="modal" data-target="#delete_modal"
+                       data-ajax="true"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#delete_content">
+                        <span class="fa-stack">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

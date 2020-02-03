@@ -1,0 +1,49 @@
+﻿@model List<DeletionLog>
+@{
+    ViewBag.Title = "DeletionLog";
+}
+
+<h2>DeletionLog</h2>
+<table class="table table-responsive table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Thời gian xóa</th>
+            <th>VideoId</th>
+            <th>Tiêu đề</th>
+            <th>Chuyên mục</th>
+            <th>Thời gian phát sóng</th>
+            <th>Tài khoản đăng</th>
+            <th>Tài khoản xóa</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var log in Model)
+        {
+            <tr>
+                <td>@log.DeletionTime</td>
+                <td>@log.VideoId</td>
+                <td>@log.VideoName</td>
+                <td>@log.CategoryName</td>
+                <td>@log.DisplayTime</td>
+                <td>@log.CreationUser</td>
+                <td>@log.DeletionUser</td>
+                <td>@log.Note</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(function()
+        {
+            $('#sidebar-nav #devReportMng').toggleClass("active");
+            $('#sidebar-nav #devReportMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#dr-li-4').toggleClass("active");
+            $('#sidebar-nav a#dr-li-4').parent().siblings().removeClass("active");
+        })
+    </script>
+}

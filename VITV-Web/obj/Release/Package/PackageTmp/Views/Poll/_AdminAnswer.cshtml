@@ -1,0 +1,35 @@
+﻿@model PollAnswer
+@{ 
+    int i = ViewBag.index;
+}
+<li class="poll-answer">
+    <div class="media">
+        <div class="pull-left">
+            <label for="answer-photo-input-@i">
+                <img class="media-object" id="answer-photo-view-@i" width=100 height=100 src="@Model.Image" />
+            </label>
+            <input class="answer-photo-input hidden" data-answerid="@i" type="file" name="answerImages[@i]" accept="image/*" id="answer-photo-input-@i">
+        </div>
+        <div class="media-body">
+            @if (Model.QuestionId != 0)
+            {
+                <input type="hidden" name="Answers[@i].QuestionId" value="@Model.QuestionId" />
+            }
+            <input type="hidden" name="Answers[@i].AnswerId" value="@Model.AnswerId" />
+            
+            <input type="hidden" name="Answers[@i].Image" value="@Model.Image" />
+
+            <textarea name="Answers[@i].Answer" class="form-control answer-editable">@Model.Answer</textarea>
+            @if (Model.Count == 0)
+            {
+                <button type="button" class="btn-del-poll-answer" id="delPollAnswer-@Model.AnswerId" onclick="delPollAnswer(this)">X</button>
+            }
+            else
+            {
+                <span>Có @Model.Count bình chọn. Không thể xóa</span>
+            }
+        </div>
+    </div>
+   
+   
+</li>

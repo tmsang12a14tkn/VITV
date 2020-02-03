@@ -1,0 +1,224 @@
+﻿@model ArticleHighlightView
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý bài viết nổi bật";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left"><b>Quản lý bài viết nổi bật</b></h2>
+                <div class="filter-block pull-right"></div>
+            </header>
+            <div class="main-box-body clearfix">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li class="active">
+                        <a href="#tab0" role="tab" data-toggle="tab">Tin nổi bật chung</a>
+                    </li>
+                    <li>
+                        <a href="#tab1" role="tab" data-toggle="tab">Tin nổi bật chuyên mục</a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="tab0">
+                        @using (Html.BeginForm("ChangeHLAOrder", "Article", new { }, FormMethod.Post, null))
+                        {
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="main-box clearfix">
+                                        <header class="main-box-header clearfix">
+                                            <div class="filter-block pull-right">
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                    Lưu thứ tự sắp xếp
+                                                </button>
+                                            </div>
+                                        </header>
+                                        <div class="main-box-body clearfix">
+                                            <div id="tableDetail0">
+                                                @Html.Partial("_HLListEdit", Model.HLAlls, new ViewDataDictionary { { "type", 0 } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="tab-pane fade" id="tab1">
+                        @using (Html.BeginForm("ChangeHLCOrder", "Article", new { }, FormMethod.Post, null))
+                        {
+                            var cnt = 0;
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="main-box clearfix">
+                                        <header class="main-box-header clearfix">
+                                            <div class="filter-block pull-right">
+                                                <div class="form-group pull-left">
+                                                    <select class="form-control" id="sortbycat">
+                                                        @foreach (var cat in ViewBag.artCategory)
+                                                        {
+                                                            <option value="@cat.Id" @(cnt == 0 ? "selected" : "")>@cat.Name</option>
+                                                            cnt++;
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group pull-right">
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                        Lưu thứ tự sắp xếp
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </header>
+                                        <div class="main-box-body clearfix">
+                                            <div id="tableDetail1">
+                                                @Html.Partial("_HLListEdit", Model.HLCats, new ViewDataDictionary { { "type", 1 } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="highlightModal" tabindex="-1" role="dialog" aria-labelledby="highlightModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="highlightModalLabel">Tin nổi bật</h4>
+            </div>
+            <div class="modal-body" id="highlightBody"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function onHLSucceed(data) {
+            if (data.success == true) {
+                $("#highlightModal").modal("hide");
+                $("#article_" + data.id + " td:nth-child(4)").html('');
+            }
+            else {
+                alert(data.error);
+            }
+        }
+
+        function formatDate(date) {
+            var newdate = new Date(date);
+
+            var dd = newdate.getDate();
+            var mm = newdate.getMonth() + 1;
+            var y = newdate.getFullYear();
+
+            return dd + '/' + mm + '/' + y;
+        }
+
+        function sortableTable() {
+            $(".table tbody").sortable(
+            {
+                update: function (event, ui) {
+                    console.log(event);
+                },
+                change: function (event, ui) {
+                    console.log(event);
+                }
+            });
+
+        }
+
+        $(document).ready(function () {
+            
+            sortableTable();
+
+            $('#sortbycat').on('change', function () {
+                $.get('/Article/GetHighlightByCat/' + $(this).val(), function (data) {
+                    $('#tableDetail1').html(data);
+                    sortableTable();
+                });
+            });
+
+            $('#highlightModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var artId = button.data('id');
+                var hlType = button.data('hltype');
+                var url = '/Article/HighlightArticle?id=' + artId + '&hltype=' + hlType;
+                var off_url = '/Article/DeleteHighlightArticle?id=' + artId + '&hltype=' + hlType;
+                var modal = $(this);
+
+                $.get(url, function (data) {
+                    modal.find('.modal-body').html(data);
+                    $('#StartDatetxt, #EndDatetxt').datetimepicker(
+                    {
+                        format: 'd/m/Y',
+                        timepicker: false
+                    });
+
+                    $('#close-hl-modal').on('click', function () {
+                        modal.modal('hide');
+                    });
+
+                    $('#hlight-off').on('click', function () {
+                        $.post(off_url, function (data) {
+                            modal.modal('hide');
+                            if (data.success == true) {
+                                $("#article_" + artId).remove();
+                            }
+                        });
+                    });
+
+                    $('#HighlightType').on('change', function (e) {
+                        var optionSelected = $("option:selected", this);
+                        var valueSelected = this.value;
+                        var now = new Date();
+
+                        if (valueSelected != 0) {
+                            $('#StartDatetxt').val(formatDate(now));
+                            $('#StartDate').val($('#StartDatetxt').val());
+
+                            if (valueSelected == 1) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 1)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 2) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 7)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 3) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 30)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 4) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 365)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+                            else if (valueSelected == 5) {
+                                $('#EndDatetxt').val(formatDate(now.setDate(now.getDate() + 3650)));
+                                $('#EndDate').val($('#EndDatetxt').val());
+                            }
+
+                            $('#StartDatetxt, #EndDatetxt').prop('disabled', true);
+                        } else {
+                            $('#StartDatetxt, #EndDatetxt').prop('disabled', false);
+                        }
+                    });
+                });
+            });
+
+            $('#sidebar-nav #articleMng').toggleClass("active");
+            $('#sidebar-nav #articleMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#ar-li-4').toggleClass("active");
+            $('#sidebar-nav a#ar-li-4').parent().siblings().removeClass("active");
+        })
+    </script>
+}

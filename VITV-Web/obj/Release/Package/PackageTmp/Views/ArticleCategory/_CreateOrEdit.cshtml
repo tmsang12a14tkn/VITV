@@ -1,0 +1,44 @@
+﻿@model ArticleCategory
+
+@{
+    var choicedCat = ViewData["choicedCat"] != null ? Convert.ToInt32(ViewData["choicedCat"].ToString()) : 0;
+}
+
+@Html.HiddenFor(model=>model.Order)
+@Html.HiddenFor(model => model.ShowInMenu)
+@Html.HiddenFor(model => model.ParentId)
+
+<div class="form-group">
+    <div class="col-lg-offset-1 col-lg-10">
+        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-1 col-lg-10">
+        @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Description, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-1 col-lg-10">
+        <label class="control-label">Danh mục cha</label>
+        @Html.Action("GetParentNode", "ArticleCategory", new { choicedCat = choicedCat })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-1 col-lg-10">
+        @Html.LabelFor(model => model.ProfilePhoto, new { @class = "control-label" })
+        @Html.HiddenFor(model => model.ProfilePhoto)
+        <p>
+            <img id="photoView" width=300 height=300 src="@(Model != null && !String.IsNullOrEmpty(Model.ProfilePhoto) ? Model.ProfilePhoto : "")" />
+            <input id="photoinput" type="file" name="profileFile" accept="image/*">
+            @Html.ValidationMessageFor(model => model.ProfilePhoto, string.Empty, new { @class = "help-block" })
+        </p>
+    </div>    
+</div>

@@ -1,0 +1,206 @@
+﻿@model Equipment
+
+@{
+    ViewBag.Title = "Sửa thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="header smaller lighter blue">Sửa thiết bị</h3>
+        <div>
+            <div class="col-xs-12 col-sm-3 center">
+                <div>
+                    <span class="profile-picture">
+                        <img id="picture" name="picture" class="editable img-responsive" alt="@Model.Name" src="@Model.EquipPicture" />
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                @using (Html.BeginForm("Edit", "Equipment", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Tên thiết bị</label>
+                            <input type="text" class="form-control" name="Name" value="@Model.Name" />
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EmployeeId, "Nhân viên")
+                            @Html.DropDownListFor(model => model.EmployeeId, ((IEnumerable<Employee>)ViewBag.Employees).Select(option => new SelectListItem
+                            {
+                                Text = option.Name,
+                                Value = option.Id,
+                                Selected = (Model != null) && (option.Id == Model.EmployeeId)
+                            }), string.Empty, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EmployeeId, string.Empty)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Status, "Trạng thái")
+                            @Html.TextAreaFor(model => model.Status, new { @class = "autosize-transition form-control", style = "overflow: hidden; word-wrap: break-word; resize: horizontal; height: 52px;" })
+                            @Html.ValidationMessageFor(model => model.Status, string.Empty)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, "Ghi chú")
+                            @Html.TextAreaFor(model => model.Description, new { @class = "autosize-transition form-control", style = "overflow: hidden; word-wrap: break-word; resize: horizontal; height: 52px;" })
+                            @Html.ValidationMessageFor(model => model.Description, string.Empty)
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        <a href="/equipment/index" class="btn btn-default">Hủy</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="/Content/css/jquery-ui.custom.min.css" />
+    <link rel="stylesheet" href="/Content/css/jquery.gritter.min.css" />
+    <link rel="stylesheet" href="/Content/css/select2.min.css" />
+    <link rel="stylesheet" href="/Content/css/bootstrap-editable.min.css" />
+}
+
+@section Scripts {
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+      <script src="~/Scripts/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/jquery-ui.custom.min.js"></script>
+    <script src="~/Scripts/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/Scripts/jquery.gritter.min.js"></script>
+    <script src="~/Scripts/jquery.hotkeys.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/fuelux.spinner.min.js"></script>
+    <script src="~/Scripts/bootstrap-editable.min.js"></script>
+    <script src="~/Scripts/ace-editable.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+
+
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //editables on first profile page
+            $.fn.editable.defaults.mode = 'inline';
+            $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+
+            try {//ie8 throws some harmless exceptions, so let's catch'em
+
+                //first let's add a fake appendChild method for Image element for browsers that have a problem with this
+                //because editable plugin calls appendChild, and it causes errors on IE at unpredicted points
+                try {
+                    document.createElement('IMG').appendChild(document.createElement('B'));
+                } catch (e) {
+                    Image.prototype.appendChild = function (el) { }
+                }
+
+                var last_gritter
+                $('#picture').editable({
+                    type: 'image',
+                    name: 'picture',
+                    value: null,
+                    image: {
+                        //specify ace file input plugin's options here
+                        btn_choose: 'Change image',
+                        droppable: true,
+                        maxSize: 110000,//~100Kb
+
+                        //and a few extra ones here
+                        name: 'picture',//put the field name here as well, will be used inside the custom plugin
+                        on_error: function (error_type) {//on_error function will be called when the selected file has a problem
+                            if (last_gritter) $.gritter.remove(last_gritter);
+                            if (error_type == 1) {//file format error
+                                last_gritter = $.gritter.add({
+                                    title: 'File is not an image!',
+                                    text: 'Please choose a jpg|gif|png image!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            } else if (error_type == 2) {//file size rror
+                                last_gritter = $.gritter.add({
+                                    title: 'File too big!',
+                                    text: 'Image size should not exceed 100Kb!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            }
+                            else {//other error
+                            }
+                        },
+                        on_success: function () {
+                            $.gritter.removeAll();
+                        }
+                    },
+                    url: function (params) {
+                        // ***UPDATE AVATAR HERE*** //
+                        //for a working upload example you can replace the contents of this function with
+                        //examples/profile-avatar-update.js
+
+                        var deferred = new $.Deferred
+
+                        var value = $('#picture').next().find('input[type=hidden]:eq(0)').val();
+                        if (!value || value.length == 0) {
+                            deferred.resolve();
+                            return deferred.promise();
+                        }
+
+
+                        var fileinput = $('input[name="picture"]')[0];
+                        var files = fileinput.files;
+                        var formData = new FormData();
+                        formData.append("X-Requested-With", "xhr");
+                        formData.append("Content-Type", files[0].type);
+                        formData.append("id", "@Model.Id");
+                        formData.append("file", files[0]);
+
+                        var updateProgress = function (oEvent) {
+                            if (oEvent.lengthComputable) {
+                                var percentComplete = oEvent.loaded / oEvent.total;
+                                console.log(percentComplete);
+                                // …
+                            } else {
+                                // Unable to compute progress information since the total size is unknown
+                            }
+                        }
+                        var transferComplete = function (oEvent) {
+                            var response = jQuery.parseJSON(oEvent.target.response);
+                            console.log(response);
+                            $('#picture').get(0).src = response.link;
+
+                            deferred.resolve({ 'status': 'OK' });
+
+                            if (last_gritter) $.gritter.remove(last_gritter);
+                            last_gritter = $.gritter.add({
+                                title: 'Picture Updated!',
+                                text: '...',
+                                class_name: 'gritter-info gritter-center'
+                            });
+                        }
+
+
+                        var oReq = new XMLHttpRequest();
+                        oReq.open("post", "/equipment/UploadPicture", true);
+                        oReq.addEventListener("progress", updateProgress, false);
+                        oReq.addEventListener("load", transferComplete, false);
+                        oReq.send(formData);
+
+                        return deferred.promise();
+                    },
+                    success: function (response, newValue) {
+                    }
+                })
+            } catch (e) { }
+
+            /////////////////////////////////////
+            $(document).one('ajaxloadstart.page', function (e) {
+                //in ajax mode, remove remaining elements before leaving page
+                try {
+                    $('.editable').editable('destroy');
+                } catch (e) { }
+                $('[class*=select2]').remove();
+            });
+        });
+    </script>
+}

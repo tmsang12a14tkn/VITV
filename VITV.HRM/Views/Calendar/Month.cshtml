@@ -1,0 +1,100 @@
+﻿@model CalendarMonthModel
+@{
+    ViewBag.Title = "Lịch làm việc tháng";
+    var firstDOM = (int)(new DateTime(Model.Year, Model.Month, 1).DayOfWeek);
+    var monthLength = DateTime.DaysInMonth(Model.Year, Model.Month);
+    var nextMonth = Model.Month % 12 + 1;
+    var nextYear = Model.Year + Model.Month / 12;
+    var previousMonth = (Model.Month + 10) % 12 + 1;
+    var previousYear = Model.Year - (Model.Month==1?1:0);
+    var notPass = Model.Year <= DateTime.Now.Year && Model.Month < DateTime.Now.Month;
+}
+@section styles
+{
+    <style>
+        .month-cal-hcell
+        {
+            width: 14%;
+        }
+        .month-cal-cell:before{
+	        content: "";
+	        display: block;
+	        padding-top: 25%; 	/* initial ratio of 1:1*/
+        }
+    </style>
+}
+<div class="page-header">
+    <h1>
+        Lịch làm việc
+        <small>
+            <a href="/Employee/ProfilePage/@Model.Employee.Id">
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                @Model.Employee.Name
+            </a>
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class=" input-group pull-left">
+                    <a class="btn btn-sm" href="/Calendar/Month?id=@Model.Employee.Id&y=@previousYear&m=@previousMonth"><</a>
+                    <a class="btn btn-sm @(notPass?"":"disabled")" href="/Calendar/Month?id=@Model.Employee.Id&y=@nextYear&m=@nextMonth">></a>
+                </div>
+            </div>
+            <div class="col-sm-6"><h3 class="text-center">@Model.Month/<a href="/Calendar/Year?id=@Model.Employee.Id&y=@Model.Year">@Model.Year</a></h3></div>
+            <div class="col-sm-3">
+                <div class=" input-group pull-right">
+                    <a class="btn btn-sm" href="/Calendar/Year?id=@Model.Employee.Id">Năm</a>
+                    <a class="btn btn-sm disabled" href="#">Tháng</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-responsive table-bordered">
+                    <thead>
+                        <tr>
+                            @foreach(DayOfWeek dow in Enum.GetValues(typeof(DayOfWeek)))
+                            {
+                                var culture = new System.Globalization.CultureInfo("vi-VN");
+                                var dowName = culture.DateTimeFormat.GetDayName(dow);
+                                <th class="month-cal-hcell text-center">@dowName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var day = 1;
+                        }
+                        @for (int j = 0; j < 6; j++)
+                        {
+                            <tr>
+                                @for (int k = 0; k < 7; k++)
+                                {
+                                    var cellNo = j * 7 + k;
+                                    if (cellNo >= firstDOM && day <= monthLength)
+                                    {
+                                        <td class="month-cal-cell" data-date="@day.ToString("00")/@Model.Month.ToString("00")/@Model.Year">
+                                            <div>@day</div>
+                                        </td>
+                                        day++;
+                                    }
+                                    else
+                                    {
+                                        <td class="month-cal-cell">&nbsp;</td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

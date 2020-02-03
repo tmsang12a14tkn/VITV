@@ -1,0 +1,118 @@
+﻿@model IEnumerable<VideoCategory>
+
+@{
+    ViewBag.Title = "Tổng hợp chương trình";
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+    List<VideoCatGroup> catGroups = ViewBag.CatGroups;
+    var num_row_delay = 1;
+}
+
+@section scripts
+{
+    <script src="~/Scripts/toggle.js"></script>
+    <script>
+        $(".navbar_right_area > li").click(function () {
+            if (!$(this).hasClass("active")) {
+                $(".navbar_right_area li.active").removeClass("active");
+                $(this).addClass("active");
+            }
+        });
+
+        $(".schedule_filter_small").change(function () {
+            var data = $(this).val();
+            filter(data);
+        });
+
+        function filter(groupId) {
+            var catList;
+            if (groupId) {
+                $("div.allprograme_item").hide();
+                var catList = $('div.allprograme_item').filter('[data-groupid*="' + groupId + '"]');
+            }
+            else {
+                var catList = $("div.allprograme_item");
+            }
+            catList.show();
+            catList.filter(':even').removeClass('odd').addClass('even');
+            catList.filter(':odd').removeClass('even').addClass('odd');
+        }
+        filter();
+    </script>
+}
+
+<div id="allprograme" class="row allprograme_area">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#allprograme_filter">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="allprograme_filter">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="active"><a href="@Url.Action("Index", "VideoCategory")">Tổng hợp các chương trình</a></li>
+                            <li><a href="@Url.Action("Index", "ProgramScheduleDetails")">Lịch phát sóng</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row dayline wow fadeInDown">
+        <div class="container">
+            <select class="form-control schedule_filter_small">
+                <option value="" onload="filter(0)" selected="selected">Tất cả</option>
+                @foreach (var catGroup in catGroups)
+                {
+                    <option value="@catGroup.Id">@catGroup.Name</option>
+                }
+            </select>
+
+            <nav class="schedule_filter_large">
+                <ul class="list-inline navbar_right_area">
+                    <li class="active"><a href="#" onclick="filter(0)">Tất cả</a></li>
+                    @foreach (var catGroup in catGroups)
+                    {
+                        <li><a href="#" data-groupid="@catGroup.Id" onclick="filter('@catGroup.Id')"><h4>@catGroup.Name</h4></a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var vc in Model)
+        {
+            <div class="row allprograme_item" data-groupid="@vc.GroupId">
+                <div class="container allprograme_container">
+                    <div class="col-md-4 allprograme_img wow fadeInLeft" data-wow-duration="400ms" data-wow-delay="@(num_row_delay * 100)ms">
+                        <a href="@Url.Action("Details", "VideoCategory", new { title = vc.UniqueTitle })"><img src="@vc.ProfilePhoto" /></a>
+                    </div>
+                    <div class="col-md-8 allprograme_content wow fadeInRight" data-wow-duration="400ms" data-wow-delay="@(num_row_delay * 100)ms">
+                        <a href="@Url.Action("Details", "VideoCategory", new{ title = vc.UniqueTitle })">@vc.Name</a>
+                        <span>@vc.IntroductionBonus</span>
+                        <p>@Html.Raw(HttpUtility.HtmlDecode(vc.Introduction))</p>
+                    </div>
+                </div>
+            </div>
+            if (num_row_delay >= 4)
+            {
+                num_row_delay = 1;
+            }
+            num_row_delay++;
+        }
+    </div>
+</div>
+
+@section seo{
+    <meta name="description" content="Tổng hợp các chương trình của VITV, các chuyên mục đặc sắc, tin tực, chuyên mục, giải trí...">
+    <meta name="keywords" content="VITV Tổng hợp chương trình,tong hop chuong trinh">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/Content/Images/logo.png" />
+    <meta property="og:image:width" content="286" />
+    <meta property="og:image:height" content="60" />
+}

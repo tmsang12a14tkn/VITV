@@ -1,0 +1,160 @@
+﻿@model TaskRequest
+@{
+    List<Employee> employees = ViewBag.Employees;
+}
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Sửa nhiệm vụ
+    </div>
+</div>
+@using (Html.BeginForm("Edit", "TaskRequest", FormMethod.Post, 
+            //new AjaxOptions
+            //{
+            //    OnSuccess = "OnSuccessAddRequest",
+            //}, 
+            new { enctype = "multipart/form-data", @class = "form-horizontal request-form", id = "edit-request-form" }))
+{
+    @Html.HiddenFor(model => model.ReceivedEmployeeIds)
+    @Html.HiddenFor(model => model.RequestedEmployeeId)
+    @Html.HiddenFor(model=>model.ProjectId)
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-title"> Tiêu đề </label>
+
+            <div class="col-sm-10">
+                <input type="text" id="form-title" placeholder="Title" name="Title" class="col-xs-12 col-sm-12" value="@Model.Title">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-content"> Nội dung </label>
+
+            <div class="col-sm-10">
+                <div class="wysiwyg-editor" id="editor-content">@Html.Raw(Model.Content)</div>
+                <input type="hidden" id="form-content" name="Content" placeholder="Content" value="@Model.Content"/>
+            </div>
+        </div>
+        <div class="form-group">
+            
+            <label class="col-sm-2 control-label no-padding-right" for="tbEmployees">Quản lý</label>
+
+            <div class="col-sm-10">
+                <select data-placeholder="..." multiple="multiple" id="tbEmployees" name="tbEmployees" class="form-control">
+                    @foreach (var ep in employees)
+                    {
+                        <option value="@ep.Id" data-img-src="@ep.ProfilePicture" @(Model.ReceivedEmployees.Any(e=>e.Id == ep.Id)?"selected":"")>@ep.Name</option>
+                    }
+                </select>
+
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="col-sm-2 control-label no-padding-right">Ưu tiên</label>
+            <div class="col-sm-10 form-inline">
+                <div class="row">
+                    <div class="col-sm-4 radio">
+                        <label>
+                            <input name="Piority" value="0" type="radio" class="ace" />
+                            <span class="lbl">Không quan trọng</span>
+                        </label>
+                    </div>
+
+                    <div class="col-sm-4 radio">
+                        <label>
+                            <input name="Piority" value="1" type="radio" checked class="ace" />
+                            <span class="lbl">Bình thường</span>
+                        </label>
+                    </div>
+
+                    <div class="col-sm-4 radio">
+                        <label>
+                            <input name="Piority" value="2" type="radio" class="ace" />
+                            <span class="lbl">Quan trọng</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right">Thời gian</label>
+            <div class="col-sm-10 form-inline">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="RequestFrom" id="request-from" value="@(Model.RequestFrom.HasValue? Model.RequestFrom.Value.ToString("dd/MM/yyyy HH:mm"):"")"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="RequestTo" id="request-to" value="@(Model.RequestTo.HasValue? Model.RequestTo.Value.ToString("dd/MM/yyyy HH:mm"):"")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<h4>Liên quan</h4>
+        <div class="hr hr-18 dotted hr-double"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="tbDevice">Thiết bị</label>
+            <div class="col-sm-10">
+                <select data-placeholder="..." multiple="multiple" id="tbDevice" name="tbDevice" class="form-control"></select>
+            </div>
+        </div>*@
+       
+        @*<div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="attachments">Thêm tệp đính kèm</label>
+            <div class="col-sm-10">
+                <div class="row">
+                    @{
+                        var imageExtentions = new List<string>{".jpg",".jpeg",".png",".gif",".svg",".bmp",".tiff"};
+                        var videoExtentions = new List<string>{"mpg","mpeg","flv","mov","avi","swf","mp4","mkv","webm","wmv","3gp"};
+                        var audioExtentions = new List<string>{"mp3","ogg","wav","wma","amr","aac"};
+                        foreach (var attachment in Model.Attachments)
+                        {
+                            <label class="ace-file-input ace-file-multiple uploaded-attachment col-sm-4">
+                                <input type="hidden" value="@attachment.AttachmentLink" name="uploadedAttachments" />
+                                <span class="ace-file-container hide-placeholder selected">
+                                    <span class="ace-file-name" data-title="@Path.GetFileName(attachment.AttachmentLink)">
+                                    @{
+                                        var extention = Path.GetExtension(attachment.AttachmentLink);
+                                        if (imageExtentions.Contains(extention))
+                                        {
+                                            <img class="middle" style="width: 50px; height: 50px;" src="@attachment.AttachmentLink">
+                                            <i class="ace-icon fa fa-picture-o file-image"></i>
+                                        }
+                                        else if (videoExtentions.Contains(extention))
+                                        {
+                                            <i class="ace-icon fa fa-film file-video"></i>
+                                        }
+                                        else if (audioExtentions.Contains(extention))
+                                        {
+                                            <i class="ace-icon fa fa-music file-audio"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="ace-icon fa fa-file"></i>
+                                        }
+                                    }
+                                    </span>
+                                </span>
+                                <a class="remove" href="#">
+                                    <i class=" ace-icon fa fa-times"></i>
+                                </a>
+                            </label>
+                        }
+                    }
+                </div>
+               
+                <input multiple type="file" id="attachments" name="attachments" />
+            </div>
+        </div>*@
+        
+
+    </div>
+
+    <div class="modal-footer no-margin-top">
+        
+        <button type="submit" class="btn btn-sm btn-success pull-right">
+            <i class="ace-icon fa fa-times"></i>
+            Sửa
+        </button>
+    </div>
+}

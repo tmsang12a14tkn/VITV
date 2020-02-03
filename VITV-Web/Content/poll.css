@@ -1,0 +1,170 @@
+﻿.poll_panel{
+    border-style:solid;
+    border-color: #3498db;
+}
+
+.poll_name {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.radio {
+    padding-left: 2px;
+}
+
+    .radio label {
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        padding-left: 30px;
+        padding-right: 10px;
+        padding-bottom: 5px;
+    }
+
+input[type="radio"] {
+    line-height: normal;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.radio input[type=radio], .radio-inline input[type=radio] {
+    float: left;
+    margin-left: -20px;
+}
+
+.radio input[type=radio] {
+    display: none;
+}
+
+.radio label:before {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #e7ebee;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    content: "";
+    display: inline-block;
+    height: 20px;
+    left: 0;
+    margin-right: 10px;
+    position: absolute;
+    width: 20px;
+}
+
+.radio label:after {
+    background-color: #3498db;
+    border: 1px solid #3498db;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    content: "";
+    display: inline-block;
+    font-size: 13px;
+    height: 16px;
+    left: 2px;
+    position: absolute;
+    text-align: center;
+    top: 2px;
+    -o-transform: scale(0);
+    -ms-transform: scale(0);
+    -moz-transform: scale(0);
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    width: 16px;
+}
+
+.radio input[type=radio]:checked + label:before, .radio input[type=radio]:hover + label:before {
+    border: 1px solid #3498db;
+}
+
+.radio input[type=radio]:checked + label:after {
+    line-height: 16px;
+    -o-transform: scale(0.63);
+    -ms-transform: scale(0.63);
+    -moz-transform: scale(0.63);
+    -webkit-transform: scale(0.63);
+    transform: scale(0.63);
+    -o-transition: -o-transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -ms-transition: -ms-transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -moz-transition: -moz-transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -webkit-transition: -webkit-transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -o-transition: transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -ms-transition: transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -moz-transition: transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    -webkit-transition: transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+    transition: transform 0.1s 0s cubic-bezier(0.4,0.02,0.3,1.2);
+}
+/*.checkbox label, .radio label {
+    min-height: 20px;
+    padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+}
+.checkbox-nice {
+    position: relative;
+    padding-left: 15px;
+}
+
+    .checkbox-nice input[type=checkbox] {
+        visibility: hidden;
+    }
+
+    .checkbox-nice label {
+        padding-top: 3px;
+    }
+
+    .checkbox-nice.checkbox-inline > label {
+        margin-left: 16px;
+    }
+
+    .checkbox-nice label:before {
+        cursor: pointer;
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        left: 1px;
+        top: 1px;
+        background: #ffffff;
+        content: "";
+        border: 1px solid #e7ebee;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+
+    .checkbox-nice label:after {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: alpha(opacity=0);
+        opacity: 0;
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 7px;
+        background: transparent;
+        top: 7px;
+        left: 6px;
+        border: 3px solid #3498db;
+        border-top: none;
+        border-right: none;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+
+    .checkbox-nice label:hover::after {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+        filter: alpha(opacity=30);
+        opacity: 0.3;
+    }
+
+    .checkbox-nice input[type=checkbox]:checked + label:after {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+        filter: alpha(opacity=100);
+        opacity: 1;
+    }*/
+

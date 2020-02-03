@@ -1,0 +1,43 @@
+﻿@media only screen and (max-width : 540px) 
+{    
+    .chat-popup
+    {
+        display: none !important;
+    }
+}
+#containerchat{
+    position:absolute;
+    right: 0px;
+    bottom:0px;
+}
+
+.chat_window
+{
+    display: none;
+    position: fixed;
+    bottom: 0px;
+    right: 220px;
+    height: 405px;
+    width: 400px;
+    z-index:100;
+}
+
+.my_btn_chat{
+    background: #d9534f !important;
+}
+
+.chat-user-item td{
+    border-top:none !important;
+}
+
+.chat-user-item td .offline{
+    color: #e7e7e7;
+}
+
+.chat-user-item td .online{
+   color: #629b58;
+}
+
+#loader_chat{
+    margin-left: 150px;
+}

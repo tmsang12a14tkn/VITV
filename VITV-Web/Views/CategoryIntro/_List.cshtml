@@ -1,0 +1,107 @@
+﻿@model IEnumerable<CategoryIntro>
+
+@*@foreach (CategoryIntro intro in Model)
+{
+    <div class="col-lg-3 col-md-4 col-sm-6" id="video_@intro.Id">
+        <div class="main-box clearfix profile-box-menu">
+            <div class="main-box-body clearfix">
+                <div class="profile-box-header @(intro.Selected == false ? "emerald-bg" : "green-bg") clearfix intro-item" data-catid="@intro.VideoCategoryId">
+                    <img src="@intro.Thumbnail" alt="" class="profile-img img-responsive">
+                    <p>@intro.Title</p>
+                    <div class="icon-box pull-right">
+                        <a href="/CategoryIntro/Edit/@intro.Id" data-backdrop="static" data-toggle="modal" data-target="#introModal" class="btn pull-left" title="Chỉnh sửa"
+                           data-ajax="true"
+                           data-ajax-complete=""
+                           data-ajax-mode="replace"
+                           data-ajax-update="#introContent">
+                            <i class="fa fa-edit fa-inverse"></i>
+                        </a>
+                        <a href="/CategoryIntro/Delete/@intro.Id" data-backdrop="static" class="btn pull-left" title="Xóa" data-toggle="modal" data-target="#introModal">
+                            <i class="fa fa-trash-o fa-inverse"></i>
+                        </a>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-nice checkbox-inline">
+                            <input type="checkbox" name="checkboxActive_@intro.VideoCategoryId" data-id="@intro.Id" data-catid="@intro.VideoCategoryId" id="checkbox_@intro.Id" @(intro.Selected == true ? "checked" : "")>
+                            <label for="checkbox_@intro.Id"></label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}*@
+
+@foreach (CategoryIntro intro in Model)
+{
+    <tr class="tbodyvideo">
+        <td>
+            <div class="intro_clearfix intro-item" data-catid="@intro.VideoCategoryId">
+
+                <nav>
+                    @*<div class="radio">
+                    <input type="radio" name="optionsRadios_@intro.VideoCategoryId" id="optionsRadios_@intro.Id" @(intro.Selected == true ? "checked" : "") data-id="@intro.Id" data-catid="@intro.VideoCategoryId">
+                    <label for="optionsRadios_@intro.Id">
+                    </label>
+                </div>*@
+                    <div class="checkbox-nice checkbox-inline">
+                        <input type="checkbox" name="checkboxActive_@intro.VideoCategoryId" data-id="@intro.Id" data-catid="@intro.VideoCategoryId" id="checkbox_@intro.Id" @(intro.Selected == true ? "checked" : "")>
+                        <label for="checkbox_@intro.Id"></label>
+                    </div>
+                </nav>
+
+                <nav>
+                    <img src="@intro.Thumbnail" alt="" width="70" height="50">
+                </nav>
+
+                <section>
+                    <span><b><span>@intro.Title</span></b></span>
+                    @*<p>Notice we have put a clearfix on the div container. It is not needed in this example, but it would be if the nav element was longer than the non-floated section content.</p>*@
+                </section>
+
+                @*<section>
+                <span>section</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet.</p>
+            </section>*@
+
+            </div>
+                    @*<div class="checkbox-nice checkbox-inline">
+                        <input type="checkbox" name="checkboxActive_@intro.VideoCategoryId" data-id="@intro.Id" data-catid="@intro.VideoCategoryId" id="checkbox_@intro.Id" @(intro.Selected == true ? "checked" : "")>
+                        <label for="checkbox_@intro.Id"></label>
+                    </div>
+                    <img src="@intro.Thumbnail" alt="" width="70" height="50">
+                    <p style="word-wrap: break-word"><b><span>@intro.Title</span></b></p>*@
+        </td>        
+        <td style="">
+            <a href="/CategoryIntro/Edit/@intro.Id" data-backdrop="static" data-toggle="modal" data-target="#introModal" class="table-link gray" title="Chỉnh sửa"
+               data-ajax="true"
+               data-ajax-complete=""
+               data-ajax-mode="replace"
+               data-ajax-update="#introContent">
+                <span class="fa-stack">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+
+            <a class="table-link gray" data-toggle="modal" href="#videoModal" data-video="@intro.Url" title="Xem video">
+                <span class="fa-stack">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+
+            <a href="/CategoryIntro/Delete/@intro.Id" class="table-link danger" data-backdrop="static" title="Xóa" data-toggle="modal" data-target="#introModal"
+               data-ajax="true"
+               data-ajax-complete=""
+               data-ajax-mode="replace"
+               data-ajax-update="#introContent">
+                <span class="fa-stack">
+                    <i class="fa fa-square fa-stack-2x"></i>
+                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+        </td>
+    </tr>
+}

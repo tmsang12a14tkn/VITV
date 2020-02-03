@@ -1,0 +1,106 @@
+﻿@model EmployeeModel
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Phone, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Phone, string.Empty, new { @class = "help-block" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Email, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ProfilePicture, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.ProfilePicture)
+    <div class="col-lg-10">
+        <img id="photoView" width=200 height=200 src="@(Model != null && !String.IsNullOrEmpty(Model.ProfilePicture) ? Model.ProfilePicture : "")" />
+        <input class="form-control" id="photoinput" type="file" name="profileFile" accept="image/*">
+        @*<input type="hidden" name="typeimage" id="typeimage" value="1"/> 
+        <div class="btn btn-primary" id="imageempty">Hình ảnh trống</div>*@
+    </div>
+    @Html.ValidationMessageFor(model => model.ProfilePicture, string.Empty, new { @class = "help-block" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.PositionId, new { @class = "col-lg-2 control-label" })
+    
+    <div class="col-lg-10">
+        @Html.DropDownListFor(model => model.PositionId, ((IEnumerable<Position>)ViewBag.PossiblePositions).Select(option => new SelectListItem
+                        {
+                            Text = (option == null ? "None" : option.Name),
+                            Value = (option == null ? "0" : option.Id.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                            Selected = (Model != null) && (option.Id == Model.PositionId)
+                        }), "Chọn chức vụ", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PositionId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "control-label col-lg-2" })
+    <div class="col-lg-10">
+        <ul style="list-style: none; padding-left: 0;">
+            @if(Model != null)
+            {
+                foreach (Role kw in ViewBag.PossibleRoles)
+                {
+                    <li><input type="checkbox" value="@kw.Id" name="Roles" checked="@(Model.Roles != null && Model.Roles.Contains(kw.Id))" /> @kw.Name</li>
+                }
+            }
+            else
+            {
+                foreach (Role kw in ViewBag.PossibleRoles)
+                {
+                    <li><input type="checkbox" value="@kw.Id" name="Roles" /> @kw.Name</li>
+                }
+            }
+            
+        </ul>
+        @Html.ValidationMessageFor(model => model.Roles, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Introduction, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Introduction, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Introduction, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Biography, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.Biography, new { @class = "form-control editable" })
+        @Html.ValidationMessageFor(model => model.Biography, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <div class="checkbox-nice">
+            <input type="checkbox" id="IsShow" name="IsShow" value="true" @(Model == null || Model.Id == default(int) ? "" : (Model.IsShow ? "checked" : ""))>
+            <label for="IsShow">@Html.DisplayNameFor(model => model.IsShow)</label>
+            <input name="IsShow" type="hidden" value="false" />
+            @Html.ValidationMessageFor(model => model.IsShow, string.Empty, new { @class = "help-block" })
+        </div>
+    </div>
+</div>

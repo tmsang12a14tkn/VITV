@@ -1,0 +1,347 @@
+﻿@using System.Globalization
+@model VideoModel
+@{
+    var reporters = ViewContext.ViewBag.PassingReporters;
+}
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.IsHot)
+@Html.HiddenFor(model => model.ScheduleDetailId)
+@Html.HiddenFor(model => model.PublishedTime)
+@Html.HiddenFor(model => model.DisplayTime)
+@Html.HiddenFor(model => model.UploaderId)
+@Html.HiddenFor(model => model.UploadedTime)
+@Html.HiddenFor(model => model.VideoWidth)
+@Html.HiddenFor(model => model.VideoHeight)
+@Html.HiddenFor(model => model.CategoryId)
+<input type="hidden" name="categoryname" value="@ViewBag.categoryname" />
+
+<div class="col-md-9 col-lg-9" id="columnleft">
+    <div class="main-box">
+        <header class="main-box-header">
+            
+        </header>
+        <div class="main-box-body clearfix">
+            @Html.ValidationSummary(true)
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Title, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @if (ViewBag.CanEditTitle == true)
+                    {
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @readonly = "readonly" })
+                    }
+                    @Html.ValidationMessageFor(model => model.Title, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+
+            @* Video URL *@
+            <div class="form-group">
+                @Html.LabelFor(model => model.Url, new { @class = "col-lg-2 control-label" })
+                @Html.HiddenFor(model => model.Url)
+                @Html.HiddenFor(model => model.Duration)
+                <div class="col-lg-10">
+                    <div id="video-progress" class="progress progress-striped active">
+                        <div class="bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                    <div id="videoupload">
+                        <input id="file_upload" name="file_upload" class="file_upload" type="file" accept="video/*" />
+                    </div>
+                    <video id="video" class="video-js" controls width="850" height="426" data-settings="autoresize:fit;">
+                        @if (Model != null && !String.IsNullOrEmpty(Model.Url))
+                        {
+                            <source id="videosource" src="@Model.Url" type='video/mp4'>
+                        }
+                    </video>
+
+
+                    @Html.ValidationMessageFor(model => model.Url, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Thumbnail, new { @class = "col-lg-2 control-label" })
+                @Html.HiddenFor(model => model.Thumbnail)
+                @Html.HiddenFor(model => model.MobileThumbnail)
+                <div class="col-lg-10">
+                    <img id="thumbnailImg" width="100%" height="426" src="@((Model == null || String.IsNullOrEmpty(Model.Thumbnail))? "/Images/NoImage.png" : Model.Thumbnail)" />
+                    <div id="photoupload">
+                        <input type="button" class="btn btn-success" id="setThumbnailBtn" value="Đặt làm hình đại diện từ video" disabled="disabled" />
+                        <input type="file" class="form-control" id="photoinput" name="thumbnailFile" value="Chọn hình ảnh từ máy tính" accept="image/*" />
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.Thumbnail, string.Empty, new { @class = "help-block" })
+            </div>
+
+
+            <div class="form-group">
+               <label for="" class="col-lg-2 control-label">Chọn tập tin phụ đề</label>
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.Subtitle)
+                    <input type="file" accept="*.vtt" class="form-control" name="subtitleFile" value="Chọn phụ đề" />    
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Content, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Content, new { @class = "form-control editable" })
+                    @Html.ValidationMessageFor(model => model.Content, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+
+            @* Youtube URL *@
+            <div class="form-group">
+                @Html.LabelFor(model => model.YoutubeUrl, new { @class = "col-lg-2 control-label" })
+                <div class="col-lg-10">
+                    @Html.TextBoxFor(model => model.YoutubeUrl, new { @class = "form-control", placeholder = "Không bắt buộc" })
+                    @Html.ValidationMessageFor(model => model.YoutubeUrl, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" title="Ưu tiên nguồn video xuất hiện trên web, nếu Youtube không có thì hiển thị nguồn lưu trữ của VITV">Ưu tiên Video</label>
+                <div class="col-md-10">
+                    <div class="radio radio-inline">
+                        <input type="radio" name="VideoPiority" id="radio-inl-1" value="0" @(Model.VideoPiority == 0 ? "checked" : "") />
+                        <label for="radio-inl-1">
+                            Từ Youtube
+                        </label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="VideoPiority" id="radio-inl-2" value="1" @(Model.VideoPiority == 1 ? "checked" : "") />
+                        <label for="radio-inl-2">
+                            Từ lưu trữ VITV
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <span id="draftSaveTime"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-lg-3">
+    <div class="main-box">
+        <header class="main-box-header">
+            Đăng
+        </header>
+        <div class="main-box-body">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <span>Ngày đăng:</span>
+                </div>
+                <div class="col-lg-9">
+                    @Html.HiddenFor(model => model.PublishImmediately)
+                    @Html.HiddenFor(model => model.PublishedTime)
+                    @if (Model.PublishImmediately)
+                    {
+                        <span id="PublishedTime-label">Ngay lập tức</span>
+                    }
+                    else
+                    {
+                        <span id="PublishedTime-label">@Model.PublishedTime.ToString("dd/MM/yyyy HH:mm")</span>
+                    }
+                    <a href="#published-time-edit" data-toggle="collapse">Sửa</a>
+                </div>
+            </div>
+            <div class="form-group collapse" id="published-time-edit">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    @Html.TextBox("PublishedTime-txt", Model.PublishedTime.ToString("dd/MM/yyyy HH:mm"), new { @class = "form-control datetimepicker" })
+                    @Html.ValidationMessageFor(model => model.PublishedTime, string.Empty, new { @class = "help-block" })
+                </div>
+                <div class="input-group">
+                    <input type="button" class="btn btn-default" id="changePublishedTime-btn" value="OK" />
+                    <a class="btn btn-default" data-toggle="collapse" href="#published-time-edit">Hủy</a>
+                </div>
+            </div>
+            @if (!Model.IsPublished)
+            {
+                <button type="button" id="saveDraft-btn" class="btn btn-primary" name="IsPublished" value="False">Lưu nháp</button>
+                <button type="submit" class="btn btn-success" name="IsPublished" value="True">Đăng</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-success" name="IsPublished" value="True">
+                    <i class="fa fa-save fa-lg"></i>        
+            Cập nhật</button>
+            }
+        </div>
+    </div>
+
+    @*<div class="main-box">
+            <header class="main-box-header">
+                Đăng
+            </header>
+            <div class="main-box-body">
+                <button type="submit" class="btn btn-success" name="IsPublished" value="True">Đăng</button>
+            </div>
+        </div>*@
+    @*<div class="main-box">
+            <header class="main-box-header clearfix">
+                Ngày đăng
+            </header>
+            <div class="main-box-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(model => model.PublishedTime, new { @class = "form-control datetimepicker" })
+                        @Html.ValidationMessageFor(model => model.PublishedTime, string.Empty, new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+    @if (ViewBag.PossibleSpecialEvent != null && ViewBag.PossibleSpecialEvent.Count > 0)
+    {
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                Chọn sự kiện đặc biệt
+            </header>
+            <div class="main-box-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @*<label><input type="radio" name="SpecialEventId" value="null" checked>Không chọn</label>
+                            @foreach(SpecialEvent s in ViewBag.PossibleSpecialEvent)
+                            {
+                                <label><input type="radio" name="SpecialEventId" value="@s.Id">@s.Name</label>
+                            }*@
+                        @Html.DropDownListFor(model => model.SpecialEventId, ((IEnumerable<SpecialEvent>)ViewBag.PossibleSpecialEvent).Select(option => new SelectListItem
+                        {
+                            Text = (option == null ? "None" : option.Name.ToString(CultureInfo.InvariantCulture)),
+                            Value = option.Id.ToString(),
+                            Selected = (Model != null) && (option.Id == Model.SpecialEventId)
+                        }), "Chọn sự kiện", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SpecialEventId, string.Empty, new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @*<div class="main-box">
+        <header class="main-box-header clearfix">
+            Chuyên mục
+        </header>
+        <div class="main-box-body">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.CategoryId, ((IEnumerable<VideoCategory>)ViewBag.PossibleCategories).Select(option => new SelectListItem
+                    {
+                        Text = (option == null ? "None" : option.Name.ToString(CultureInfo.InvariantCulture)),
+                        Value = option.Id.ToString(),
+                        Selected = (Model != null) && (option.Id == Model.CategoryId)
+                    }), "chon", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CategoryId, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="main-box video-spinner">
+        <header class="main-box-header clearfix">
+            Bỏ qua thời gian giới thiệu trong video
+        </header>
+        <div class="main-box-body">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-xs-6 col-md-4">
+                        <p>Giờ</p>
+                        <p style="position:relative">
+                            @Html.TextBoxFor(model => model.HourSkip, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.HourSkip, string.Empty, new { @class = "help-block" })
+                        </p>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                        <p>Phút</p>
+                        <p style="position:relative">
+                            @Html.TextBoxFor(model => model.MinuteSkip, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.MinuteSkip, string.Empty, new { @class = "help-block" })
+                        </p>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                        <p>Giây</p>
+                        <p style="position:relative">
+                            @Html.TextBoxFor(model => model.SecondSkip, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.SecondSkip, string.Empty, new { @class = "help-block" })
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-box">
+        <header class="main-box-header clearfix">
+            Thực hiện bởi
+        </header>
+        <div class="main-box-body">
+            <div class="form-group">
+                <div class="col-lg-12">
+                    @Html.HiddenFor(model => model.ReporterIds)
+                    @{
+                        var chkIds = new List<int>();
+                        var hasReporter = false;
+                        if (!string.IsNullOrEmpty(Model.ReporterIds))
+                        {
+                            hasReporter = true;
+                            var arrIds = Model.ReporterIds.Split(',');
+                            foreach (string id in arrIds)
+                            {
+                                if (!string.IsNullOrWhiteSpace(id))
+                                {
+                                    var idNormalize = id.Trim();
+                                    chkIds.Add(Convert.ToInt32(idNormalize));
+                                }
+                            }
+                        }
+                    }
+                    <select data-placeholder="..." multiple="multiple" id="tbReporters" name="tbReporters" class="form-control">
+                        @foreach (var rp in reporters)
+                        {
+                            <option value="@rp.Id" @(hasReporter && chkIds.Count > 0 && chkIds.Contains(rp.Id) ? "selected" : "") data-img-src="@rp.ProfilePicture">@rp.Name</option>
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(model => model.ReporterIds, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-box">
+        <header class="main-box-header clearfix">
+            Từ khóa
+        </header>
+        <div class="main-box-body">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Keywords, string.Empty, new { @class = "help-block" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal wizard-modal in" role="dialog" id="existFileModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Video</h4>
+            </div>
+            <div class="modal-body">
+                <p>Video đã tồn tại &hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalReuseBtn" class="btn btn-primary">Sử dụng lại video</button>
+                <button type="button" id="modalOverrideBtn" class="btn btn-primary">Ghi đè</button>
+                <button type="button" id="modalCancalBtn" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

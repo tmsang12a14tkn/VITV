@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="vitv.vn" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="GoogleAnalyticContext-Web.config Connection String" description="" value="GoogleAnalyticContext_ConnectionString" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='GoogleAnalyticContext']/@connectionString" />
+  </parameter>
+  <parameter name="MarketInfoContext-Web.config Connection String" description="" value="Data Source=192.168.0.240;Initial Catalog=MarketInfo_Reuters;Persist Security Info=True;User ID=vitv;Password=Abc@@123;MultipleActiveResultSets=True" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='MarketInfoContext']/@connectionString" />
+  </parameter>
+  <parameter name="ReutersContext-Web.config Connection String" description="" value="Data Source=192.168.0.240;Initial Catalog=DB_REUTERS;Persist Security Info=True;User ID=vitv;Password=Abc@@123;MultipleActiveResultSets=True" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='ReutersContext']/@connectionString" />
+  </parameter>
+  <parameter name="StoreInfoContext-Web.config Connection String" description="" value="Data Source=115.79.62.189;Initial Catalog=VITV_MarketInfo;Persist Security Info=True;User ID=vitv;Password=Abc@@123;MultipleActiveResultSets=True" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='StoreInfoContext']/@connectionString" />
+  </parameter>
+  <parameter name="VITVContext-Web.config Connection String" description="" value="Data Source=115.79.62.189;Initial Catalog=VITV;Persist Security Info=True;User ID=vitv;Password=Abc@@123;MultipleActiveResultSets=True" tags="">
+    <parameterEntry kind="XmlFile" scope="D:\\VITV-TFS\\VITV\\VITV-Web\\VITV-Web\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='VITVContext']/@connectionString" />
+  </parameter>
+</parameters>

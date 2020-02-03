@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Admin", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+    }
+        <ul class="nav navbar-nav pull-right">
+            <li class="dropdown profile-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="~/Content/assets/Flag-S-02.jpg" alt="" />
+                    <span class="hidden-xs">@User.Identity.GetUserName()</span> <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a href="/Admin/Management"><i class="fa fa-cog"></i>Quản lý người dùng</a></li>
+                        <li><a href="/Role/Management"><i class="fa fa-cog"></i>Quản lý vai trò</a></li>
+                        <li><a href="/Admin/PagePermission"><i class="fa fa-cog"></i>Quản lý truy cập trang</a></li>
+                    }
+                    <li><a href="/Admin/ChangePassword?userId=@User.Identity.GetUserId()"><i class="fa fa-cog"></i>Thay đổi mật khẩu</a></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-power-off"></i>Đăng xuất</a></li>
+                </ul>
+            </li>
+            <li class="hidden-xxs">
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="btn">
+                    <i class="fa fa-power-off"></i>
+                </a>
+            </li>
+        </ul>
+    
+}

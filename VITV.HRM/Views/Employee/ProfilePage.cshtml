@@ -1,0 +1,1282 @@
+﻿@model ProfilePageModel
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1>@Model.Employee.Name</h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="clearfix">
+
+            <div class="pull-right">
+                <span class="green middle bolder">Choose profile: &nbsp;</span>
+
+                <div class="btn-toolbar inline middle no-margin">
+                    <div data-toggle="buttons" class="btn-group no-margin">
+                        <label class="btn btn-sm btn-yellow active">
+                            <span class="bigger-110">1</span>
+
+                            <input type="radio" value="1" />
+                        </label>
+
+                        <label class="btn btn-sm btn-yellow">
+                            <span class="bigger-110">2</span>
+
+                            <input type="radio" value="2" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hr dotted"></div>
+
+        <div>
+            <div id="user-profile-1" class="user-profile row">
+                <div class="col-xs-12 col-sm-3 center">
+                    <div>
+                        <span class="profile-picture">
+                            <img id="avatar" class="editable img-responsive" alt="@Model.Employee.Name" src="@Model.Employee.ProfilePicture" />
+                        </span>
+
+                        <div class="space-4"></div>
+
+                        <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                            <div class="inline position-relative">
+                                <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                    <i class="ace-icon fa fa-circle light-green"></i>
+                                    &nbsp;
+                                    <span class="white">@Model.Employee.Name</span>
+                                </a>
+
+                                <ul class="align-left dropdown-menu dropdown-caret dropdown-lighter">
+                                    <li class="dropdown-header"> Change Status </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="ace-icon fa fa-circle green"></i>
+                                            &nbsp;
+                                            <span class="green">Available</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="ace-icon fa fa-circle red"></i>
+                                            &nbsp;
+                                            <span class="red">Busy</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="ace-icon fa fa-circle grey"></i>
+                                            &nbsp;
+                                            <span class="grey">Invisible</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-6"></div>
+
+                    <div class="profile-contact-info">
+                        <div class="profile-contact-links align-left">
+                            <a href="/Calendar/Index/@Model.Employee.Id" class="btn btn-link">
+                                <i class="ace-icon fa fa-calendar bigger-120 green"></i>
+                                Lịch làm việc
+                            </a>
+
+                            <a href="#" class="btn btn-link">
+                                <i class="ace-icon fa fa-envelope bigger-120 pink"></i>
+                                Send a message
+                            </a>
+
+                            <a href="#" class="btn btn-link">
+                                <i class="ace-icon fa fa-globe bigger-125 blue"></i>
+                                @Model.Employee.ApplicationUser.Email
+                            </a>
+                        </div>
+
+                        <div class="space-6"></div>
+
+                        <div class="profile-social-links align-center">
+                            <a href="#" class="tooltip-info" title="" data-original-title="Visit my Facebook">
+                                <i class="middle ace-icon fa fa-facebook-square fa-2x blue"></i>
+                            </a>
+
+                            <a href="#" class="tooltip-info" title="" data-original-title="Visit my Twitter">
+                                <i class="middle ace-icon fa fa-twitter-square fa-2x light-blue"></i>
+                            </a>
+
+                            <a href="#" class="tooltip-error" title="" data-original-title="Visit my Pinterest">
+                                <i class="middle ace-icon fa fa-pinterest-square fa-2x red"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="hr hr12 dotted"></div>
+
+                    <div class="clearfix">
+                        <div class="grid2">
+                            <span class="bigger-175 blue">25</span>
+
+                            <br />
+                            Followers
+                        </div>
+
+                        <div class="grid2">
+                            <span class="bigger-175 blue">12</span>
+
+                            <br />
+                            Following
+                        </div>
+                    </div>
+
+                    <div class="hr hr16 dotted"></div>
+                </div>
+
+                <div class="col-xs-12 col-sm-9">
+                    <div class="center">
+                        <span class="btn btn-app btn-sm btn-light no-hover">
+                            <span class="line-height-1 bigger-170 blue"> 1,411 </span>
+
+                            <br />
+                            <span class="line-height-1 smaller-90"> Views </span>
+                        </span>
+
+                        <span class="btn btn-app btn-sm btn-yellow no-hover">
+                            <span class="line-height-1 bigger-170"> 32 </span>
+
+                            <br />
+                            <span class="line-height-1 smaller-90"> Followers </span>
+                        </span>
+
+                        <span class="btn btn-app btn-sm btn-pink no-hover">
+                            <span class="line-height-1 bigger-170"> 4 </span>
+
+                            <br />
+                            <span class="line-height-1 smaller-90"> Projects </span>
+                        </span>
+
+                        <span class="btn btn-app btn-sm btn-grey no-hover">
+                            <span class="line-height-1 bigger-170"> 23 </span>
+
+                            <br />
+                            <span class="line-height-1 smaller-90"> Reviews </span>
+                        </span>
+
+                        <span class="btn btn-app btn-sm btn-success no-hover">
+                            <span class="line-height-1 bigger-170"> 7 </span>
+
+                            <br />
+                            <span class="line-height-1 smaller-90"> Albums </span>
+                        </span>
+
+                        <span class="btn btn-app btn-sm btn-primary no-hover">
+                            <span class="line-height-1 bigger-170"> 55 </span>
+
+                            <br />
+                            <span class="line-height-1 smaller-90"> Contacts </span>
+                        </span>
+                    </div>
+
+                    <div class="space-12"></div>
+
+                    <div class="profile-user-info profile-user-info-striped">
+                        <input type="hidden" data-pk="@Model.Employee.Id" id="emp-pk" name="emp-pk" />
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> Họ tên </div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="name">@Model.Employee.Name</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> Địa chỉ </div>
+
+                            <div class="profile-info-value">
+                                <i class="fa fa-map-marker light-orange bigger-110"></i>
+                                <span class="editable" id="address">@Model.Employee.Address</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> Ngày sinh </div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="birthday">@Model.Employee.BirthDay.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> Ngày vào làm </div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="starteddate">@(Model.Employee.WorkInfo.StartDate.HasValue ? Model.Employee.WorkInfo.StartDate.Value.ToString("dd/MM/yyyy") : "")</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> Ngày kết thúc</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="endeddate">@(Model.Employee.WorkInfo.EndDate.HasValue ? Model.Employee.WorkInfo.EndDate.Value.ToString("dd/MM/yyyy") : "")</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> About Me </div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="about">@Model.Employee.About</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-20"></div>
+
+                    <div class="widget-box transparent">
+                        <div class="widget-header widget-header-small header-color-blue2">
+                            <h4 class="widget-title smaller">
+                                <i class="ace-icon fa fa-lightbulb-o bigger-120"></i>
+                                My Skills
+                            </h4>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main padding-16">
+                                <div class="clearfix">
+                                    @foreach (var skill in Model.Employee.WorkInfo.Skills)
+                                    {
+                                        <div class="grid3 center">
+                                            <div class="easy-pie-chart percentage" data-percent="@skill.Rate" data-color="#CA5952">
+                                                <span class="percent">@skill.Rate</span>%
+                                            </div>
+
+                                            <div class="space-2"></div>
+                                            @skill.Skill.Name
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="hr hr-16"></div>
+
+                                <div class="profile-skills">
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width:80%">
+                                            <span class="pull-left">HTML5 & CSS3</span>
+                                            <span class="pull-right">80%</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-success" style="width:72%">
+                                            <span class="pull-left">Javascript & jQuery</span>
+
+                                            <span class="pull-right">72%</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-purple" style="width:70%">
+                                            <span class="pull-left">PHP & MySQL</span>
+
+                                            <span class="pull-right">70%</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-warning" style="width:50%">
+                                            <span class="pull-left">Wordpress</span>
+
+                                            <span class="pull-right">50%</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-danger" style="width:38%">
+                                            <span class="pull-left">Photoshop</span>
+
+                                            <span class="pull-right">38%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hr hr2 hr-double"></div>
+
+                    <div class="space-6"></div>
+
+                    <div class="center">
+                        <button type="button" class="btn btn-sm btn-primary btn-white btn-round">
+                            <i class="ace-icon fa fa-rss bigger-150 middle orange2"></i>
+                            <span class="bigger-110">View more activities</span>
+
+                            <i class="icon-on-right ace-icon fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hide">
+            <div id="user-profile-2" class="user-profile">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs padding-18">
+                        <li class="active">
+                            <a data-toggle="tab" href="#home">
+                                <i class="green ace-icon fa fa-user bigger-120"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#equipment">
+                                <i class="blue ace-icon fa fa-desktop bigger-110"></i>
+                                Equipment
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#password">
+                                <i class="blue ace-icon fa fa-key bigger-120"></i>
+                                Password
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="home" class="tab-pane in active">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3 center">
+                                    <span class="profile-picture">
+                                        <img class="editable img-responsive" alt="@Model.Employee.Name" id="avatar2" src="@Model.Employee.ProfilePicture" />
+                                    </span>
+
+                                    <div class="space space-4"></div>
+
+                                    <a href="#" class="btn btn-sm btn-block btn-success">
+                                        <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                        <span class="bigger-110">Add as a friend</span>
+                                    </a>
+
+                                    <a href="#" class="btn btn-sm btn-block btn-primary">
+                                        <i class="ace-icon fa fa-envelope-o bigger-110"></i>
+                                        <span class="bigger-110">Send a message</span>
+                                    </a>
+                                </div><!-- /.col -->
+
+                                <div class="col-xs-12 col-sm-9">
+                                    <h4 class="blue">
+                                        <span class="middle">@Model.Employee.Name</span>
+
+                                        <span class="label label-purple arrowed-in-right">
+                                            <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
+                                            online
+                                        </span>
+                                    </h4>
+
+                                    <div class="profile-user-info">
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Username </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Employee.ApplicationUser.UserName</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Location </div>
+
+                                            <div class="profile-info-value">
+                                                <i class="fa fa-map-marker light-orange bigger-110"></i>
+                                                @Model.Employee.Address
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Age </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Employee.BirthDay.ToString("dd/MM/yyyy")</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Joined </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@(Model.Employee.WorkInfo.StartDate.HasValue ? Model.Employee.WorkInfo.StartDate.Value.ToString("dd/MM/yyyy") : "")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-8 dotted"></div>
+
+                                    <div class="profile-user-info">
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Website </div>
+
+                                            <div class="profile-info-value">
+                                                <a href="#" target="_blank">@Model.Employee.ApplicationUser.Email</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">
+                                                <i class="middle ace-icon fa fa-facebook-square bigger-150 blue"></i>
+                                            </div>
+
+                                            <div class="profile-info-value">
+                                                <a href="#">Find me on Facebook</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name">
+                                                <i class="middle ace-icon fa fa-twitter-square bigger-150 light-blue"></i>
+                                            </div>
+
+                                            <div class="profile-info-value">
+                                                <a href="#">Follow me on Twitter</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.col -->
+                            </div><!-- /.row -->
+
+                            <div class="space-20"></div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="widget-box transparent">
+                                        <div class="widget-header widget-header-small">
+                                            <h4 class="widget-title smaller">
+                                                <i class="ace-icon fa fa-check-square-o bigger-110"></i>
+                                                Little About Me
+                                            </h4>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                @Model.Employee.About
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="widget-box transparent">
+                                        <div class="widget-header widget-header-small header-color-blue2">
+                                            <h4 class="widget-title smaller">
+                                                <i class="ace-icon fa fa-lightbulb-o bigger-120"></i>
+                                                My Skills
+                                            </h4>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-16">
+                                                <div class="clearfix">
+                                                    @foreach (var skill in Model.Employee.WorkInfo.Skills)
+                                                    {
+                                                        <div class="grid3 center">
+                                                            <div class="easy-pie-chart percentage" data-percent="@skill.Rate" data-color="#CA5952">
+                                                                <span class="percent">@skill.Rate</span>%
+                                                            </div>
+
+                                                            <div class="space-2"></div>
+                                                            @skill.Skill.Name
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <div class="hr hr-16"></div>
+
+                                                <div class="profile-skills">
+                                                    <div class="progress">
+                                                        <div class="progress-bar" style="width:80%">
+                                                            <span class="pull-left">HTML5 & CSS3</span>
+                                                            <span class="pull-right">80%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-success" style="width:72%">
+                                                            <span class="pull-left">Javascript & jQuery</span>
+
+                                                            <span class="pull-right">72%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-purple" style="width:70%">
+                                                            <span class="pull-left">PHP & MySQL</span>
+
+                                                            <span class="pull-right">70%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-warning" style="width:50%">
+                                                            <span class="pull-left">Wordpress</span>
+
+                                                            <span class="pull-right">50%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-danger" style="width:38%">
+                                                            <span class="pull-left">Photoshop</span>
+
+                                                            <span class="pull-right">38%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /#home -->
+
+                        <div id="password" class="tab-pane">
+                            <div class="space-10"></div>
+                            @using (Html.BeginForm("ChangePassword", "Account", FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" id="UserId" name="UserId" value="@Model.RegisterViewModel.UserId" />
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="Password">New Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" id="Password" name="Password" />
+                                    </div>
+                                </div>
+
+                                <div class="space-4"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="ConfirmPassword">Confirm Password</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="password" id="ConfirmPassword" name="ConfirmPassword" />
+                                    </div>
+                                </div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="submit">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            Save
+                                        </button>
+
+                                        &nbsp; &nbsp;
+                                        <button class="btn" type="reset">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div><!-- /#password -->
+
+                        <div id="equipment" class="tab-pane">
+                            <div class="space-10"></div>
+                            @Html.Partial("~/Views/Equipment/_Details.cshtml", Model.Equipments)
+                        </div><!-- /#equipment -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div>
+
+@section Styles {
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="/Content/css/jquery-ui.custom.min.css" />
+    <link rel="stylesheet" href="/Content/css/jquery.gritter.min.css" />
+    <link rel="stylesheet" href="/Content/css/select2.min.css" />
+    <link rel="stylesheet" href="/Content/css/datepicker.min.css" />
+    <link rel="stylesheet" href="/Content/css/bootstrap-editable.min.css" />
+}
+
+@section Scripts {
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+      <script src="~/Scripts/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/jquery-ui.custom.min.js"></script>
+    <script src="~/Scripts/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/Scripts/jquery.gritter.min.js"></script>
+    <script src="~/Scripts/jquery.easypiechart.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/jquery.hotkeys.min.js"></script>
+    <script src="~/Scripts/bootstrap-wysiwyg.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/fuelux.spinner.min.js"></script>
+    <script src="~/Scripts/bootstrap-editable.min.js"></script>
+    <script src="~/Scripts/ace-editable.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+
+    <script src="/Scripts/jquery.dataTables.min.js"></script>
+    <script src="/Scripts/jquery.dataTables.bootstrap.min.js"></script>
+    <script src="/Scripts/dataTables.tableTools.min.js"></script>
+    <script src="/Scripts/dataTables.colVis.min.js"></script>
+
+
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        jQuery(function ($) {
+
+            //editables on first profile page
+            $.fn.editable.defaults.mode = 'inline';
+            $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+            $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>' +
+                                        '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';
+
+            //editables
+
+            //text editable
+            $('#name').editable({
+                type: 'text',
+                name: 'username'
+            });
+
+            $('#name').on('save', function (e, params) {
+                $.post('/employee/edit?id=' + $('#emp-pk').data('pk') + "&val=" + params.newValue + "&valObj=name", function () { });
+            });
+
+            $('#address').editable({
+                type: 'text',
+                name: 'address'
+            });
+
+            $('#address').on('save', function (e, params) {
+                $.post('/employee/edit?id=' + $('#emp-pk').data('pk') + "&val=" + params.newValue + "&valObj=address", function () { });
+            });
+
+            //custom date editable
+            $('#starteddate').editable({
+                type: 'adate',
+                date: {
+                    //datepicker plugin options
+                    format: 'dd/mm/yyyy',
+                    viewformat: 'dd/mm/yyyy',
+                    weekStart: 1
+
+                    //,nativeUI: true//if true and browser support input[type=date], native browser control will be used
+                    //,format: 'yyyy-mm-dd',
+                    //viewformat: 'yyyy-mm-dd'
+                }
+            });
+
+            $('#starteddate').on('save', function (e, params) {
+                $.post('/employee/edit?id=' + $('#emp-pk').data('pk') + "&val=" + params.newValue + "&valObj=starteddate", function () { });
+            });
+
+            //custom date editable
+            $('#endeddate').editable({
+                type: 'adate',
+                date: {
+                    //datepicker plugin options
+                    format: 'dd/mm/yyyy',
+                    viewformat: 'dd/mm/yyyy',
+                    weekStart: 1
+
+                    //,nativeUI: true//if true and browser support input[type=date], native browser control will be used
+                    //,format: 'yyyy-mm-dd',
+                    //viewformat: 'yyyy-mm-dd'
+                }
+            });
+
+            $('#endeddate').on('save', function (e, params) {
+                $.post('/employee/edit?id=' + $('#emp-pk').data('pk') + "&val=" + params.newValue + "&valObj=endeddate", function () { });
+            });
+
+            $('#birthday').editable({
+                type: 'adate',
+                date: {
+                    //datepicker plugin options
+                    format: 'dd/mm/yyyy',
+                    viewformat: 'dd/mm/yyyy',
+                    weekStart: 1
+
+                    //,nativeUI: true//if true and browser support input[type=date], native browser control will be used
+                    //,format: 'yyyy-mm-dd',
+                    //viewformat: 'yyyy-mm-dd'
+                }
+            });
+
+            $('#birthday').on('save', function (e, params) {
+                $.post('/employee/edit?id=' + $('#emp-pk').data('pk') + "&val=" + params.newValue + "&valObj=birthday", function () { });
+            });
+
+            $('#login').editable({
+                type: 'slider',
+                name: 'login',
+
+                slider: {
+                    min: 1,
+                    max: 50,
+                    width: 100
+                    //,nativeUI: true//if true and browser support input[type=range], native browser control will be used
+                },
+                success: function (response, newValue) {
+                    if (parseInt(newValue) == 1)
+                        $(this).html(newValue + " hour ago");
+                    else $(this).html(newValue + " hours ago");
+                }
+            });
+
+            $('#about').editable({
+                mode: 'inline',
+                type: 'wysiwyg',
+                name: 'about',
+
+                wysiwyg: {
+                    //css : {'max-width':'300px'}
+                },
+                success: function (response, newValue) {
+                }
+            });
+
+            $('#about').on('save', function (e, params) {
+                $.post('/employee/edit?id=' + $('#emp-pk').data('pk') + "&val=" + params.newValue + "&valObj=about", function () { });
+            });
+
+            // *** editable avatar *** //
+            // *** editable avatar *** //
+            try {//ie8 throws some harmless exceptions, so let's catch'em
+
+                //first let's add a fake appendChild method for Image element for browsers that have a problem with this
+                //because editable plugin calls appendChild, and it causes errors on IE at unpredicted points
+                try {
+                    document.createElement('IMG').appendChild(document.createElement('B'));
+                } catch (e) {
+                    Image.prototype.appendChild = function (el) { }
+                }
+
+                var last_gritter
+                $('#avatar').editable({
+                    type: 'image',
+                    name: 'avatar',
+                    value: null,
+                    image: {
+                        //specify ace file input plugin's options here
+                        btn_choose: 'Change Avatar',
+                        droppable: true,
+                        maxSize: 110000,//~100Kb
+
+                        //and a few extra ones here
+                        name: 'avatar',//put the field name here as well, will be used inside the custom plugin
+                        on_error: function (error_type) {//on_error function will be called when the selected file has a problem
+                            if (last_gritter) $.gritter.remove(last_gritter);
+                            if (error_type == 1) {//file format error
+                                last_gritter = $.gritter.add({
+                                    title: 'File is not an image!',
+                                    text: 'Please choose a jpg|gif|png image!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            } else if (error_type == 2) {//file size rror
+                                last_gritter = $.gritter.add({
+                                    title: 'File too big!',
+                                    text: 'Image size should not exceed 100Kb!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            }
+                            else {//other error
+                            }
+                        },
+                        on_success: function () {
+                            $.gritter.removeAll();
+                        }
+                    },
+                    url: function (params) {
+                        // ***UPDATE AVATAR HERE*** //
+                        //for a working upload example you can replace the contents of this function with
+                        //examples/profile-avatar-update.js
+
+                        var deferred = new $.Deferred
+
+                        var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
+                        if (!value || value.length == 0) {
+                            deferred.resolve();
+                            return deferred.promise();
+                        }
+
+
+                        var fileinput = $('input[name="avatar"]')[0];
+                        var files = fileinput.files;
+                        var formData = new FormData();
+                        formData.append("X-Requested-With", "xhr");
+                        formData.append("Content-Type", files[0].type);
+                        formData.append("id", "@Model.Employee.Id");
+                        formData.append("file", files[0]);
+
+                        var updateProgress = function (oEvent) {
+                            if (oEvent.lengthComputable) {
+                                var percentComplete = oEvent.loaded / oEvent.total;
+                                console.log(percentComplete);
+                                // …
+                            } else {
+                                // Unable to compute progress information since the total size is unknown
+                            }
+                        }
+                        var transferComplete = function (oEvent) {
+                            var response = jQuery.parseJSON(oEvent.target.response);
+                            console.log(response);
+                            $('#avatar').get(0).src = response.link;
+
+                            deferred.resolve({ 'status': 'OK' });
+
+                            if (last_gritter) $.gritter.remove(last_gritter);
+                            last_gritter = $.gritter.add({
+                                title: 'Avatar Updated!',
+                                text: '...',
+                                class_name: 'gritter-info gritter-center'
+                            });
+                        }
+
+
+                        var oReq = new XMLHttpRequest();
+                        oReq.open("post", "/Employee/UploadAvatar", true);
+                        oReq.addEventListener("progress", updateProgress, false);
+                        oReq.addEventListener("load", transferComplete, false);
+                        oReq.send(formData);
+
+
+                        return deferred.promise();
+
+                        // ***END OF UPDATE AVATAR HERE*** //
+                    },
+
+                    success: function (response, newValue) {
+                    }
+                })
+            } catch (e) { }
+
+
+            /**
+            //let's display edit mode by default?
+            var blank_image = true;//somehow you determine if image is initially blank or not, or you just want to display file input at first
+            if(blank_image) {
+                $('#avatar').editable('show').on('hidden', function(e, reason) {
+                    if(reason == 'onblur') {
+                        $('#avatar').editable('show');
+                        return;
+                    }
+                    $('#avatar').off('hidden');
+                })
+            }
+            */
+
+
+            //another option is using modals
+            $('#avatar2').on('click', function () {
+                var modal =
+                '<div class="modal fade">\
+					  <div class="modal-dialog">\
+					   <div class="modal-content">\
+						<div class="modal-header">\
+							<button type="button" class="close" data-dismiss="modal">&times;</button>\
+							<h4 class="blue">Change Avatar</h4>\
+						</div>\
+						\
+						<form class="no-margin">\
+						 <div class="modal-body">\
+							<div class="space-4"></div>\
+							<div style="width:75%;margin-left:12%;"><input type="file" name="file-input" /></div>\
+						 </div>\
+						\
+						 <div class="modal-footer center">\
+							<button type="submit" class="btn btn-sm btn-success"><i class="ace-icon fa fa-check"></i> Submit</button>\
+							<button type="button" class="btn btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times"></i> Cancel</button>\
+						 </div>\
+						</form>\
+					  </div>\
+					 </div>\
+					</div>';
+
+
+                var modal = $(modal);
+                modal.modal("show").on("hidden", function () {
+                    modal.remove();
+                });
+
+                var working = false;
+
+                var form = modal.find('form:eq(0)');
+                var file = form.find('input[type=file]').eq(0);
+                file.ace_file_input({
+                    style: 'well',
+                    btn_choose: 'Click to choose new avatar',
+                    btn_change: null,
+                    no_icon: 'ace-icon fa fa-picture-o',
+                    thumbnail: 'small',
+                    before_remove: function () {
+                        //don't remove/reset files while being uploaded
+                        return !working;
+                    },
+                    allowExt: ['jpg', 'jpeg', 'png', 'gif'],
+                    allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+                });
+
+                form.on('submit', function () {
+                    if (!file.data('ace_input_files')) return false;
+
+                    file.ace_file_input('disable');
+                    form.find('button').attr('disabled', 'disabled');
+                    form.find('.modal-body').append("<div class='center'><i class='ace-icon fa fa-spinner fa-spin bigger-150 orange'></i></div>");
+
+                    var deferred = new $.Deferred;
+                    working = true;
+                    deferred.done(function () {
+                        form.find('button').removeAttr('disabled');
+                        form.find('input[type=file]').ace_file_input('enable');
+                        form.find('.modal-body > :last-child').remove();
+
+                        modal.modal("hide");
+
+                        var thumb = file.next().find('img').data('thumb');
+                        if (thumb) $('#avatar2').get(0).src = thumb;
+
+                        working = false;
+                    });
+
+
+                    setTimeout(function () {
+                        deferred.resolve();
+                    }, parseInt(Math.random() * 800 + 800));
+
+                    return false;
+                });
+
+            });
+
+
+
+            //////////////////////////////
+            $('#profile-feed-1').ace_scroll({
+                height: '250px',
+                mouseWheelLock: true,
+                alwaysVisible: true
+            });
+
+            $('a[ data-original-title]').tooltip();
+
+            $('.easy-pie-chart.percentage').each(function () {
+                var barColor = $(this).data('color') || '#555';
+                var trackColor = '#E2E2E2';
+                var size = parseInt($(this).data('size')) || 72;
+                $(this).easyPieChart({
+                    barColor: barColor,
+                    trackColor: trackColor,
+                    scaleColor: false,
+                    lineCap: 'butt',
+                    lineWidth: parseInt(size / 10),
+                    animate: false,
+                    size: size
+                }).css('color', barColor);
+            });
+
+            ///////////////////////////////////////////
+
+            //right & left position
+            //show the user info on right or left depending on its position
+            $('#user-profile-2 .memberdiv').on('mouseenter touchstart', function () {
+                var $this = $(this);
+                var $parent = $this.closest('.tab-pane');
+
+                var off1 = $parent.offset();
+                var w1 = $parent.width();
+
+                var off2 = $this.offset();
+                var w2 = $this.width();
+
+                var place = 'left';
+                if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) place = 'right';
+
+                $this.find('.popover').removeClass('right left').addClass(place);
+            }).on('click', function (e) {
+                e.preventDefault();
+            });
+
+
+            ///////////////////////////////////////////
+            $('#user-profile-3')
+            .find('input[type=file]').ace_file_input({
+                style: 'well',
+                btn_choose: 'Change avatar',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-picture-o',
+                thumbnail: 'large',
+                droppable: true,
+
+                allowExt: ['jpg', 'jpeg', 'png', 'gif'],
+                allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+            })
+            .end().find('button[type=reset]').on(ace.click_event, function () {
+                $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
+            })
+            .end().find('.date-picker').datepicker().next().on(ace.click_event, function () {
+                $(this).prev().focus();
+            })
+            $('.input-mask-phone').mask('(999) 999-9999');
+
+            $('#user-profile-3').find('input[type=file]').ace_file_input('show_file_list', [{ type: 'image', name: $('#avatar').attr('src') }]);
+
+
+            ////////////////////
+            //change profile
+            $('[data-toggle="buttons"] .btn').on('click', function (e) {
+                var target = $(this).find('input[type=radio]');
+                var which = parseInt(target.val());
+                $('.user-profile').parent().addClass('hide');
+                $('#user-profile-' + which).parent().removeClass('hide');
+            });
+
+
+
+            /////////////////////////////////////
+            $(document).one('ajaxloadstart.page', function (e) {
+                //in ajax mode, remove remaining elements before leaving page
+                try {
+                    $('.editable').editable('destroy');
+                } catch (e) { }
+                $('[class*=select2]').remove();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        function OnDeleteEquipmentSuccess(data) {
+            $("#deleteModal").modal("hide");
+            location.reload();
+        }
+
+        jQuery(function ($) {
+            //initiate dataTables plugin
+            var oTable1 =
+            $('#dynamic-table')
+            //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+            .dataTable({
+                bAutoWidth: false,
+                "aoColumns": [
+                  null, null, null, null,
+                  { "bSortable": false }
+                ],
+                "aaSorting": [],
+                //,
+                //"sScrollY": "200px",
+                //"bPaginate": false,
+
+                //"sScrollX": "100%",
+                //"sScrollXInner": "120%",
+                //"bScrollCollapse": true,
+                //Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+                //you may want to wrap the table inside a "div.dataTables_borderWrap" element
+
+                //"iDisplayLength": 50
+            });
+            //oTable1.fnAdjustColumnSizing();
+
+
+            //TableTools settings
+            TableTools.classes.container = "btn-group btn-overlap";
+            TableTools.classes.print = {
+                "body": "DTTT_Print",
+                "info": "tableTools-alert gritter-item-wrapper gritter-info gritter-center white",
+                "message": "tableTools-print-navbar"
+            }
+
+            //initiate TableTools extension
+            var tableTools_obj = new $.fn.dataTable.TableTools(oTable1, {
+                "sSwfPath": "assets/copy_csv_xls_pdf.swf",
+
+                "sRowSelector": "td:not(:last-child)",
+                "sRowSelect": "multi",
+                "fnRowSelected": function (row) {
+                    //check checkbox when row is selected
+                    try { $(row).find('input[type=checkbox]').get(0).checked = true }
+                    catch (e) { }
+                },
+                "fnRowDeselected": function (row) {
+                    //uncheck checkbox
+                    try { $(row).find('input[type=checkbox]').get(0).checked = false }
+                    catch (e) { }
+                },
+
+                "sSelectedClass": "success",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "sToolTip": "Copy to clipboard",
+                        "sButtonClass": "btn btn-white btn-primary btn-bold",
+                        "sButtonText": "<i class='fa fa-copy bigger-110 pink'></i>",
+                        "fnComplete": function () {
+                            this.fnInfo('<h3 class="no-margin-top smaller">Table copied</h3>\
+									<p>Copied '+ (oTable1.fnSettings().fnRecordsTotal()) + ' row(s) to the clipboard.</p>',
+                                1500
+                            );
+                        }
+                    },
+
+                    {
+                        "sExtends": "csv",
+                        "sToolTip": "Export to CSV",
+                        "sButtonClass": "btn btn-white btn-primary  btn-bold",
+                        "sButtonText": "<i class='fa fa-file-excel-o bigger-110 green'></i>"
+                    },
+
+                    {
+                        "sExtends": "pdf",
+                        "sToolTip": "Export to PDF",
+                        "sButtonClass": "btn btn-white btn-primary  btn-bold",
+                        "sButtonText": "<i class='fa fa-file-pdf-o bigger-110 red'></i>"
+                    },
+
+                    {
+                        "sExtends": "print",
+                        "sToolTip": "Print view",
+                        "sButtonClass": "btn btn-white btn-primary  btn-bold",
+                        "sButtonText": "<i class='fa fa-print bigger-110 grey'></i>",
+
+                        "sMessage": "<div class='navbar navbar-default'><div class='navbar-header pull-left'><a class='navbar-brand' href='#'><small>Optional Navbar &amp; Text</small></a></div></div>",
+
+                        "sInfo": "<h3 class='no-margin-top'>Print view</h3>\
+									  <p>Please use your browser's print function to\
+									  print this table.\
+									  <br />Press <b>escape</b> when finished.</p>",
+                    }
+                ]
+            });
+            //we put a container before our table and append TableTools element to it
+            $(tableTools_obj.fnContainer()).appendTo($('.tableTools-container'));
+
+            //also add tooltips to table tools buttons
+            //addding tooltips directly to "A" buttons results in buttons disappearing (weired! don't know why!)
+            //so we add tooltips to the "DIV" child after it becomes inserted
+            //flash objects inside table tools buttons are inserted with some delay (100ms) (for some reason)
+            setTimeout(function () {
+                $(tableTools_obj.fnContainer()).find('a.DTTT_button').each(function () {
+                    var div = $(this).find('> div');
+                    if (div.length > 0) div.tooltip({ container: 'body' });
+                    else $(this).tooltip({ container: 'body' });
+                });
+            }, 200);
+
+
+
+            //ColVis extension
+            var colvis = new $.fn.dataTable.ColVis(oTable1, {
+                "buttonText": "<i class='fa fa-search'></i>",
+                "aiExclude": [0, 6],
+                "bShowAll": true,
+                //"bRestore": true,
+                "sAlign": "right",
+                "fnLabel": function (i, title, th) {
+                    return $(th).text();//remove icons, etc
+                }
+
+            });
+
+            //style it
+            $(colvis.button()).addClass('btn-group').find('button').addClass('btn btn-white btn-info btn-bold')
+
+            //and append it to our table tools btn-group, also add tooltip
+            $(colvis.button())
+            .prependTo('.tableTools-container .btn-group')
+            .attr('title', 'Show/hide columns').tooltip({ container: 'body' });
+
+            //and make the list, buttons and checkboxed Ace-like
+            $(colvis.dom.collection)
+            .addClass('dropdown-menu dropdown-light dropdown-caret dropdown-caret-right')
+            .find('li').wrapInner('<a href="javascript:void(0)" />') //'A' tag is required for better styling
+            .find('input[type=checkbox]').addClass('ace').next().addClass('lbl padding-8');
+
+
+
+            /////////////////////////////////
+            //table checkboxes
+            $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+            //select/deselect all rows according to table header checkbox
+            $('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+                var th_checked = this.checked;//checkbox inside "TH" table header
+
+                $(this).closest('table').find('tbody > tr').each(function () {
+                    var row = this;
+                    if (th_checked) tableTools_obj.fnSelect(row);
+                    else tableTools_obj.fnDeselect(row);
+                });
+            });
+
+            //select/deselect a row when the checkbox is checked/unchecked
+            $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
+                var row = $(this).closest('tr').get(0);
+                if (!this.checked) tableTools_obj.fnSelect(row);
+                else tableTools_obj.fnDeselect($(this).closest('tr').get(0));
+            });
+
+
+
+
+            $(document).on('click', '#dynamic-table .dropdown-toggle', function (e) {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+
+            //And for the first simple table, which doesn't have TableTools or dataTables
+            //select/deselect all rows according to table header checkbox
+            var active_class = 'active';
+            $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+                var th_checked = this.checked;//checkbox inside "TH" table header
+
+                $(this).closest('table').find('tbody > tr').each(function () {
+                    var row = this;
+                    if (th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                    else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+                });
+            });
+
+            //select/deselect a row when the checkbox is checked/unchecked
+            $('#simple-table').on('click', 'td input[type=checkbox]', function () {
+                var $row = $(this).closest('tr');
+                if (this.checked) $row.addClass(active_class);
+                else $row.removeClass(active_class);
+            });
+
+
+
+            /********************************/
+            //add tooltip for small view action buttons in dropdown menu
+            $('[data-rel="tooltip"]').tooltip({ placement: tooltip_placement });
+
+            //tooltip placement on right or left
+            function tooltip_placement(context, source) {
+                var $source = $(source);
+                var $parent = $source.closest('table')
+                var off1 = $parent.offset();
+                var w1 = $parent.width();
+
+                var off2 = $source.offset();
+                //var w2 = $source.width();
+
+                if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+                return 'left';
+            }
+
+        })
+    </script>
+}

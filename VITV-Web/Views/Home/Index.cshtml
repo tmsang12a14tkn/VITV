@@ -1,0 +1,472 @@
+﻿@using System.Globalization
+@model HomeModel
+
+@{
+    ViewBag.Title = "VITV - Khởi nguồn kinh doanh, Kênh truyền hình Kinh tế - Tài chính hàng đầu Việt Nam";
+    var context = new VITVContext();
+    var specialEvent = Model.SpecialEvent;
+}
+
+<div class="row special_annouce">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <h3 class="navbar-brand"><a href="https://www.facebook.com/VITV.Channel/" target="_blank">Trực tuyến chương trình ĐỐI THOẠI – Thúc đẩy cổ phần hóa Doanh nghiệp Nhà nước, Chủ nhật (09/10) tại <span>Facebook kênh VITV</span></a></h3>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Stream Area -->
+<div class="row stream_area has-special-annouce">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <div class="stream-video">
+                    <h5 class="stream-title">TRUYỀN HÌNH TRỰC TUYẾN</h5>
+                    <div id="player" class="row fullscale">
+                        <video id="video" class="video-js" controls autoplay preload="auto">
+                            <source src="rtmp://14.160.54.166/livepkgr/livestream" type='rtmp/mp4'>
+                        </video>
+                    </div>
+                </div>
+            </div>
+            @Html.Action("WeekSchedules", "ProgramScheduleDetails")
+        </div>
+
+        <div class="row tv_partner_area">
+            <div class="col-row-5">
+                <div class="single_tvpartner sctv">
+                    <div class="row">
+                        <div class="img" style="background: url('/Content/assets/SCTV8_logo.png') center no-repeat;"></div>
+                        <p>Kênh số 8</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-row-5">
+                <div class="single_tvpartner vtvcab">
+                    <div class="row">
+                        <div class="img" style="background: url('/Content/assets/VTVcab_logo.png') center no-repeat;"></div>
+                        <p>Kênh số 10</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-row-5">
+                <div class="single_tvpartner hncab">
+                    <div class="row">
+                        <div class="img" style="background: url('/Content/assets/hncab_logo.png') center no-repeat;"></div>
+                        <p>Kênh số 19</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-row-5">
+                <div class="single_tvpartner mytv">
+                    <div class="row">
+                        <div class="img" style="background: url('/Content/assets/mytv_logo.png') center no-repeat;"></div>
+                        <p>Kênh số 8</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-row-5 last">
+                <div class="single_tvpartner yt">
+                    <a href="https://www.youtube.com/VITVChannel" target="_blank">
+                        <div class="row">
+                            <div class="img" style="background: url('/Content/assets/ytchannel_logo.png') center no-repeat;"></div>
+                            <p>VITV Channel</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div> <!-- TV Partner Area -->
+
+        <div class="row schedule-link">
+            <a type="button" class="btn btn-danger" href="/lich-phat-song">Lịch phát sóng</a>
+        </div>
+    </div>
+</div>
+@*<div id="indexes" class="row indexes_area">
+        @Html.Partial("_MarketInfo", Model.RateAndPrices)
+    </div>*@
+<!-- Indexes Area -->
+@if (specialEvent != null && specialEvent.Videos.Count > 0)
+{
+    var item = (int)Math.Ceiling((double)specialEvent.Videos.Count / 8);
+    var length = specialEvent.Videos.Count;
+    var cnt = 0;
+
+    <div class="row program_area special_event">
+        <div class="row vline">
+            <div class="container">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            @*<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#related_video_filter">
+                                    <i class="glyphicon glyphicon-chevron-right"></i>
+                                </button>*@
+                            <h3 class="navbar-brand">@specialEvent.Name</h3>
+                            <span class="navbar-special-event" style="display: block; position: absolute; bottom: -10px; width: 310px; height: 110px; background: url(@specialEvent.BarBkgr) no-repeat center;"></span>
+                        </div>
+                        <div class="collapse navbar-collapse">
+                            <div class="navbar-form navbar-right">
+                                <a href="@Url.Action("Index", "Video", new { evtId = specialEvent.Id})" class="btn btn-danger">Xem thêm</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="related_video_content">
+            <div class="container">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    @*<div class="carousel-inner" role="listbox">
+                            <div class="item active">
+
+                                <div class="carousel-caption">
+
+                                </div>
+                            </div>
+                            <div class="item">
+
+                                <div class="carousel-caption">
+
+                                </div>
+                            </div>
+
+                        </div>*@
+                </div>
+            </div>
+
+            <div class="container" id="list_video">
+                <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+                    <ol class="carousel-indicators">
+                        @for (int n = 0; n < item; n++)
+                        {
+                            <li data-target="#carousel" data-slide-to="@n" class="@(n == 0 ? "active" : "")"></li>
+                        }
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        @for (int n = 0; n < item; n++)
+                        {
+                            <div class="item @(n == 0 ? "active" : "") wow fadeInDown">
+                                @for (int r = 0; r < 2; r++)
+                                {
+                                    <div class="row single_related">
+                                        @for (int k = 0; k < 4; k++)
+                                        {
+                                            if (cnt == length)
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                var rVideo = specialEvent.Videos[cnt];
+                                                <div class="col-sm-3">
+                                                    <div class="single_video">
+                                                        <div class="video_image">
+                                                            <a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">
+                                                                <span class="thumb">
+                                                                    <span class="thumb_sizer">
+                                                                        <span class="thumb_tugger">
+                                                                            <img class="poster" src="@rVideo.Thumbnail">
+                                                                            <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(@rVideo.Category.ProfilePhoto) no-repeat center;"></span>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="video_info">
+                                                            <p><a href="@Url.Action("Details", "VideoCategory", new { title = @rVideo.Category.UniqueTitle })"><span>@rVideo.Category.Name</span></a></p>
+                                                            @if (rVideo.Category.Group.Id != 2)
+                                                            {
+                                                                <h4><a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">@rVideo.Title</a></h4>
+                                                            }
+                                                            <p>Phát sóng @rVideo.DisplayTime.ToString("HH:mm") ngày @rVideo.DisplayTime.ToString("dd/MM/yyyy")</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            cnt++;
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- SpecialEvent Area -->
+}
+
+@foreach (var videoCatGroup in Model.VideoCatGroups)
+{
+    var videos = videoCatGroup.NewestVideos;
+    var rowNo = Math.Ceiling(videos.Count / 4.0f);
+    <div class="row program_area">
+        <div class="row vline">
+            <div class="container">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#related_video_filter-@videoCatGroup.Id">
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </button>
+                            <h3 class="navbar-brand">@videoCatGroup.Name</h3>
+                        </div>
+                        <div class="collapse navbar-collapse" id="related_video_filter-@videoCatGroup.Id">
+                            <form class="navbar-form navbar-right" role="search">
+                                @{
+                                    List<VideoCategory> lstVideoCategory = context.VideoCategories.Where(v => v.GroupId == videoCatGroup.Id).OrderBy(v => v.Order).ToList();
+                                    <div class="form-group">
+                                        <div class="dropdown">
+                                            <select class="form-control select_video_category" id="select_video_category-@videoCatGroup.Id">
+                                                <option value="0" selected>Tất cả</option>
+                                                @foreach (VideoCategory vc in lstVideoCategory)
+                {
+                                                    <option value="@vc.Id">@vc.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                }
+                                <a href="@Url.Action("Index", "Video", new {cat = videoCatGroup.UniqueTitle })" class="btn btn-danger">Xem thêm</a>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        @*<div class="row video_metro">
+                <div class="container">
+                    <div class="metro-boxes">
+                        @for (int i = 0; i < 9 && i < videoCatGroup.NewestVideos.Count; i++)
+                        {
+                            var video = videoCatGroup.NewestVideos[i];
+                            <a class="metro-box @videoClassList.ElementAt(i)" href="@Url.Action("Details", "Video", new { id = video.Id, title = video.UniqueTitle, date = video.PublishedTime.ToString("dd-MM-yyyy")})">
+                                <div class="metro-box-photo"><img src="@video.Thumbnail" alt="" /></div>
+                                <div class="metro-box-icon"><i class="glyphicon glyphicon-play"></i></div>
+                                <div class="metro-box-title">
+                                    <h5>@video.Title</h5>
+                                    <p>@video.PublishedTime</p>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>*@
+        <div class="related_video_content">
+            <div class="container" id="list_video-@videoCatGroup.Id">
+                @for (int i = 0; i < rowNo; i++)
+                {
+                    <div class="row single_related wow fadeInDown">
+                        @for (int j = 0; j < 4; j++)
+                        {
+                            var vIndex = i * 4 + j;
+                            if (vIndex < videos.Count)
+                            {
+                                var rVideo = videos[vIndex];
+                                <div class="col-sm-3">
+                                    <div class="single_video">
+                                        <div class="video_image">
+                                            <a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">
+                                                <span class="thumb">
+                                                    <span class="thumb_sizer">
+                                                        <span class="thumb_tugger">
+                                                            <img class="poster" src="@rVideo.Thumbnail">
+                                                            <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(@rVideo.Category.ProfilePhoto) no-repeat center;"></span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="video_info">
+                                            <p><a href="@Url.Action("Details", "VideoCategory", new { title = @rVideo.Category.UniqueTitle})"><span>@rVideo.Category.Name</span></a></p>
+                                            @if (videoCatGroup.Id != 2)
+                                            {
+                                                <h4><a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">@rVideo.Title</a></h4>
+                                            }
+                                            <p>Phát sóng @rVideo.DisplayTime.ToString("HH:mm") ngày @rVideo.DisplayTime.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div> <!-- Program Area -->
+                                    }
+
+@*<div id="news" class="row news_area">
+        <div class="row vline">
+            <div class="container">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#news_filter">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <h3 class="navbar-brand">TIN TỨC</h3>
+                        </div>
+                        <div class="collapse navbar-collapse" id="news_filter">
+                            <form class="navbar-form navbar-right" role="search">
+                                <div class="form-group">
+                                    <span>Loại tin</span>
+                                    <select class="form-control m14" id="videocat" name="videogroup">
+                                        <option value="tatca" selected>Chính trị XH</option>
+                                        <option value="chuyenmuc">Chính trị XH</option>
+                                        <option value="tintuc">Tin tức</option>
+                                        <option value="giaitri">Giải trí</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="news_content">
+            <div class="container">
+                <div class="row m9">
+                    @for (int i = 0; i < 3 && i < hotArticles.Count;i++ )
+                    {
+                        var article = hotArticles[i];
+                        <div class="col-md-4 single_news">
+                            <img src="@article.Thumbnail">
+                            <h4>@article.Title</h4>
+                            <h5>@article.PublishedTime</h5>
+                            <p>@article.ShortBrief</p>
+                        </div>
+                    }
+                </div>
+                <div class="row m15">
+                    @for (int i = 3; i < 6 && i < hotArticles.Count; i++)
+                    {
+                        var article = hotArticles[i];
+                        <div class="col-md-4 single_news">
+                            <img src="@article.Thumbnail">
+                            <h4>@article.Title</h4>
+                            <h5>@article.PublishedTime</h5>
+                            <p>@article.ShortBrief</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>*@ <!-- News Area -->
+@section styles
+{
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.datetimepicker.css" />
+    <link href="~/Content/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet">
+}
+
+@section scripts{
+    <!-- Scrolling Nav JavaScript -->
+    <script src="~/Scripts/jquery.easing.min.js"></script>
+    <script src="~/Scripts/toggle.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+    <script src="~/Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+
+    <script>
+        $('.carousel').carousel().on('slide.bs.carousel', function (e) {
+            var nextH = $(e.relatedTarget).height();
+            $(this).find('.active.item').parent().animate({ height: nextH }, 500);
+        });
+
+        videojs.options.flash.swf = "http://vitv.vn/content/videojs/video-js.swf";
+
+        $(window).load(function () {
+
+            var isAndroid = (navigator.userAgent.match(/Android/i) ? true : false);
+            //detect Android version
+            var ua = navigator.userAgent;
+            var androidversion = 0;
+            if (ua.indexOf("Android") >= 0) {
+                androidversion = parseFloat(ua.slice(ua.indexOf("Android") + 8));
+            }
+            //detect is IOS
+            var iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i) ? true : false);
+            if (iOS == true || androidversion >= 3) {
+                $("#video").html("<source src='http://14.160.54.166:8134/hls-live/livepkgr/_definst_/liveevent/livestream.m3u8'>");
+            }
+            else {
+                videojs("video", {}, function () { });
+            };
+
+
+            $.mCustomScrollbar.defaults.scrollButtons.enable = true; //enable scrolling buttons by default
+            $(".day-schedule").mCustomScrollbar({ theme: "rounded", autoDraggerLength: false });
+            $(".index-pane").mCustomScrollbar({ theme: "rounded", autoDraggerLength: false });
+
+            gotoCurrent();
+            $("#gotoCurrentBtn").on("click", function () {
+                $("#tab@(DateTime.Now.DayOfWeek)").tab("show");
+                setTimeout(function () { gotoCurrent(); }, 300);
+
+            })
+
+
+            //setInterval(function ()
+            //{
+            //    $("#indexes").load("/Home/MarketInfo");
+            //}, 60000); //1 phút
+        });
+
+        function getCurrentPoint() {
+            var now = new Date();
+            var minuteOfDay = now.getHours() * 60 + now.getMinutes();
+            var current = 0;
+            $(".tab-pane.active li.day-program").each(function () {
+                var minute = $(this).data("time");
+                if (minute > minuteOfDay) {
+                    //Dừng
+                    return false;
+                }
+                current = this;
+            });
+            return current;
+        }
+
+        function gotoCurrent() {
+            var currentItem = getCurrentPoint();
+            if (currentItem != null) {
+                $(".tab-pane.active li.day-program.active").removeClass("active");
+                $(currentItem).addClass("active");
+                var offsetTop = currentItem.offsetTop;
+                var scrollTo = Math.max(0, offsetTop - 150);
+                $(".tab-pane.active .day-schedule").mCustomScrollbar("scrollTo", scrollTo);
+            }
+        }
+
+        $('.select_video_category').on('change', function () {
+            var _target = $(this).attr('id').replace('select_video_category-', '');
+            $('#list_video-' + _target).load("/VideoCategory/GetVideoByCategory?cat=" + $(this).val() + "&grp=" + _target, function () {
+                $('#list_video-' + _target).hide().delay(400).fadeIn('400');
+            });
+        });
+
+        analyticPage($("meta[property='og:image']").attr("content"), "Trang chủ", null, null, null, null);
+    </script>
+}

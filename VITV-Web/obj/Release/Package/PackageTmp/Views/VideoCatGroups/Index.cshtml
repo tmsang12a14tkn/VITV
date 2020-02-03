@@ -1,0 +1,147 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "Quản lý chuyên mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.type = Model;
+    
+}
+
+<div class="row" ng-app="indexVideoModule" ng-controller="IndexVideoModuleCtrl">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <div class="row">
+                    @if(Model == 0)
+                    {
+                        <a href="#" class="navbar-form navbar-left btn btn-success" style="margin-right:10px"><b>Quản lý chuyên mục theo thể loại chương trình</b></a>
+                        <a href="/VideoCatGroups/Index?type=1" class="navbar-form navbar-left btn btn-default">Quản lý nhóm chuyên mục xuất hiện trên web</a>
+                    }
+                    else
+                    {
+                        <a href="/VideoCatGroups/Index?type=0" class="navbar-form navbar-left btn btn-default" style="margin-right:10px"><b>Quản lý chuyên mục theo thể loại chương trình</b></a>
+                        <a href="#" class="navbar-form navbar-left btn btn-success">Quản lý nhóm chuyên mục xuất hiện trên web</a>
+                    }
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row" id="tabserver">
+                    <ul id="tabvcg" class="nav nav-tabs" role="tablist">
+                        @if (Model == 0)
+                        {
+                            List<VideoCatType> list = (List<VideoCatType>)ViewBag.videocattypes;
+                            for (int i = 0; i < list.Count(); i++)
+                            {
+                                <li class="@(i == 0 ? "active" : "") itemvct">
+                                    <a href="#tabvcg@(list[i].Id)" id="namevct@(list[i].Id)" role="tab" data-toggle="tab" data-type="2" data-vcgid="@(list[i].Id)" data-namevcg="@(list[i].Name)">
+                                        <b>@list[i].Name</b>
+                                    </a>
+                                </li>
+                            }
+                            <li class="btnfuncsortable" style="margin-left:20px;margin-top:10px">
+                                <span class="fa fa-pencil fa-2x" id="editcategorytab" title="Chỉnh sửa nhóm chuyên mục" data-type="" data-vcgid="" data-namevcg=""></span>
+                            </li>
+                        }
+                        else
+                        {
+                            List<VideoCatGroup> list = ((List<VideoCatGroup>)ViewBag.videocatgroups).OrderBy(c => c.Order).ToList();
+                            for (int i = 0; i < list.Count(); i++)
+                            {
+                                <li class="@(i == 0 ? "active" : "") itemvcg" data-vcgid="@(list[i].Id)">
+                                    <a href="#tabvcg@(list[i].Id)" id="namevcg@(list[i].Id)" role="tab" data-toggle="tab" data-type="1" data-vcgid="@(list[i].Id)" data-namevcg="@(list[i].Name)">
+                                        <b style="white-space: nowrap;">@list[i].Name</b>
+                                    </a>
+                                </li>
+                            }
+                            <li class="btnfuncsortable" style="margin-left:10px;margin-top:10px" title="Lưu thứ tự nhóm chuyên mục">
+                                <span class="fa fa-save fa-2x" id="ordereditvcgroup" title="Lưu thứ tự nhóm chuyên mục"></span>
+                            </li>
+                            <li class="btnfuncsortable" style="margin-left:20px;margin-top:10px" title="Chỉnh sửa nhóm chuyên mục">
+                                <span class="fa fa-pencil fa-2x" id="editcategorytab" title="Chỉnh sửa nhóm chuyên mục" data-type="" data-vcgid="" data-namevcg=""></span>
+                            </li>
+                            <li class="btnfuncsortable" style="margin-left:20px;margin-top:10px" title="Thêm mới nhóm chuyên mục">
+                                <span class="fa fa-plus fa-2x" id="addcategorytab" target="_blank" title="Thêm mới nhóm chuyên mục"></span>
+                            </li>
+                            
+                        }
+                    </ul>
+
+                    <div id="myTabContent" class="tab-content">
+                        @if (Model == 0)
+                        {
+                            List<VideoCatType> list = (List<VideoCatType>)ViewBag.videocattypes;
+                            for (int i = 0; i < list.Count(); i++)
+                            {
+                                <div class="tab-pane fade @(i == 0 ? "active in" : "")" id="tabvcg@(list[i].Id)">
+                                    <div class="row">
+                                        <div class="table-responsive">
+                                            <table class="table user-list table-hover" id="manage_video_group">
+                                                <thead>
+                                                    <tr>
+                                                        <th><span>Tên</span></th>
+                                                        <th><span>Số lần phát trong tuần</span></th>
+                                                        <th><span>Tổng số video</span></th>
+                                                        <th>Lượt xem</th>
+                                                        <th>Vỏ bản tin</th>
+                                                        <th>Youtube</th>
+                                                        <th>Quảng cáo</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                @Html.Partial("_ListVideoCategoryType", list[i])
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            List<VideoCatGroup> list = (List<VideoCatGroup>)ViewBag.videocatgroups;
+                            for (int i = 0; i < list.Count(); i++)
+                            {
+                                <div class="tab-pane fade @(i == 0 ? "active in" : "")" id="tabvcg@(list[i].Id)">
+                                    <div class="row">
+                                        <div class="table-responsive">
+                                            <table class="table user-list table-hover" id="manage_video_group">
+                                                <thead>
+                                                    <tr>
+                                                        <th><span>Tên</span></th>
+                                                        <th><span>Số video</span></th>
+                                                        <th>&nbsp;</th>
+                                                    </tr>
+                                                </thead>
+                                                @Html.Partial("_ListVideoCategoryGroup", list[i])
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/Content/tooltipster/tooltipster.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/tooltipster/themes/tooltipster-shadow.css">
+}
+
+@section Scripts
+{
+
+    <script type="text/javascript" src="~/Scripts/tooltipster/jquery.tooltipster.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/app/videocategorygroup.js"></script>
+    <script type="text/javascript">
+
+    </script>
+}
+
+
+
+
+            

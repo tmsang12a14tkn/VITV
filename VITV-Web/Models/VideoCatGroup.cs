@@ -1,0 +1,20 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace VITV_Web.Models
+{
+    public class VideoCatGroup
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public int Order { get; set; }
+        [Index("TitleUniqueIndex", IsUnique = true)]
+        [StringLength(450)]
+        public string UniqueTitle { get; set; }
+
+        public virtual ICollection<VideoCategory> VideoCats { get; set; }
+    }
+}

@@ -1,0 +1,46 @@
+﻿@model List<Video>
+
+@{
+    var rowNo = Math.Ceiling(Model.Count / 4.0f);
+}
+
+<div class="container">
+    @for (int i = 0; i < rowNo; i++)
+    {
+        <div class="row single_related">
+            @for (int j = 0; j < 4; j++)
+            {
+                var vIndex = i * 4 + j;
+                if (vIndex < Model.Count)
+                {
+                    var rVideo = Model[vIndex];
+                    <div class="col-sm-3">
+                        <div class="single_video">
+                            <div class="video_image">
+                                <a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">
+                                    <span class="thumb">
+                                        <span class="thumb_sizer">
+                                            <span class="thumb_tugger">
+                                                <img class="poster" src="@rVideo.Thumbnail">
+                                                <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(@rVideo.Category.ProfilePhoto) no-repeat center;"></span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="video_info">
+                                <p><a href="@Url.Action("Details", "VideoCategory", new { title = @rVideo.Category.UniqueTitle})"><span>@rVideo.Category.Name</span></a></p>
+                                @if (rVideo.Category.GroupId != 2)
+                                {
+                                    <h4><a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">@rVideo.Title</a></h4>
+                                }
+                                <p>Phát sóng @rVideo.DisplayTime.ToString("HH:mm") ngày @rVideo.DisplayTime.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>
+

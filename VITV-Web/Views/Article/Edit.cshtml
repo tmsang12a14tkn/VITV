@@ -1,0 +1,238 @@
+﻿@model ArticleModel
+
+@{
+        Layout = "../Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "Chỉnh sửa bài viết";
+        List<ArticleRevision> revisions = ViewBag.Revisions;
+        var user = ViewBag.User as ApplicationUser;
+        var canEdit = (User.IsInRole("Writter") && Model.ArticleStatus == (int)ArticleStatus.NeedEdit)
+                       || (User.IsInRole("Reviewer") && Model.ArticleStatus == (int)ArticleStatus.NeedReview)
+                       || User.IsInRole("Publisher")
+                       || User.IsInRole("Admin");
+}
+
+<div class="">
+    <h2>
+        <a href="@ViewBag.returnUrl">
+            <i class="fa fa-arrow-left"></i>
+        </a>
+        Chỉnh sửa bài viết
+    </h2>
+    <ul id="myTab" class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#tab1" role="tab" data-toggle="tab">Chỉnh sửa nội dung</a></li>
+        <li><a href="#tab2" role="tab" data-toggle="tab">Các phiên bản chỉnh sửa</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content tab-content-body">
+        <div class="tab-pane fade active in" id="tab1">
+            @*@if(User.IsInRole("Writter") && Model.ArticleStatus != (int)ArticleStatus.NeedEdit)
+            {
+                <h2>Không có quyền chỉnh sửa bài. Liên hệ quản trị</h2>
+            }*@
+            @*else*@ 
+            @*@if (User.IsInRole("Reviewer") && Model.ArticleStatus != (int)ArticleStatus.NeedReview)
+            {
+                <h2>Không có quyền duyệt bài. Liên hệ quản trị</h2>
+            }*@
+            @if(canEdit)
+            {
+                using (Html.BeginForm("Edit", "Article", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "articleForm" }))
+                {
+                    @Html.Partial("_CreateOrEdit")
+                }
+            }
+            else
+            {
+                <h2>Không có quyền chỉnh sửa bài. Liên hệ quản trị</h2>
+            }
+        </div>
+        <div class="tab-pane fade" id="tab2">
+            <ul class="list-unstyled">
+                @foreach (var revision in revisions)
+                {
+                    <li>
+                        @Html.ActionLink(revision.ChangedDate.ToString(), "Revision", "Article", new { id = revision.Id }, null)
+                        - @revision.CreateUser.UserName
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="comment-box" class="comment-box closed">
+    <div class="">
+        <iframe id="if-comment" style="width:100%" srcdoc="<textarea rows='4' style='width:100%' class='form-control article-comment' id='txt-articlecomment'></textarea>"></iframe>
+
+        <input type="button" value="Đăng" id="btn-submitreview" class="btn btn-sm btn-primary" />
+        <input type="button" value="Hủy" id="btn-cancelreview" class="btn btn-sm btn-info" />
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/ImageSelect.jquery.js"></script>
+    <script>
+        function toggleSelectReporter(btn) {
+            var rpId = $(btn).data("id");
+            if ($(btn).hasClass("rp-unselected"))
+                $(btn).removeClass("rp-unselected");
+            else
+                $(btn).addClass("rp-unselected");
+        }
+
+        $(document).ready(function () {
+            var articleEditor = $('.article-editable').froalaEditor({
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html', 'commentDisplay', 'myDropdown'],
+                pluginsEnabled: null,
+                imageUploadParam: 'files',
+                imageUploadURL: '/UploadHandler/FroalaHandler.ashx',
+                preloaderSrc: "/Content/assets/ajax-loader.gif",
+                imagesLoadURL: '/Home/FroalaMediaManager',
+                imageDeleteURL: "/Home/FroalaDelete",
+                emptytext: '',
+                heightMin: 400,
+                fontFamilySelection: true,
+                fontSizeSelection: true,
+                toolbarSticky: false,
+                userName: '@(user.Employee==null?user.UserName: user.Employee.Name)',
+                userAvatar: '@(user.Employee==null?"/images/default-avatar.png": user.Employee.ProfilePicture)',
+                articleId: '@Model.Id'
+            });
+
+            //Thumbnail
+            function readURL(input) {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#photoView').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#photoinput").change(function () {
+                readURL(this);
+            });
+
+            //Published Time
+            $("#changePublishedTime-btn").click(function () {
+                var publishedTimeVal = $("#PublishedTime-txt").val();
+                $("#PublishedTime-label").html(publishedTimeVal);
+                $("#PublishedTime").val(publishedTimeVal);
+            });
+
+            var availableKeywords = [
+                @foreach(Keyword keyword in ViewBag.PossibleKeywords)
+                {
+                    <text>"@Html.Raw(keyword.Value)",</text>
+                }
+            ];
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+            var catArray = $('#CategoryIds').val().split(',');
+
+            $("#Keywords")
+              // don't navigate away from the field on tab when selecting an item
+              .bind("keydown", function (event) {
+                  if (event.keyCode === $.ui.keyCode.TAB &&
+                      $(this).data("ui-autocomplete").menu.active) {
+                      event.preventDefault();
+                  }
+              })
+              .autocomplete({
+                  minLength: 0,
+                  source: function (request, response) {
+                      // delegate back to autocomplete, but extract the last term
+                      response($.ui.autocomplete.filter(
+                        availableKeywords, extractLast(request.term)));
+                  },
+                  focus: function () {
+                      // prevent value inserted on focus
+                      return false;
+                  },
+                  select: function (event, ui) {
+                      var terms = split(this.value);
+                      // remove the current input
+                      terms.pop();
+                      // add the selected item
+                      terms.push(ui.item.value);
+                      // add placeholder to get the comma-and-space at the end
+                      terms.push("");
+                      this.value = terms.join(", ");
+                      return false;
+                  }
+              });
+
+            $('.artItem').each(function (idx) {
+                var selfId = $(this).data('id');
+                if ($.inArray(selfId.toString(), catArray) !== -1) {
+                    $(this).prop("checked", true);
+                }
+            });
+
+            $('.artItem').on('change', function () {
+                var selfId = $(this).data('id');
+
+                if ($(this).is(":checked")) {
+                    catArray.push(selfId);
+                } else {
+                    catArray = $.grep(catArray, function (value) {
+                        return value != selfId;
+                    });
+                }
+
+                $('#CategoryIds').val(catArray.toString());
+            });
+
+            $("#tbReporters").chosen({
+                width: "100%",
+                no_results_text: "Không có kết quả nào!"
+            });
+
+            $('#tbReporters').on('change', function (evt, params) {
+                var ids = "";
+                var selectedIds = $("#tbReporters").chosen().val();
+
+                if (selectedIds != null) {
+                    $.each(selectedIds, function (index, value) {
+                        ids = ids + ", " + value;
+                    });
+                }
+                $("#ReporterIds").val(ids);
+            });
+
+            $('#dmArtStatus li a').on('click', function (e) {
+                e.preventDefault();
+                $("#btnArtStatus").html($(this).text() + ' <span class="caret"></span>');
+                $("#ArticleStatus").val($(this).data('id'));
+            });
+
+            formmodified = 0;
+            $('form *').on('change', function () {
+                formmodified = 1;
+            });
+            articleEditor.on('editable.keydown', function (e, editor, keydownEvent) {
+                if (formmodified == 0) formmodified = 1;
+            });
+            window.onbeforeunload = confirmExit;
+            function confirmExit() {
+                if (formmodified == 1) {
+                    return "Các thao tác của bạn chưa được lưu. Bạn có chắc muốn tắt trang này không?";
+                }
+            }
+            $("#saveDraft-btn, #preview-btn, #save-btn, #approve-btn").click(function () {
+                formmodified = 0;
+            });
+        });
+
+    </script>
+}

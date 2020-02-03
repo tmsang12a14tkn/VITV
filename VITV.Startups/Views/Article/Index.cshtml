@@ -1,0 +1,112 @@
+﻿@model IEnumerable<VITV.Data.Models.Article>
+
+@{
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+    ViewBag.Title = "Tin chữ - Cổng công nghệ VIT";
+}
+
+<!--News Area-->
+<div class="row text_pg_area">
+    <div class="row recent_news">
+        <div class="col-md-8 lg_news">
+            <div class="">
+                <a href="article_detail.html">
+                    <img src="./img/h7.jpg" />
+                    <span>
+                        Here’s our newest round-up of the featured startups on our site this week. If you have startup tips or story suggestions, feel free to email us. Enjoy this week’s list!
+                        <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 sm_news">
+            <div class="row sm" style="background:url('./img/h1.jpg') no-repeat;background-size:cover;">
+                <span>
+                    Bài toán khô khan bỗng dưng có kết quả biết nói, khiến nhiều người phải suy nghĩ.
+                    <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                </span>
+            </div>
+            <div class="row sm" style="background:url('./img/h2.jpg') no-repeat;background-size:cover;">
+                <span>
+                    Haravan – start-up chuyên cung cấp giải pháp bán hàng toàn diện.
+                    <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                </span>
+            </div>
+            <div class="row sm" style="background:url('./img/h3.jpg') no-repeat;background-size:cover;">
+                <span>
+                    Beeketing chiến thắng cuộc thi khởi nghiệp Start Tel Aviv tại Việt Nam
+                    <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row hr_line">
+        <div class="col-xs-12 catdropdown">
+            <div class="form-group dropdown">
+                <button id="catLabel" class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                    <span class="text-value">Tất cả</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="catLabel">
+                    <li role="presentation" class="active">Tất cả</li>
+                    <li role="presentation">Tin tức - Sự kiện</li>
+                    <li role="presentation">Kinh nghiệm - Hướng dẫn</li>
+                    <li role="presentation">Câu chuyện - Dự án</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row catlg">
+            <div class="col-xs-6 col-md-4 all current"><h5><span>Tất cả</span></h5></div>
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <div class="col-xs-6 col-sm-3"><h5><span>Tin tức - Sự kiện</span></h5></div>
+                <div class="col-xs-6 col-sm-5"><h5><span>Kinh nghiệm - Hướng dẫn</span></h5></div>
+                <div class="col-xs-6 col-sm-4"><h5><span>Câu chuyện - Dự án</span></h5></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="related_artical_content">
+            @foreach (var art in Model)
+            {
+                <div class="row single_related">
+                    <div class="single_artical">
+                        <div class="col col-xs-4">
+                            <div class="artical_image">
+                                <a href="@Url.Action("Details", "Article", new { id = art.Id })">
+                                    <span class="thumb">
+                                        <span class="thumb_sizer">
+                                            <span class="thumb_tugger">
+                                                <img class="poster" src="@(art.Thumbnail)">
+                                            </span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col col-xs-8">
+                            <div class="artical_info">
+                                <h3><a href="@Url.Action("Details", "Article", new { id = art.Id })">@(art.Title)</a></h3>
+                                <p class="tm">Đăng ngày @(art.PublishedTime)</p>
+                                <p class="cn">@(art.ShortBrief)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+            <div class="row center">
+                <nav>
+                    <ul class="pagination">
+                        <li class="disabled"><a href="#" aria-label="Previous"><</a></li>
+                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#" aria-label="Next">></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

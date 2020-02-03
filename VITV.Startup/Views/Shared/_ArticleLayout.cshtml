@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @RenderSection("seo", false)
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="~/Content/normalize.css">
+    <link rel="stylesheet" href="~/Content/font-awesome.css">
+    <link rel="stylesheet" href="~/Content/bootstrap.css">
+    <link rel="stylesheet" href="~/Content/main.css">
+    <link rel="stylesheet" href="~/Content/component.css">
+
+    @RenderSection("styles", false)
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-75245868-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+</head>
+<body id="page-top">
+    <div class="wrapper_overlay" id="wrapper_overlay"></div>
+
+    @Html.Action("GetMenu", "Home")
+
+    <nav class="navbar navbar-default navbar-fixed-top header_area" role="navigation">
+        <div id="cbp-hrmenu">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <img class="logo" src="~/Content/img/logo.png" alt="logo" />
+                        <img class="logo_shrink" src="~/Content/img/logo_shrink.png" alt="logo_shrink" />
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-main">
+                    <ul class="nav navbar-nav">
+                        <li class="page-ctg-title"><a href="/">CỔNG CÔNG NGHỆ VÀ KHỞI NGHIỆP</a></li>
+                    </ul>
+
+                    <div class="sidebar-toggle">
+                        <button type="button" class="navbar-toggle hamburger is-closed" data-toggle="offcanvas">
+                            <span class="hamb-top"></span>
+                            <span class="hamb-middle"></span>
+                            <span class="hamb-bottom"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <li class="side-brand">
+                <a href="/">CỔNG CÔNG NGHỆ</a>
+            </li>
+            <li class="title">
+                <a href="@Url.Action("About", "Home")">GIỚI THIỆU</a>
+            </li>
+            <li class="title">
+                <a href="@Url.Action("Index", "Home")">VIDEO</a>
+                <ul>
+                    @Html.Action("GetVideoCategories", "Video")
+                </ul>
+            </li>
+            <li class="title">
+                <a href="@Url.Action("Index", "Article")">TIN TỨC - BÀI VIẾT</a>
+                <ul>
+                    @Html.Action("GetArticleCategories", "Article")
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="row">
+        <div class="container">
+            <div class="col-md-12 main_content">
+                <div class="col-md-9 left_content">
+                    @RenderBody()
+                </div>
+
+                <div class="col-md-3 right_content">
+                    <!--Vertical Menu-->
+                    <div class="row side_menu">
+                        <div class="row picker edition-picker">
+                            <div class="drop-down">
+                                <div class="title current"><a href="/">CỔNG CÔNG NGHỆ</a></div>
+                            </div>
+                        </div>
+
+                        @Html.Action("GetSideMenu", "Home")
+                    </div>
+
+                    <div class="row article_series" id="article_series" style="display: none;"></div>
+
+                    @Html.Action("GetPopularNews", "Article")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="row footer_area">
+        <div class="container">
+            <div class="col-md-5 footer_img">
+                <img src="~/Content/img/footer.png" />
+            </div>
+            <div class="col-md-7 footer_license">
+                <p>Bản quyền thuộc Công ty Cổ phần Công nghệ và Truyền thông VIT</p>
+                <p>Giấy phép số: 1240/GP-TTĐ cấp ngày 21/10/2011 SỞ THÔNG TIN VÀ TRUYỀN THÔNG HÀ NỘI</p>
+                <p>Ghi rõ nguồn "vitv.vn" khi bạn phát hành lại thông tin từ website này</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toTop" class="icon-up-open">
+        <i class="fa fa-angle-up"></i>
+    </div>
+
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/cbpHorizontalMenu.js"></script>
+    <script src="~/Scripts/jquery.nicescroll.js"></script>
+
+    @RenderSection("scripts", false)
+
+    <script>
+        $(document).ready(function () {
+            if (!navigator.userAgent.match(/iemobile/i)) {
+                $("html").niceScroll({ cursorborder: "", cursorcolor: "#cccccc", scrollspeed: 45, cursorwidth: "10px", zindex: "9999" });
+            }
+
+            $(function () {
+                cbpHorizontalMenu.init();
+            });
+
+            // Scroll to top button
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 250) {
+                    $('#toTop').fadeIn();
+                } else {
+                    $('#toTop').fadeOut();
+                }
+            });
+
+            $('#toTop').click(function () {
+                $('body,html').animate({ scrollTop: 0 }, 800);
+            });
+
+            var trigger = $('.hamburger'),
+                overlay = $('.wrapper_overlay'),
+                isClosed = false,
+                isClicked = false;
+
+            trigger.click(function () {
+                hamburger_cross();
+                isClicked = true;
+            });
+
+            function hamburger_cross() {
+                if (isClosed == true) {
+                    overlay.hide();
+                    trigger.removeClass('is-open');
+                    trigger.addClass('is-closed');
+                    isClosed = false;
+                } else {
+                    overlay.show();
+                    trigger.removeClass('is-closed');
+                    trigger.addClass('is-open');
+                    isClosed = true;
+                }
+            }
+
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('#sidebar-wrapper').toggleClass('toggled');
+            });
+
+            $('#wrapper_overlay').on('click', function () {
+                if (isClicked) {
+                    $('#sidebar-wrapper').removeClass('toggled');
+                    hamburger_cross();
+                    isClicked = false;
+                }
+            });
+
+            $(window).on('resize', function () {
+                if (isClicked) {
+                    $('#sidebar-wrapper').removeClass('toggled');
+                    hamburger_cross();
+                    isClicked = false;
+                }
+            });
+
+           
+        });
+    </script>
+</body>
+</html>

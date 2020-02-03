@@ -1,0 +1,76 @@
+﻿@model ProgramSchedulesView
+
+@{
+    ViewBag.Title = "Quản lý khung chương trình";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Quản lý khung chương trình</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Monday?"active":"")"><a href="#monday" role="tab" data-toggle="tab">Thứ 2</a></li>
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Tuesday?"active":"")"><a href="#tuesday" role="tab" data-toggle="tab">Thứ 3</a></li>
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Wednesday?"active":"")"><a href="#wednesday" role="tab" data-toggle="tab">Thứ 4</a></li>
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Thursday?"active":"")"><a href="#thusday" role="tab" data-toggle="tab">Thứ 5</a></li>
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Friday?"active":"")"><a href="#friday" role="tab" data-toggle="tab">Thứ 6</a></li>
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Saturday?"active":"")"><a href="#saturday" role="tab" data-toggle="tab">Thứ 7</a></li>
+                    <li class="@(Model.DayOfWeek == DayOfWeek.Sunday?"active":"")"><a href="#sunday" role="tab" data-toggle="tab">Chủ nhật</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Monday?"active in":"")" id="monday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Monday })</p>
+                    </div>
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Tuesday?"active in":"")" id="tuesday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Tuesday })</p>
+                    </div>
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Wednesday?"active in":"")" id="wednesday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Wednesday })</p>
+                    </div>
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Thursday?"active in":"")" id="thusday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Thursday })</p>
+                    </div>
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Friday?"active in":"")" id="friday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Friday })</p>
+                    </div>
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Saturday?"active in":"")" id="saturday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Saturday })</p>
+                    </div>
+                    <div class="tab-pane fade @(Model.DayOfWeek == DayOfWeek.Sunday?"active in":"")" id="sunday">
+                        <p>@Html.Action("DowList", "ProgramSchedules", new { dayOfWeek = DayOfWeek.Sunday })</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="delete-content">
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+    <script>
+        $('#sidebar-nav #scheduleMng').toggleClass("active");
+        $('#sidebar-nav #scheduleMng').siblings().removeClass("active");
+
+        $('#sidebar-nav a#sch-li-1').toggleClass("active");
+        $('#sidebar-nav a#sch-li-1').parent().siblings().removeClass("active");
+
+        function onSuccessDeleteProSche(data) {
+            if (data.success == 1) {
+                $("#programschedules_" + data.id).remove();
+                $("#deleteModal").modal("hide");
+            }
+            else {
+                alert(data.content);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Product>
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý sản phẩm";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Quản lý sản phẩm</h2>
+                <div class="filter-block pull-right">
+                    <a href="/Product/Create" class="btn btn-success pull-right">
+                        <i class="fa fa-plus fa-lg"></i> Tạo mới sản phẩm
+                    </a>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><span>Tiêu đề</span></th>
+                                <th class="text-center"><span>Nội dung</span></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="table-link">
+                                            @item.Title
+                                        </a>
+                                    </td>
+                                    <td>@Html.Raw(item.Content)</td>
+                                    <td style="width: 15%;">
+                                        <a href="@Url.Action("Details", new { id = item.Id })" class="table-link">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" class="table-link danger">
+                                            <span class=" fa-stack">
+                                            <i class="fa fa-square fa-stack-2x"></i>
+                                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#sidebar-nav #productMng').toggleClass("active");
+        $('#sidebar-nav #productMng').siblings().removeClass("active");
+    </script>
+}

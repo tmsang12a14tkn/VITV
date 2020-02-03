@@ -1,0 +1,26 @@
+﻿@model VideoTranscript
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">Bạn có chắc chắn muốn xóa nội dung này không?</h4>
+</div>
+@using (Ajax.BeginForm("Delete", "VideoTranscript", new { id = Model.Id }, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    OnSuccess = "onDeleteSucceed",
+    UpdateTargetId = "list_transcipt"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="form-field-display">
+                @Html.DisplayFor(model => model.Title)
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-primary btn-ok" value="Xóa" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+    </div>
+}

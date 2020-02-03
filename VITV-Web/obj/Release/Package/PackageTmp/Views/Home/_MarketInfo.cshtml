@@ -1,0 +1,200 @@
+﻿@model RateAndPrices
+<div class="container">
+    <div class="row m13">
+        <div class="col-lg-6 left-index">
+            <div class="single-index" role="tabpanel">
+                <div class="row index-title">
+                    <div class="col-xs-3 bold">GIÁ</div>
+                    <div class="col-xs-7 bold">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="active"><a href="#goldprice" role="tab" data-toggle="tab">VÀNG</a></li>
+                            <li><a href="#oilprice" role="tab" data-toggle="tab">DẦU</a></li>
+                            <li><a href="#metalprice" role="tab" data-toggle="tab">KIM LOẠI</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-2 roboto right"><a href="/gia-vang">Chi tiết</a></div>
+                </div>
+                <div class="row tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="goldprice">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-3 roboto bold">Mã</div>
+                            <div class="col-row-3 roboto bold">Mua vào</div>
+                            <div class="col-row-3 roboto bold">Bán ra</div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach (var goldPrice in Model.GoldVNs)
+                            {
+                                string updown = goldPrice.Buy > goldPrice.YesterdayBuy ? "up" : (goldPrice.Buy == goldPrice.YesterdayBuy?"":"down");
+                                <div class="row index-row">
+                                    <div class="col-row-3 roboto bold pull-left">@goldPrice.Name</div>
+                                    <div class="col-row-3 roboto @updown">@goldPrice.Buy.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></div>
+                                    @*<div class="col-row-5 roboto right"><span class="@(isUp ? "up" : "down")-left">@goldPrice.Change</div>*@
+                                    <div class="col-row-3 roboto @updown">@goldPrice.Sell.ToString("0,0.###")<span class="glyphicon glyphicon-arrow-@updown"></span></div>
+                                    @*<div class="col-row-5 roboto">@oilPrice.VCreateDate.ToString("hh:mm tt")</div>*@
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="oilprice">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-4 roboto bold">Mã</div>
+                            <div class="col-row-4 roboto bold">Giá trị</div>
+                            <div class="col-row-4 roboto bold">Thay đổi</div>
+                            <div class="col-row-4 roboto bold">Tỉ lệ</div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach (var oilPrice in Model.Oils)
+                            {
+                                var isUp = oilPrice.Change > 0 || (oilPrice.Change == 0 && oilPrice.Percent >= 0);
+                                <div class="row index-row">
+                                    <div class="col-row-4 roboto bold">@oilPrice.Name</div>
+                                    <div class="col-row-4 roboto">@oilPrice.Value</div>
+                                    <div class="col-row-4 roboto @(isUp ? " up" : "down" )">@oilPrice.Change<span class="glyphicon glyphicon-arrow-@(isUp ? " up" : "down" )"></span></div>
+                                    <div class="col-row-4 roboto @(isUp ? " up" : "down" )">@(oilPrice.Percent)%<span class="glyphicon glyphicon-arrow-@(isUp ? " up" : "down" )"></span></div>
+                                    @*>@oilPrice.Percent</span></div>
+                                        @*<div class="col-row-5 roboto">@oilPrice.VCreateDate.ToString("hh:mm tt")</div>*@
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="metalprice">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-4 roboto bold">Mã</div>
+                            <div class="col-row-4 roboto bold">Giá trị</div>
+                            <div class="col-row-4 roboto bold">Thay đổi</div>
+                            <div class="col-row-4 roboto bold">Tỉ lệ</div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach (var metalPrice in Model.Metals)
+                            {
+                                <div class="row index-row">
+                                    <div class="col-row-4 roboto bold">@metalPrice.Name</div>
+                                    <div class="col-row-4 roboto">@metalPrice.Value</div>
+                                    <div class="col-row-4 roboto @(metalPrice.Change >= 0 ? "up" : "down")">@metalPrice.Change<span class="glyphicon glyphicon-arrow-@(metalPrice.Change >= 0 ? "up" : "down")"></span></div>
+                                    <div class="col-row-4 roboto @(metalPrice.Change >= 0 ? "up" : "down")">@(metalPrice.Percent)%<span class="glyphicon glyphicon-arrow-@(metalPrice.Change >= 0 ? "up" : "down")"></span></div>
+                                    @*<div class="col-row-5 roboto">@oilPrice.VCreateDate.ToString("hh:mm tt")</div>*@
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="single-index" role="tabpanel">
+                <div class="row index-title">
+                    <div class="col-xs-3 bold">TỶ GIÁ</div>
+                    <div class="col-xs-7 bold">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#vnd" role="tab" data-toggle="tab">VND</a></li>
+                            <li role="presentation"><a href="#usd" role="tab" data-toggle="tab">USD</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-2 roboto right"><a href="/ty-gia">Chi tiết</a></div>
+                </div>
+                <div class="row tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="vnd">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-4 roboto bold">Mã</div>
+                            <div class="col-row-4 roboto bold">Bán ra</div>
+                            <div class="col-row-4 roboto bold">Chuyển khoản</div>
+                            <div class="col-row-4 roboto bold">Mua vào</div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach (var vndExchangeRate in Model.VNDRates)
+                            {
+                                <div class="row index-row">
+                                    <div class="col-row-4 roboto bold" title="@vndExchangeRate.Name">@vndExchangeRate.Code</div>
+                                    <div class="col-row-4 roboto">@vndExchangeRate.Sell.ToString("0,0")</div>
+                                    <div class="col-row-4 roboto right">@vndExchangeRate.Transfer.ToString("0,0")</div>
+                                    <div class="col-row-4 roboto">@vndExchangeRate.Buy.ToString("0,0")</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="usd">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-4 roboto bold">Mã</div>
+                            <div class="col-row-4 roboto bold">Giá trị</div>
+                            <div class="col-row-4 roboto bold">Thay đổi</div>
+                            <div class="col-row-4 roboto bold">Tỉ lệ</div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach (var usdExchangeRate in Model.USDRates)
+                            {
+                                <div class="row index-row">
+                                    <div class="col-row-4 roboto bold">@usdExchangeRate.Name</div>
+                                    <div class="col-row-4 roboto">@usdExchangeRate.Value</div>
+                                    <div class="col-row-4 roboto @(usdExchangeRate.Change >= 0 ? "up" : "down")">@usdExchangeRate.Change<span class="glyphicon glyphicon-arrow-@(usdExchangeRate.Change >= 0 ? "up" : "down")"></span></div>
+                                    <div class="col-row-4 roboto @(usdExchangeRate.Change >= 0 ? "up" : "down")">@(usdExchangeRate.Percent)%<span class="glyphicon glyphicon-arrow-@(usdExchangeRate.Change >= 0 ? "up" : "down")"></span></div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-lg-6 left-index">
+                <div class="single-index">
+                    <div class="row index-title">
+                        <div class="col-xs-10 bold">CỔ PHIẾU <font color="#bb202f">TRONG NƯỚC</font></div>
+                        <div class="col-xs-2 roboto right"><a href="/chung-khoan/truc-tuyen/hose">Chi tiết</a></div>
+                    </div>
+                    <div class="row row-pane">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-5 roboto bold">Mã</div>
+                            <div class="col-row-5 roboto bold">Giá trị</div>
+                            <div class="col-row-5 roboto bold">Thay đổi</div>
+                            <div class="col-row-5 roboto bold">% Thay đổi</div>
+                            <div class="col-row-5 roboto bold">Khối lượng</div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach(var stock in Model.VNStocks)
+                            {
+                                var updown = stock.PriceChange >= 0 ? "up" : "down";
+                                <div class="row index-row">
+                                    <div class="col-row-5 roboto bold">@stock.Ticker</div>
+                                    <div class="col-row-5 roboto">@stock.Close</div>
+                                    <div class="col-row-5 roboto @updown">@stock.PriceChange<span class="glyphicon glyphicon-arrow-@updown"></span></div>
+                                    <div class="col-row-5 roboto @updown">@stock.PercentChange<span class="glyphicon glyphicon-arrow-@updown"></span></div>
+                                    <div class="col-row-5 roboto">@stock.Volumn</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="single-index">
+                    <div class="row index-title">
+                        <div class="col-xs-10 bold">CỔ PHIẾU <font color="#bb202f">QUỐC TẾ</font></div>
+                        <div class="col-xs-2 roboto right"><span>Chi tiết</span></div>
+                    </div>
+                    <div class="row row-pane">
+                        <div class="row index-row index-row-header">
+                            <div class="col-row-4 roboto bold">Mã</div>
+                            <div class="col-row-4 roboto bold">Giá trị</div>
+                            <div class="col-row-4 roboto bold">Khối lượng</div>
+                            <div class="col-row-4 roboto bold"></div>
+                        </div>
+                        <div class="index-pane">
+                            @foreach (var stock in Model.WorldStocks)
+                            {
+                                <div class="row index-row">
+                                    <div class="col-row-4 roboto bold">@stock.Symbol</div>
+                                    <div class="col-row-4 roboto">@stock.Price</div>
+                                    <div class="col-row-4 roboto right">@stock.Volumn</div>
+                                    <div class="col-row-4 roboto"></div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+

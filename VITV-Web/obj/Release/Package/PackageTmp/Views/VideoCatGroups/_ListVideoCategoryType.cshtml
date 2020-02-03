@@ -1,0 +1,102 @@
+﻿@model VideoCatType
+
+@{
+    List<VideoCategory> lstVideoCates = ((List<VideoCategory>)ViewBag.videocategories).Where(c => c.TypeId == Model.Id).ToList();
+    List<ProgramSchedule> lstProgramSchedules = ((List<ProgramSchedule>)ViewBag.programschedules).ToList();
+    int type = (int)ViewBag.type;
+}
+
+<thead class="theadvideo" id="theadvideocattype@(Model.Id)">
+    <tr>
+        <th>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="filter-block pull-left">
+                        <a href="/VideoCategory/Create?@(ViewBag.type == 0 ? "typeId=" : "groupId=")@(Model.Id)" target="_blank" class="table-link settingcatgroup" title="Thêm mới chuyên mục">
+                            <span class="fa-stack" title="Thêm mới chuyên mục">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-plus fa-stack-1x fa-inverse fa-2x settingcatgroupchild"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </th>
+        <th><span></span></th>
+        <th><span></span></th>
+        <th><span></span></th>
+        <th><span></span></th>
+        <th><span></span></th>
+        <th><span></span></th>
+        <th><span></span></th>
+        
+    </tr>
+</thead>
+
+
+
+<tbody id="tbodyvct@(Model.Id)">
+    @foreach (VideoCategory c in lstVideoCates.OrderBy(videoCat => videoCat.Order))
+    {
+        var lstTemp = lstProgramSchedules.Where(p => p.VideoCategoryId == c.Id && p.IsNew == true).ToList();
+        string dayofweek = "";
+        foreach(ProgramSchedule p in lstTemp)
+        {
+            dayofweek += (int)p.DayOfWeek == 0 ? "Chủ nhật " : "Thứ " + ((int)p.DayOfWeek + 1) + ", ";
+        }
+        <tr class="tbodyvideo" data-vcid="@c.Id">
+            <td>
+                <img src="@c.ProfilePhoto" alt="" width="70" height="50">
+                <p style="word-wrap: break-word"><b><a href="/VideoCategory/Edit/@(c.Id)">@c.Name</a></b></p>
+            </td>
+            <td>
+                <span class="@(string.IsNullOrEmpty(dayofweek) ? "" : "dayofweektooltip pointervit")" title="@dayofweek.Trim().TrimEnd(',')">@lstTemp.Count</span>
+            </td>
+            <td>
+                @(c.Videos == null ? "None" : c.Videos.Count.ToString(CultureInfo.InvariantCulture))
+            </td>
+            <td>@Html.Action("FirstWeekAndAllViewVideoCatPopover", "VideoCatGroups", new { catId = c.Id, year = DateTime.Now.Year })</td>
+            <td>
+                @if(c.HasTranscript)
+                {
+                    <span class="label label-success">Đang hoạt động</span>
+                }else
+                {
+                    <span class="label label-danger">Không hoạt động</span>
+                }
+            </td>
+            <td>
+                @if (c.HasYoutube)
+                {
+                    <span class="label label-success">Đang hoạt động</span>
+                }
+                else
+                {
+                    <span class="label label-danger">Không hoạt động</span>
+                }
+            </td>
+            <td>
+                @if (c.HasAds)
+                {
+                    <span class="label label-success">Đang hoạt động</span>
+                }
+                else
+                {
+                    <span class="label label-danger">Không hoạt động</span>
+                }
+            </td>
+            <td style="">
+                <a href="@Url.Action("Delete", "VideoCategory", new { id = c.Id })" class="table-link danger">
+                    <span class="fa-stack">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                    </span>
+                </a>
+            </td>
+        </tr>
+    }
+</tbody>
+
+
+
+

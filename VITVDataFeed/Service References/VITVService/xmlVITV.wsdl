@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="getUS_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getUS_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getUS_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getVangTG_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getVangTG_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getVangTG_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getVangVietnam_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getVangVietnam_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getVangVietnam_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getTygiaUSD_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getTygiaUSD_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getTygiaUSD_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getTygiaVND_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getTygiaVND_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getTygiaVND_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getASIA_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getASIA_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getASIA_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getEUROPE_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getEUROPE_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getEUROPE_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getUSDIndex_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getUSDIndex_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getUSDIndex_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getDau_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getDau_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getDau_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getKimloai_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getKimloai_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getKimloai_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TygiaVND_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="TygiaVND_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TygiaVND_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getStock_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getStock_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getStock_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getHAHO_index_xml">
+        <s:complexType />
+      </s:element>
+      <s:element name="getHAHO_index_xmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getHAHO_index_xmlResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getUS_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getUS_xml" />
+  </wsdl:message>
+  <wsdl:message name="getUS_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getUS_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getVangTG_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getVangTG_xml" />
+  </wsdl:message>
+  <wsdl:message name="getVangTG_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getVangTG_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getVangVietnam_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getVangVietnam_xml" />
+  </wsdl:message>
+  <wsdl:message name="getVangVietnam_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getVangVietnam_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTygiaUSD_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getTygiaUSD_xml" />
+  </wsdl:message>
+  <wsdl:message name="getTygiaUSD_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getTygiaUSD_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTygiaVND_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getTygiaVND_xml" />
+  </wsdl:message>
+  <wsdl:message name="getTygiaVND_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getTygiaVND_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getASIA_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getASIA_xml" />
+  </wsdl:message>
+  <wsdl:message name="getASIA_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getASIA_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getEUROPE_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getEUROPE_xml" />
+  </wsdl:message>
+  <wsdl:message name="getEUROPE_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getEUROPE_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getUSDIndex_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getUSDIndex_xml" />
+  </wsdl:message>
+  <wsdl:message name="getUSDIndex_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getUSDIndex_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDau_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getDau_xml" />
+  </wsdl:message>
+  <wsdl:message name="getDau_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getDau_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getKimloai_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getKimloai_xml" />
+  </wsdl:message>
+  <wsdl:message name="getKimloai_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getKimloai_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="TygiaVND_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:TygiaVND_xml" />
+  </wsdl:message>
+  <wsdl:message name="TygiaVND_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:TygiaVND_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getStock_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getStock_xml" />
+  </wsdl:message>
+  <wsdl:message name="getStock_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getStock_xmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="getHAHO_index_xmlSoapIn">
+    <wsdl:part name="parameters" element="tns:getHAHO_index_xml" />
+  </wsdl:message>
+  <wsdl:message name="getHAHO_index_xmlSoapOut">
+    <wsdl:part name="parameters" element="tns:getHAHO_index_xmlResponse" />
+  </wsdl:message>
+  <wsdl:portType name="xmlVITVSoap">
+    <wsdl:operation name="getUS_xml">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Name, Value,Change, percent</wsdl:documentation>
+      <wsdl:input message="tns:getUS_xmlSoapIn" />
+      <wsdl:output message="tns:getUS_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getVangTG_xml">
+      <wsdl:input message="tns:getVangTG_xmlSoapIn" />
+      <wsdl:output message="tns:getVangTG_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getVangVietnam_xml">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Name, Bid,Ask,Change, percent</wsdl:documentation>
+      <wsdl:input message="tns:getVangVietnam_xmlSoapIn" />
+      <wsdl:output message="tns:getVangVietnam_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getTygiaUSD_xml">
+      <wsdl:input message="tns:getTygiaUSD_xmlSoapIn" />
+      <wsdl:output message="tns:getTygiaUSD_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getTygiaVND_xml">
+      <wsdl:input message="tns:getTygiaVND_xmlSoapIn" />
+      <wsdl:output message="tns:getTygiaVND_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getASIA_xml">
+      <wsdl:input message="tns:getASIA_xmlSoapIn" />
+      <wsdl:output message="tns:getASIA_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getEUROPE_xml">
+      <wsdl:input message="tns:getEUROPE_xmlSoapIn" />
+      <wsdl:output message="tns:getEUROPE_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getUSDIndex_xml">
+      <wsdl:input message="tns:getUSDIndex_xmlSoapIn" />
+      <wsdl:output message="tns:getUSDIndex_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getDau_xml">
+      <wsdl:input message="tns:getDau_xmlSoapIn" />
+      <wsdl:output message="tns:getDau_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getKimloai_xml">
+      <wsdl:input message="tns:getKimloai_xmlSoapIn" />
+      <wsdl:output message="tns:getKimloai_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TygiaVND_xml">
+      <wsdl:input message="tns:TygiaVND_xmlSoapIn" />
+      <wsdl:output message="tns:TygiaVND_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getStock_xml">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">StockSymbol, MatchPrice,PriceChange, Display,PriceChangePercent</wsdl:documentation>
+      <wsdl:input message="tns:getStock_xmlSoapIn" />
+      <wsdl:output message="tns:getStock_xmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getHAHO_index_xml">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">names, value,Change, ChangeDisp,PercentDisp</wsdl:documentation>
+      <wsdl:input message="tns:getHAHO_index_xmlSoapIn" />
+      <wsdl:output message="tns:getHAHO_index_xmlSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="xmlVITVSoap" type="tns:xmlVITVSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getUS_xml">
+      <soap:operation soapAction="http://tempuri.org/getUS_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVangTG_xml">
+      <soap:operation soapAction="http://tempuri.org/getVangTG_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVangVietnam_xml">
+      <soap:operation soapAction="http://tempuri.org/getVangVietnam_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTygiaUSD_xml">
+      <soap:operation soapAction="http://tempuri.org/getTygiaUSD_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTygiaVND_xml">
+      <soap:operation soapAction="http://tempuri.org/getTygiaVND_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getASIA_xml">
+      <soap:operation soapAction="http://tempuri.org/getASIA_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEUROPE_xml">
+      <soap:operation soapAction="http://tempuri.org/getEUROPE_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUSDIndex_xml">
+      <soap:operation soapAction="http://tempuri.org/getUSDIndex_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDau_xml">
+      <soap:operation soapAction="http://tempuri.org/getDau_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getKimloai_xml">
+      <soap:operation soapAction="http://tempuri.org/getKimloai_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TygiaVND_xml">
+      <soap:operation soapAction="http://tempuri.org/TygiaVND_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStock_xml">
+      <soap:operation soapAction="http://tempuri.org/getStock_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHAHO_index_xml">
+      <soap:operation soapAction="http://tempuri.org/getHAHO_index_xml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="xmlVITVSoap12" type="tns:xmlVITVSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getUS_xml">
+      <soap12:operation soapAction="http://tempuri.org/getUS_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVangTG_xml">
+      <soap12:operation soapAction="http://tempuri.org/getVangTG_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVangVietnam_xml">
+      <soap12:operation soapAction="http://tempuri.org/getVangVietnam_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTygiaUSD_xml">
+      <soap12:operation soapAction="http://tempuri.org/getTygiaUSD_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTygiaVND_xml">
+      <soap12:operation soapAction="http://tempuri.org/getTygiaVND_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getASIA_xml">
+      <soap12:operation soapAction="http://tempuri.org/getASIA_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEUROPE_xml">
+      <soap12:operation soapAction="http://tempuri.org/getEUROPE_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUSDIndex_xml">
+      <soap12:operation soapAction="http://tempuri.org/getUSDIndex_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDau_xml">
+      <soap12:operation soapAction="http://tempuri.org/getDau_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getKimloai_xml">
+      <soap12:operation soapAction="http://tempuri.org/getKimloai_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TygiaVND_xml">
+      <soap12:operation soapAction="http://tempuri.org/TygiaVND_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStock_xml">
+      <soap12:operation soapAction="http://tempuri.org/getStock_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHAHO_index_xml">
+      <soap12:operation soapAction="http://tempuri.org/getHAHO_index_xml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="xmlVITV">
+    <wsdl:port name="xmlVITVSoap" binding="tns:xmlVITVSoap">
+      <soap:address location="http://vitv.vn/services/xmlVITV.asmx" />
+    </wsdl:port>
+    <wsdl:port name="xmlVITVSoap12" binding="tns:xmlVITVSoap12">
+      <soap12:address location="http://vitv.vn/services/xmlVITV.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

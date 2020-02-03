@@ -1,0 +1,114 @@
+﻿@model VideoCategory
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+    var ortherCat = (VideoCategory)ViewBag.ortherCat;
+}
+
+<div class="row category_details">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        @if (ViewBag.curType == 0)
+                        {
+                            <h3 class="navbar-brand">@Model.Group.Name</h3>
+                        }
+                        else
+                        {
+                            if (Model.Group.Order < ortherCat.Group.Order)
+                            {
+                                <h3 class="navbar-brand hybrid-category">@Model.Group.Name | <a href="@Url.Action("Details", "VideoCategory", new { title = ortherCat.UniqueTitle })">@ortherCat.Group.Name</a></h3>
+                            }
+                            else
+                            {
+                                <h3 class="navbar-brand hybrid-category"><a href="@Url.Action("Details", "VideoCategory", new { title = ortherCat.UniqueTitle })">@ortherCat.Group.Name</a> | @Model.Group.Name</h3>
+                            }
+                        }                        
+                    </div>
+                    <div class="collapse navbar-collapse" id="category_details_filter"></div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="container m15">
+        <div class="col-md-6 wow fadeInLeft"><img src="@Model.ProfilePhoto"></div>
+        <div class="col-md-6 wow fadeInRight">
+            <h4>@Model.Name</h4>
+            <h6>@Model.IntroductionBonus</h6>
+            <p>@Html.Raw(HttpUtility.HtmlDecode(Model.Introduction))</p>
+        </div>
+    </div>
+</div>
+
+<div class="row related_video">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#related_video_filter">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                        <h3 class="navbar-brand">VIDEO TRONG CHƯƠNG TRÌNH</h3>
+                    </div>
+                    <div class="collapse navbar-collapse" id="related_video_filter">
+                        @using (Ajax.BeginForm("Videos", "VideoCategory", new { catId = Model.Id }, new AjaxOptions
+                        {
+                            HttpMethod = "Post",
+                            OnSuccess = "OnCompleteFilter",
+                        }, new { @class = "navbar-form navbar-right" }))
+                        {
+                            <div class="form-group">
+                                <select class="form-control" name="month">
+                                    <option value="0" selected>Chọn tháng</option>
+                                    @for (int i = 1; i <= 12; i++)
+                                    {
+                                        <option value="@i">Tháng @i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="year">
+                                    <option value="0" selected>Chọn năm</option>
+                                    @for (int i = 2015; i <= 2016; i++)
+                                    {
+                                        <option value="@i">Năm @i</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger" id="buttonfilter">Xem</button>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="related_video_content">
+        <div class="container" id="result_container">
+            @Html.Action("Videos", "VideoCategory", new { catId = Model.Id })
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/toggle.js"></script>
+    <script>
+        function OnCompleteFilter(data) {
+            $("#result_container").fadeTo('slow', 0.5, function () {
+                $(this).html(data);
+                $(this).fadeTo('slow', 1);
+            });
+        }
+    </script>
+}
+
+@section seo{
+    <meta name="description" content="Chương trình @Model.Name. @Model.Introduction">
+    <meta name="keywords" content="@Model.Name - VITV @Model.Name">
+    <meta property="og:image" content="@Model.ProfilePhoto" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="537" />
+}

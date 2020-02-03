@@ -1,0 +1,30 @@
+﻿@model VideoCategorySponsor
+
+@using (Html.BeginForm("Create", "VideoCatSponsor", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "sponsorForm" }))
+{
+    @Html.Partial("_CreateOrEdit", Model)
+}
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#photoView').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $(document).ready(function () {
+        $("#photoinput").change(function () {
+            readURL(this);
+        });
+
+        $('#sidebar-nav #videoMng').toggleClass("active");
+        $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+        $('#sidebar-nav a#vd-li-5').toggleClass("active");
+        $('#sidebar-nav a#vd-li-5').parent().siblings().removeClass("active");
+    });
+</script>

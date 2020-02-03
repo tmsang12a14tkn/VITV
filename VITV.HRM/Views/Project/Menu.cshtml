@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Project>
+<ul class="nav nav-list">
+    @foreach(var project in Model)
+    { 
+    <li class="">
+        <a href="/Project/Details/@project.Id">
+            <i class="menu-icon fa fa-globe"></i>
+            <span class="menu-text" title="@project.Title"> @project.Title </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+    }
+    <li class="">
+        <a href="/Project/MyProjects">
+            <i class="menu-icon fa fa-globe"></i>
+            <span class="menu-text" title="Tất cả"> Tất cả </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+</ul>

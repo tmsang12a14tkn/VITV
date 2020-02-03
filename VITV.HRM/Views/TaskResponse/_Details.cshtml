@@ -1,0 +1,52 @@
+﻿@model TaskResponse
+<div class="timeline-item clearfix">
+    <div class="timeline-info">
+        <img class="pull-left" src="@Model.Employee.ProfilePicture" />
+    </div>
+
+    <div class="widget-box transparent">
+        <div class="widget-header widget-header-small">
+            <h5 class="widget-title smaller">@Model.Employee.Name</h5>
+
+            <span class="widget-toolbar">
+                @*<a data-href="/TaskResponse/Edit/3" class="blue" data-toggle="modal" data-target="#project-modal">
+                        <i class="ace-icon fa fa-pencil bigger-125"></i>
+                    </a>*@
+
+                <a data-href="/TaskResponse/Delete/@Model.Id" class="red" data-toggle="modal" data-target="#response-delete-modal">
+                    <i class="ace-icon fa fa-times bigger-125"></i>
+                </a>
+            </span>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <div class="clearfix">
+                    <div class="row">
+                        @Model.Content
+                    </div>
+
+                    @*<ul class="attachment-list pull-left list-unstyled">
+                        @foreach (var attachment in Model.Attachments)
+                        {
+                            <li>
+                                <a href="@attachment.AttachmentLink" target="_blank" class="attached-file">
+                                    <i class="ace-icon fa fa-file-o bigger-110"></i>
+                                    <span class="attached-name">@Path.GetFileName(attachment.AttachmentLink)</span>
+                                </a>
+
+                                <span class="action-buttons">
+                                    <a href="@attachment.AttachmentLink" download="">
+                                        <i class="ace-icon fa fa-download bigger-125 blue"></i>
+                                    </a>
+
+                                </span>
+                            </li>
+                        }
+                    </ul>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

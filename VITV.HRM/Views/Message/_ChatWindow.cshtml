@@ -1,0 +1,81 @@
+﻿@model List<MessageModel>
+@{
+    string myId = ViewBag.MyId;
+}
+@* data-viewed true: xem het roi *@
+<div class="col-sm-3 chat_window chat_popup" id="@ViewBag.receiver.Id" data-userid="@ViewBag.receiver.Id" data-viewed="false">
+
+    <div class="widget-box ">
+        <div class="widget-header" id="chat_title">
+            <h4 class="widget-title lighter smaller">
+                <i class="ace-icon fa fa-comment blue"></i>
+                <button type="button" class="btn btn-info pull-right" id="btnclose">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                @ViewBag.receiver.Name
+
+            </h4>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <div class="dialogs" style="height: 300px; overflow-y: scroll">
+                    @Html.Partial("_ChatList", Model)
+                </div>
+
+                <form>
+                    <div class="form-actions">
+                        <div class="input-group">
+                            <input placeholder="Type your message here ..." type="text" class="form-control" id="ChatContent" name="message" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-info no-radius btnSendMessage" type="button">
+                                    <i class="ace-icon fa fa-share"></i>
+                                    Gửi
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.widget-main -->
+        </div><!-- /.widget-body -->
+    </div><!-- /.widget-box -->
+</div>
+
+<script type="text/javascript">
+    //loading data scroll top
+    var IsDataAvailable = true;
+    $('.dialogs').on('scroll', function () {
+        if ($(this).scrollTop() == 0) {
+            console.log("scroll");
+            var dialog = $(this);
+            var item = dialog.children(0);
+            var chatwindow = dialog.parents('.chat_window');
+            console.log(chatwindow.data('userid'));
+            console.log(item.data('time'));
+            if (IsDataAvailable == true) {
+                dialog.prepend('<i id="loader_chat" class="ace-icon fa fa-spinner fa-spin red bigger-250"></i>');
+                IsDataAvailable = false;
+
+                $.post('/Message/GetChatListWhenScrolling', { userid: chatwindow.data('userid'), createdatetime: item.data('time') }, function (result) {
+                    if (result.success == -1) {
+                        window.location = result.content;
+                    }
+                    else if (result.success == 1) {
+                        IsDataAvailable = true;
+                        $('#loader_chat').remove();
+                        item.first().before(result.content);
+                        console.log(result.time);
+                        dialog.animate({
+                            scrollTop: $("#" + result.time).offset().top
+                        }, 300);
+                    }
+                    else if (result.success == 2) {
+                        $('#loader_chat').remove();
+                    }
+                });
+            }
+        }
+    });
+
+
+</script>

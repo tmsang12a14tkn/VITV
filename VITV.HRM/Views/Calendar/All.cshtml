@@ -1,0 +1,167 @@
+﻿@model CalendarAllModel
+@{
+    ViewBag.Title = "Quản lý lịch làm việc";
+    var now = DateTime.Now;
+    var isCurrentMonth = now.Month==Model.Month&&now.Year==Model.Year;
+    var daysInMonth = DateTime.DaysInMonth(Model.Year, Model.Month);
+    var firstDOW = (int)(new DateTime(Model.Year, Model.Month, 1).DayOfWeek);
+    var groups = ViewBag.Groups as List<Group>;
+}
+
+<div class="page-header">
+    <h1>
+        Lịch làm việc
+        <small>
+            <a href="/Employee/ProfilePage">
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Quản lý chung
+            </a>
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-3">
+               <select id="selectGroup">
+                   <option value="0">Tất cả</option>
+                   @foreach (var group in groups)
+                   {
+                    <option value="@group.Id" @(group.Id==Model.GroupId?"selected":"")>@group.Name</option>
+                   }
+                   
+               </select>
+            </div>
+            <div class="col-sm-6 text-center"><h4>Tháng @Model.Month / @Model.Year</h4></div>
+            <div class="col-sm-3">
+                <div class="btn-group pull-right"> 
+                    <a class="btn btn-sm" href="/Calendar/All?group=@Model.GroupId&y=@Model.Year&m=@(Model.Month-1)">← Trước</a>
+                    <a class="btn btn-sm @(isCurrentMonth?"disabled":"")" href="/Calendar/All?group=@Model.GroupId">Hiện tại</a>
+                    <a class="btn btn-sm" href="/Calendar/All?group=@Model.GroupId&y=@Model.Year&m=@(Model.Month+1)">Sau →</a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th rowspan="2">STT</th>
+                    <th rowspan="2">Nhân viên</th>
+                    @for (int i = 1; i <= daysInMonth; i++)
+                    {
+                        <th @(now.Day==i&&isCurrentMonth?"class=red":"")>@i.ToString("00")</th> 
+                    }
+                    <th rowspan="2">Nghỉ</th>
+                </tr>
+                <tr>
+                    @for (int i = 1; i <= daysInMonth; i++)
+                    {
+                        var dow = (firstDOW + i)%7;
+                        <td @(now.Day==i&&isCurrentMonth?"class=red":"")> @(dow==0?"T 7":(dow==1?"CN":string.Format("T {0}",dow)))</td>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                
+                @for (int i = 0; i < Model.EmployeeAttendances.Count;i++ )
+                {
+                    var empAtd = Model.EmployeeAttendances[i];
+                    <tr data-id="@empAtd.EmployeeId">
+                        <td>@(i+1)</td>
+                        <td>
+                            @Html.ActionLink(empAtd.EmployeeName, "Index", "Calendar", new{id=empAtd.EmployeeId},null)
+                        </td>
+                        @for (int j = 0; j < daysInMonth; j++)
+                        {
+                            var activeClass = (j - 1 - firstDOW) % 7 == 0 ? "active" : "";
+                            //data-dayoffid="@empAtd.DayoffIds.Contains(j + 1) ?  :"
+                            <td class="day-cell text-center @activeClass" data-date="@(j+1)/@Model.Month/@Model.Year">
+                                @if (empAtd.Dayoffs.FirstOrDefault(d => d.Start.Day == (j + 1)) != null)
+                                {
+                                    <i class="fa fa-close red"></i>
+                                }
+                            </td>
+                        }
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+
+<div class="modal fade" id="modal-create-absent">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts
+{
+    <script>
+        jQuery(function ($) {
+            $("#selectGroup").change(function (a) {
+                //console.log(this.value);
+                location.href = "/Calendar/All?group=" + this.value + "&y=@Model.Year&m=@Model.Month";
+            });
+
+            
+            $(".day-cell").on('click', function () {
+                var date = $(this).data("date");
+                var userid = $(this).parent().data("id");
+                //var dayoffid = $(this).data("dayoffid");
+                $("#modal-create-absent .modal-content").load("/PersonalDayoff/Create?date=" + date + "&userid=" + userid, function () {
+                    $("#modal-create-absent .timepicker").datetimepicker({
+                        datepicker: false,
+                        format: 'H:i'
+                    });
+                    $("#modal-create-absent form").ajaxForm({
+                        success: function (response, statusText, xhr, $form) {
+                            if (response.success == true) {
+                                location.reload();
+                            }
+                            else {
+                                $("#modal-create-absent").modal("hide");
+                                alert(response.error);
+                            }
+                        }
+                    });
+                    $("#modal-create-absent").modal("show");
+                });
+                //create
+                //if (dayoffid == 0)
+                //{
+                //    $("#modal-create-absent .modal-content").load("/PersonalDayoff/Create?date=" + date + "&userid=" + userid, function () {
+                //        $("#modal-create-absent .timepicker").datetimepicker({
+                //            datepicker: false,
+                //            format: 'H:i'
+                //        });
+                //        $("#modal-create-absent").modal("show");
+                //    });
+                //}
+                ////edit
+                //else
+                //{
+                //    $("#modal-create-absent .modal-content").load("/PersonalDayoff/Edit?date=" + date + "&userid=" + userid + "&dayoffid=" + dayoffid, function () {
+                //        $("#modal-create-absent .timepicker").datetimepicker({
+                //            datepicker: false,
+                //            format: 'H:i'
+                //        });
+                //        $("#modal-create-absent").modal("show");
+                //    });
+                //}
+                
+            });
+
+        });
+    </script>
+}
+@section styles
+{
+    <style>
+       
+    </style>
+}

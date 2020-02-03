@@ -1,0 +1,17 @@
+﻿@model List<Article>
+
+@foreach (var item in Model)
+{
+    <div class="grid @item.Category.UniqueTitle">
+        <div class="imgholder">
+            <a href="@Url.Action("Details", "Article", new { id = item.Id, title = item.UniqueTitle })">
+                <img src="@item.Thumbnail" />
+                <span class="hover"></span>
+            </a>
+        </div>
+        <h5><a href="#">@item.Category.Name</a>, @item.PublishedTime.ToString("dd/MM/yyyy")</h5>
+        <strong><a href="@Url.Action("Details", "Article", new { id = item.Id, title = item.UniqueTitle })">@item.Title</a></strong>
+        <p>@item.ShortBrief</p>
+        <p class="read_btn"><a href="@Url.Action("Details", "Article", new { id = item.Id, title = item.UniqueTitle })">Xem thêm...</a></p>
+    </div>
+}

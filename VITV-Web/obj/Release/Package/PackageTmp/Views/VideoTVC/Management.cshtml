@@ -1,0 +1,203 @@
+﻿@model IEnumerable<VideoTVC>
+
+@{
+    ViewBag.Title = "Quản lý TVC";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left"><b>Quản lý TVC</b></h2>
+                <form class="form-inline pull-right" role="form">
+                    <div class="navbar-form navbar-right" role="search" id="formsearch">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="sr-only" for="slCompany">Công ty</label>
+                                <select class="form-control" id="slCompany">
+                                    <option value="0">Theo công ty</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="sr-only" for="slProductGroup">Password</label>
+                                <select class="form-control" id="slProductGroup">
+                                    <option value="0">Theo nhóm sản phẩm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-filter fa-lg"></i> Lọc</button>
+                        </div>
+
+                        <div class="form-group">
+                            <a href="/VideoTVC/Create" title="Tạo mới TVC" class="btn btn-success pull-right" data-backdrop="static" data-toggle="modal" data-target="#tvcModal"
+                               data-ajax="true"
+                               data-ajax-complete=""
+                               data-ajax-mode="replace"
+                               data-ajax-update="#tvcContent">
+                                <i class="fa fa-plus fa-lg"></i> Tạo mới TVC
+                            </a>
+                        </div>
+                    </div>  
+                </form>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table user-list table-hover" id="manage_video">
+                            <thead>
+                                <tr>
+                                    <th><span>Hình ảnh</span></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodytvc">
+                                @foreach (VideoTVC vd in Model)
+                                {
+
+                                    <tr class="tbodyvideo" id="tvc-@vd.Id">
+                                        <td>
+                                            <img src="@vd.Thumbnail" alt="" width="70" height="50">
+                                            <p style="word-wrap: break-word;font-size: 15px"><b>@vd.Title</b></p>
+                                        </td>
+
+                                        <td style="width: 20%;">
+                                            <a href="/VideoTVC/Edit/@vd.Id" class="table-link gray" data-backdrop="static" title="Chỉnh sửa" data-toggle="modal" data-target="#tvcModal"
+                                               data-ajax="true"
+                                               data-ajax-complete=""
+                                               data-ajax-mode="replace"
+                                               data-ajax-update="#tvcContent">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+
+                                            <a class="table-link gray" data-toggle="modal" href="#videoModal" data-video="@vd.Url" title="Xem video">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+
+                                            <a href="@vd.Url" class="table-link gray" download title="Tải về">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-download fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+
+                                            <a href="/VideoTVC/Delete/@vd.Id" class="table-link danger" title="Xóa" data-backdrop="static" data-toggle="modal" data-target="#tvcModal"
+                                               data-ajax="true"
+                                               data-ajax-complete=""
+                                               data-ajax-mode="replace"
+                                               data-ajax-update="#tvcContent">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <video src="" controls preload="auto" width="100%" height="100%" id="videotvcstop"></video>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="tvcModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="tvcContent">
+        </div>
+    </div>
+</div>
+@section styles {
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+    <script src="~/Scripts/jquery.vitv.js"></script>
+    <script src="~/Scripts/jquery.form.min.js"></script>
+
+    <script>
+
+        $('#videoModal').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget)
+            var videoUrl = button.data('video');
+            $(this).find('video').attr('src', videoUrl);
+            $("video").each(function () { this.play() });
+            // do something...
+        });
+        $('#videoModal').on('hide.bs.modal', function (e) {
+            $("video").each(function () { this.pause() });
+
+        });
+
+        function OnDeleteSuccess(data) {
+            if (data.success == true) {
+                $("#tvcModal").modal("hide");
+                $("#tvc-" + data.id).remove();
+            }
+            else {
+                alert(data.error);
+            }
+        }
+        function registerForm() {
+            $('#tvcForm').ajaxForm(function (data) {
+                console.log(data);
+                if (data.success == true) {
+                    $("#tvcModal").modal("hide");
+                    reloadTVC();
+                }
+                else {
+                    $("#tvcModal").find(".modal-content").html(data.view);
+                    //run javascript
+                    $("#tvcModal").find("script").each(function (i) {
+                        if ($(this).attr("src") != "") {
+                            $.getScript($(this).attr("src"));
+                        }
+                        else {
+                            eval($(this).text());
+                        }
+                    });
+                    registerForm();
+                }
+            });
+        }
+        function reloadTVC() {
+            $("#tbodytvc").load('/VideoTVC/PartialDetail');
+
+        }
+        $(document).ready(function () {
+            $('#sidebar-nav #videoMng').toggleClass("active");
+            $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#vd-li-4').toggleClass("active");
+            $('#sidebar-nav a#vd-li-4').parent().siblings().removeClass("active");
+        });
+    </script>
+}

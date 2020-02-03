@@ -1,0 +1,97 @@
+﻿@model VITV.Data.Models.Article
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+}
+
+<div class="row main_article">
+    <ol class="breadcrumb">
+        <li><a href="/">Cổng công nghệ</a></li>
+        <li><a href="#">Tin chữ</a></li>
+        <li class="active">Bản tin công nghệ cuối tuần</li>
+    </ol>
+    <h2>@Model.Title</h2>
+    <h5 class="tm"><span>Bản tin công nghệ cuối tuần</span> - @Model.PublishedTime</h5>
+    <ul class="list-inline">
+        <li><a class="social-btn" data-social="fb" href="#"><img src="~/Content/img/fb.png"></a></li>
+        <li><a class="social-btn" data-social="gp" href="#"><img src="~/Content/img/gp.png"></a></li>
+        <li><a class="social-btn" data-social="twitter" href="#"><img src="~/Content/img/tw.png"></a></li>
+        <li><div class="divider"></div></li>
+        <li><div class="font-btn nm current" data-size="12" title="Cỡ chữ thường"></div></li>
+        <li><div class="font-btn lgr" data-size="15" title="Cỡ chữ to hơn"></div></li>
+        <li><div class="font-btn lgs" data-size="18" title="Cỡ chữ to nhất"></div></li>
+    </ul>
+    @Html.Raw(@Model.ArticleContent)
+    <p class="author">@Model.Reporter.Name</p>
+</div>
+
+<div class="row text_news_area">
+    <div class="row hr_line">
+        <h4>TIN LIÊN QUAN</h4>
+    </div>
+    <div class="row">
+        <div class="related_artical_content">
+            <div class="col col-xs-4 single_related">
+                <div class="single_artical">
+                    <div class="artical_image">
+                        <a href="#">
+                            <span class="thumb">
+                                <span class="thumb_sizer">
+                                    <span class="thumb_tugger">
+                                        <img class="poster" src="./img/h4.jpg">
+                                    </span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="artical_info m3">
+                        <h4><a href="#">Startups Châu Á có thể học hỏi gì từ Thung lũn Silicon</a></h4>
+                        <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                        <p class="cn">ICTnews - Sau hơn một năm thành lập, Haravan – start-up chuyên cung cấp giải pháp bán hàng toàn diện – đã đạt 27 ngàn người đăng ký dùng.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-xs-4 single_related">
+                <div class="single_artical">
+                    <div class="artical_image">
+                        <a href="#">
+                            <span class="thumb">
+                                <span class="thumb_sizer">
+                                    <span class="thumb_tugger">
+                                        <img class="poster" src="./img/h6.jpg">
+                                    </span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="artical_info m3">
+                        <h4><a href="#">5 Startups Việt tiêu biểu của tuần 3 tháng 4 năm 2015</a></h4>
+                        <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                        <p class="cn">ICTnews - Bài toán khô khan bỗng dưng có kết quả biết nói, khiến nhiều người phải suy nghĩ.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-xs-4 single_related">
+                <div class="single_artical">
+                    <div class="artical_image">
+                        <a href="#">
+                            <span class="thumb">
+                                <span class="thumb_sizer">
+                                    <span class="thumb_tugger">
+                                        <img class="poster" src="./img/h5.jpg">
+                                    </span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="artical_info m3">
+                        <h4><a href="#">FPT sẽ ra mắt FPT Ventures tại TechDay 2015</a></h4>
+                        <p class="tm">Phát sóng 06:30 ngày 15/09/2015</p>
+                        <p class="cn">Toong là mô hình co-working thật sự đầu tiên tại Hà Nội – nơi các startup có thể tìm được không gian và những tiện ích để phục vụ các hoạt động của họ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

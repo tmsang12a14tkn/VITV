@@ -1,0 +1,67 @@
+﻿@model List<PeriodVideoAccess>
+@{
+    ViewBag.Title = "ReportData";
+    List<string> lstName = new List<string>();
+    List<double> lstPercentIPView = new List<double>();
+    List<double> lstPercentPageView = new List<double>();
+    foreach (PeriodVideoAccess p in Model)
+    {
+        lstName.Add(p.Title);
+        lstPercentIPView.Add(p.PercentIPViewCount);
+        lstPercentPageView.Add(p.PercentPageViewCount);
+    }
+}
+
+<div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+
+@section scripts
+{
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        $(function () {
+            var lstname = getParameterByName('from');
+
+            $('#container').highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Stacked bar chart'
+                },
+                xAxis: {
+                    categories: '@lstName'
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total fruit consumption'
+                    }
+                },
+                legend: {
+                    reversed: true
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [{
+                    name: 'John',
+                    data: '@lstPercentIPView'
+                }, {
+                    name: 'Jane',
+                    data: '@lstPercentPageView'
+                }]
+            });
+        });
+    </script>
+}

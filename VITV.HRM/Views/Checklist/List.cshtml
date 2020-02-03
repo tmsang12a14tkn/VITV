@@ -1,0 +1,7 @@
+﻿@model IEnumerable<JobList>
+@foreach (var checklist in Model)
+{
+    <li class="clearfix" id="checklist-@checklist.Id">
+       @Html.Partial("~/Views/Checklist/Details.cshtml", checklist)
+    </li>
+}

@@ -1,0 +1,204 @@
+﻿@model List<Video>
+
+@{
+    IEnumerable<IGrouping<DateTime, Video>> videolistgroups = Model.OrderByDescending(b => b.DisplayTime).GroupBy(b => b.DisplayTime.Date);
+    var week = ViewData["week"] != null ? Convert.ToInt32(ViewData["week"].ToString()) : 0;
+}
+
+@foreach (IGrouping<DateTime, Video> videogroup in videolistgroups)
+{
+    <thead class="theadvideo" id="theadvideo@(videogroup.Key.Day)@(videogroup.Key.Month)@(videogroup.Key.Year)">
+        <tr>
+            <th><h2><b>@(videogroup.Key.DayOfWeek == 0 ? "Chủ nhật - " + videogroup.Key.ToShortDateString() : "Thứ " + ((int)videogroup.Key.DayOfWeek + 1) + " - " + videogroup.Key.ToShortDateString())</b></h2></th>
+            <th><span></span></th>
+            <th><span></span></th>
+            <th><span></span></th>
+            <th><span></span></th>
+            <th><span></span></th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+
+    List<Video> lstVideo = videogroup.OrderBy(b => b.DisplayTime).ToList();
+    <tbody>
+        @foreach (Video video in lstVideo)
+        {
+            TimeSpan timespan = video.UploadedTime.Value.Subtract(video.DisplayTime);
+            var timeLate = Math.Round(timespan.TotalMinutes);
+            string timeDisplay = (timespan.ToString(@"dd") == "00" ? "" : timespan.ToString(@"dd") + " ngày ") + (timespan.ToString(@"hh") == "00" ? "" : timespan.ToString(@"hh") + " giờ ") + timespan.ToString(@"mm") + " phút";
+            <tr class="tbodyvideo" data-lastdate="@video.DisplayTime.ToShortDateString()" data-videoid="@video.Id" data-youtubeurl="@(string.IsNullOrEmpty(video.YoutubeUrl) ? "" : video.YoutubeUrl)" data-videopiority="@video.VideoPiority">
+                <td>
+                    <img src="@video.Thumbnail" alt="" width="70" height="50">
+                    <img src="@video.Category.ProfilePhoto" alt="" width="70" height="50">
+                    <p style="word-wrap: break-word;font-size: 13px">@video.Title</p>
+                    <span class="user-subhead"><b>@video.Category.Name</b></span>
+                </td>
+                <td>
+                    @(video.Category != null ? video.Category.Type != null ? video.Category.Type.Name : "" : "")
+                </td>
+                <td>
+                    @video.DisplayTime.ToString("HH:mm")
+                </td>
+                <td>
+                    <span class="videouploadtime pointervit @(timeLate > 120 ? "red" : "")" title="Xem thông tin thời gian upload"
+                          data-uploader="@(video.UploadUser != null ? video.UploadUser.UserName : "")"
+                          data-uploadtime="@video.UploadedTime.Value.ToString("dd/MM/yyy") - @video.UploadedTime.Value.ToString("HH:mm")"
+                          data-publishtime="@video.PublishedTime.ToString("dd/MM/yyy") - @video.PublishedTime.ToString("HH:mm")"
+                          data-displaytime="@video.DisplayTime.ToString("dd/MM/yyy") - @video.DisplayTime.ToString("HH:mm")"
+                          data-difference="@timeDisplay"
+                          data-type="@(timeLate < 0 ? 2 : timeLate > 120 ? 1 : 3)">
+                        @(video.UploadedTime.HasValue ? video.UploadedTime.Value.ToString("HH:mm") : "")
+                    </span>
+                    
+                </td>
+                
+                <td>@Html.Action("FirstWeekPopover", "Video", new { videoId = video.Id }) | @Html.Action("AllTimePopover", "Video", new { videoId = video.Id })</td>
+
+                <td style="width: 20%;">
+                    @if (video.Category != null && video.Category.HasYoutube)
+                    {
+                        if (!string.IsNullOrEmpty(video.YoutubeUrl))
+                        {
+                            //tu youtube
+                            if (video.VideoPiority == 0)
+                            {
+
+                                <a href="#" class="table-link green youtubeplay" title="Xem video từ youtube" id="youtubeplay@(video.Id)">
+                                    <span class="fa-stack" title="Xem video từ youtube">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-film fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+
+
+                            }
+                            //tu luu tru vitv
+                            else
+                            {
+
+                                <a href="#" class="table-link youtubeplay" title="Xem video từ lưu trữ VITV" id="youtubeplay@(video.Id)">
+                                    <span class="fa-stack" title="Xem video từ lưu trữ VITV">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-film fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+
+
+                            }
+
+                        }
+                        //khong co link youtube
+                        else
+                        {
+                            <a href="#" class="table-link red youtubeplay" title="Không có đường dẫn youtube" id="youtubeplay@(video.Id)">
+                                <span class="fa-stack" title="Không có đường dẫn youtube">
+                                    <i class="fa fa-square fa-stack-2x"></i>
+                                    <i class="fa fa-film fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="#" class="table-link gray youtubeplay" title="Không sử dụng youtube" id="youtubeplay@(video.Id)">
+                            <span class="fa-stack" title="Không sử dụng youtube">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-film fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    }
+                
+
+                    @if (video.Category != null && video.Category.Type != null)
+                    {
+
+                        if (video.Category.HasTranscript)
+                        {
+                            //co vo ban tin
+                            if (video.VideoTranscripts != null && video.VideoTranscripts.Count > 0)
+                            {
+                                <a href="@Url.Action("Details", "VideoTranscript", new { vId = video.Id })" class="table-link green" title="Đã có nội dụng chi tiết">
+                                    <span class="fa-stack">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-list fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Details", "VideoTranscript", new { vId = video.Id })" class="table-link red" title="Chưa có nội dung chi tiết">
+                                    <span class="fa-stack">
+                                        <i class="fa fa-square fa-stack-2x"></i>
+                                        <i class="fa fa-list fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="#" class="table-link gray videotranscript" title="Thay đổi nội dung chi tiết">
+                                <span class="fa-stack">
+                                    <i class="fa fa-square fa-stack-2x"></i>
+                                    <i class="fa fa-list fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        }
+                    }
+
+                    <a href="/Video/Edit/@video.Id?week=@week" class="table-link gray" title="Chỉnh sửa">
+                        <span class="fa-stack">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+
+                    <a target="_blank" href="@Url.Action("Details", "Video", new { id = video.Id, title = video.UniqueTitle, date = video.PublishedTime.ToString("dd-MM-yyyy") })" class="table-link gray" title="Xem video">
+                        <span class="fa-stack">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    
+                    <a href="@video.Url" class="table-link gray" download title="Tải về">
+                        <span class="fa-stack">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-download fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+
+                    @if (video.IsPublished)
+                    {
+                        <a href="#" class="table-link gray ispublished" data-videoid="@video.Id" title="Cho phép hiển thị trên web" id="ispublished@(video.Id)">
+                            <span class="fa-stack" title="Cho phép hiển thị trên web">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" class="table-link danger ispublished" data-videoid="@video.Id" title="Ẩn trên web" id="ispublished@(video.Id)">
+                            <span class="fa-stack" title="Ẩn trên web">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    }
+                    
+                    <a href="/Video/Delete/@video.Id" class="table-link danger" title="Xóa" data-toggle="modal" data-target="#deleteVideoModal"
+                       data-ajax="true"
+                       data-ajax-complete=""
+                       data-ajax-mode="replace"
+                       data-ajax-update="#deleteVideoContent">
+                        <span class="fa-stack">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+}
+

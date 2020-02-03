@@ -1,0 +1,98 @@
+﻿@model List<Job>
+@{
+    Employee employee = ViewBag.Employee;
+}
+@if(User.Identity.IsAuthenticated)
+{ 
+<div class="navbar-buttons navbar-header pull-right" role="navigation">
+    <ul class="nav ace-nav">
+        <li class="grey">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                <i class="ace-icon fa fa-tasks"></i>
+                <span class="badge badge-grey">@Model.Count</span>
+            </a>
+
+            <ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                <li class="dropdown-header">
+                    <i class="ace-icon fa fa-check"></i>
+                    @Model.Count công việc cho bạn
+                </li>
+
+                <li class="dropdown-content">
+                    <ul class="dropdown-menu dropdown-navbar navbar-pink">
+                        @foreach(var job in Model)
+                        { 
+                        <li>
+                            <a href="/TaskRequest/Details/@job.JobList.TaskRequestId"> @*data-toggle="modal" data-target="#request-view-modal"*@
+                                <div class="clearfix">
+                                    <span class="pull-left">
+                                        @*<i class="btn btn-xs no-hover btn-pink fa fa-briefcase"></i>*@
+                                        <label>
+                                            <input name="form-field-checkbox" type="checkbox" data-id="@job.Id" class="ace input-lg item-checkbox" @(job.Done ? "checked" : "")>
+                                            <span class="lbl bigger-120"> </span>
+                                        </label>
+                                        @job.Title
+                                    </span>
+                                    <span class="pull-right badge badge-info"></span>
+                                </div>
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </li>
+
+                <li class="dropdown-footer">
+                    <a href="/Job/MyJobs">
+                        Xem tất cả các công việc
+                        <i class="ace-icon fa fa-arrow-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="purple" id="notifiCentered">
+            @*@Html.Action("Get", "Notification")*@
+        </li>
+
+        <li class="green">
+            @*@Html.Action("Get", "Message")*@
+        </li>
+
+        <li class="light-blue">
+            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                <img class="nav-user-photo" src="@employee.ProfilePicture" />
+                <span class="user-info">
+                    <small>Welcome,</small>
+                    @employee.Name
+                </span>
+
+                <i class="ace-icon fa fa-caret-down"></i>
+            </a>
+            <form action="/Account/LogOff" id="logoutForm" method="post">
+                @Html.AntiForgeryToken()
+            </form>
+            <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                <li>
+                    <a href="#">
+                        <i class="ace-icon fa fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Employee/ProfilePage">
+                        <i class="ace-icon fa fa-user"></i>
+                        Profile
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li>
+                    <a href="javascript:document.getElementById('logoutForm').submit()"><i class="ace-icon fa fa-power-off"></i>Đăng xuất</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+}

@@ -1,0 +1,39 @@
+﻿@model CategoryIntro
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel"><b>Bạn có chắc chắn muốn xóa intro này không?</b></h4>
+</div>
+
+@using (Html.BeginForm("Delete", "CategoryIntro", new { id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form", id = "videoForm" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="form-field-display">
+                @Html.DisplayFor(model => model.Title)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <video src="@Model.Url" controls="controls" style="width: 100%; height: auto;" />
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="confirmText" placeholder="Nhập 'Đồng ý'" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-ok"><span class="fa fa-check"></span> Đồng ý</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-times"></span> Hủy</button>
+    </div>
+}
+
+<div id="scripts">
+    <script>
+        registerForm();
+    </script>
+</div>

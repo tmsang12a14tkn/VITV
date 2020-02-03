@@ -1,0 +1,17 @@
+﻿<div class="row buckets">
+    <div class="row r_about">
+        <p class="title"><a href="@Url.Action("About", "Home")">GIỚI THIỆU</a></p>
+    </div>
+    <div class="row r_videos">
+        <p class="title"><a href="@Url.Action("Index", "Home")">VIDEO</a></p>
+        <ul>
+            @Html.Action("GetVideoCategories", "Video")
+        </ul>
+    </div>
+    <div class="row r_articles">
+        <p class="title"><a href="@Url.Action("Index", "Article")">TIN TỨC - BÀI VIẾT</a></p>
+        <ul>
+            @Html.Action("GetArticleCategories", "Article")
+        </ul>
+    </div>
+</div>

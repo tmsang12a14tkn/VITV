@@ -1,0 +1,163 @@
+﻿@model List<ScheduleDetailFilterView>
+
+@{
+    ViewBag.Title = "Quản lý lịch phát sóng hằng ngày";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Quản lý lịch phát sóng hằng ngày</h2>
+                @using (Html.BeginForm("Management", "ProgramScheduleDetails", FormMethod.Get, null))
+                {
+                <div class="navbar-form navbar-right" role="search" id="formsearch">
+                    <div class="form-group">
+                        @Html.TextBox("date", Model[0].DateTime, "{0:dd/MM/yyyy}", new { @class = "datepicker form-control", data_format = "dd/MM/yyyy" })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search"></span> Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+                }
+            </header>
+            <div class="main-box-body clearfix">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <li class="@(i==0?"active":"")"><a href="#tab@(Model[i].DateTime.ToString("dd-MM-yyyy"))" role="tab" data-toggle="tab">@Model[i].DateTime.ToString("dddd dd-MM-yyyy")</a></li>
+                    }
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <div class="tab-pane fade @(i==0?"active in":"")" id="tab@(Model[i].DateTime.ToString("dd-MM-yyyy"))">
+                            @Html.Partial("_DateList", Model[i])
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDeleteVideo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Xóa video?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning fade in">
+                    <i class="fa fa-warning fa-fw fa-lg"></i>
+                    <strong>Lưu ý!</strong> Thay đổi này sẽ dẫn tới việc xóa dữ liệu video đã đăng. Bạn có muốn tiếp tục?
+                </div>
+                <input type="text" class="form-control" id="confirmText" placeholder="Nhập 'Đồng ý'"/>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="btnDeleteVideo">
+                    <span class="fa fa-check"></span> Đồng ý
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <span class="fa fa-times"></span> Hủy
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modalDeleteSchedule">
+    <div class="modal-dialog">
+        <div class="modal-content" id="contentDeleteSchedule">
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts
+{
+    <script>
+        $('#sidebar-nav #scheduleMng').toggleClass("active");
+        $('#sidebar-nav #scheduleMng').siblings().removeClass("active");
+
+        $('#sidebar-nav a#sch-li-2').toggleClass("active");
+        $('#sidebar-nav a#sch-li-2').parent().siblings().removeClass("active");
+        $(document).ready(function ()
+        {
+            function changeNew(btn, id, deleteVideo)
+            {
+                $.post("/ProgramScheduleDetails/ChangeNew", { id: id, deleteVideo: deleteVideo })
+                    .done(function (data) {
+
+                        if (data.success == true) {
+                            location.reload();
+                            //$(btn).data("videoid", null);
+                            //var link = $("#schedule_video_" + id);
+                            //link.html("Thêm");
+                            //link.attr("href", data.url);
+
+                            //if (data.isnew == true) {
+                            //    $(btn).html("Phát mới");
+                            //    $(btn).removeClass("btn-primary");
+                            //    $(btn).addClass("btn-danger");
+
+
+                            //}
+                            //else {
+                            //    $(btn).html("Phát lại");
+                            //    $(btn).removeClass("btn-danger");
+                            //    $(btn).addClass("btn-primary");
+
+
+                            //}
+                        }
+                    });
+            }
+            $("#myTabContent").on("click", ".btnIsNew", function ()
+            {
+                var btn = this;
+                var id = $(this).data('id');
+                var videoid = $(this).data('videoid');
+                var isNew = $(this).data('new');
+                if (isNew == true && videoid) {
+                    //confirm
+                    $("#modalDeleteVideo").modal();
+                    $("#btnDeleteVideo").off("click");
+                    $("#btnDeleteVideo").on("click", function ()
+                    {
+                        if ($("#confirmText").val().toLowerCase() == "đồng ý") {
+                            changeNew(btn, id, true);
+                        }
+                    });
+                }
+                else
+                {
+                    changeNew(btn, id, false);
+                }
+            })
+        });
+
+        //delete schedule details
+        function onSuccessDelete(data)
+        {
+            if (data.success)
+            {
+                for (var i = 0; i < data.ids.length; i++)
+                {
+                    $("#scheduleDetail_" + data.ids[i]).remove();
+                };
+                
+                $("#modalDeleteSchedule").modal("hide");
+            }
+            else
+            {
+                alert(data.error);
+            }
+        }
+    </script>
+}

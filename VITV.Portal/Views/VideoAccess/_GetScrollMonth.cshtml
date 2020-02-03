@@ -1,0 +1,14 @@
+﻿@model DateTime
+@{
+    DateTime d = Model;
+}
+
+@for (int i = 0; i < d.Month; i++)
+{
+    var month = d.AddMonths(i * -1);
+    var dateTemp = new DateTime(month.Year, month.Month, 1);
+    var firstDayOfMonth = dateTemp.ToString("dd/MM/yyyy");
+    var lastDayOfMonth = dateTemp.AddMonths(1).AddDays(-1).ToString("dd/MM/yyyy");
+    <p data-date="@dateTemp.AddMonths(-1)"><a href="#" class="selectpicker" data-display="@month.Month / @month.Year" data-start="@firstDayOfMonth" data-end="@lastDayOfMonth">@month.Month / @month.Year</a></p>
+}
+

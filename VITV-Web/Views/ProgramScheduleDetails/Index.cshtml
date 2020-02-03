@@ -1,0 +1,169 @@
+﻿@model List<ProgramScheduleDetail>
+
+@{
+    ViewBag.Title = "Lịch phát sóng VITV";
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+    DateTime currentDate = ViewBag.Date;
+}
+
+@section styles
+{
+    <link href="~/Content/jquery.mCustomScrollbar.css" rel="stylesheet" />
+}
+
+@section scripts
+{
+    <script src="~/Scripts/toggle.js"></script>
+    <script src="~/Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script>
+        $.mCustomScrollbar.defaults.scrollButtons.enable = true; //enable scrolling buttons by default
+        //$.mCustomScrollbar.defaults.axis = "yx"; //enable 2 axis scrollbars by default
+        $("#scroller").mCustomScrollbar({ theme: "vitv", setLeft: "0px", scrollbarPosition: "outside", autoDraggerLength: false });
+        function getAllTimePoint() {
+            return [@foreach(var detail in Model)
+                {
+                    <text>@detail.DateTime.TimeOfDay.TotalMinutes,</text>
+                }];
+        }
+
+        function getCurrentPoint() {
+            var now = new Date();
+            var minuteOfDay = now.getHours() * 60 + now.getMinutes();
+            var current = 0;
+            
+            $(".schedule_right_list > div").each(function () {
+                var minute = $(this).data("time");
+                if (minute > minuteOfDay) {
+                    //Dừng
+                    return false;
+                }
+                current = minute;
+            });
+            return current;
+        }
+
+        function updateSchedule() {
+            var currentPoint = getCurrentPoint();
+            $(".schedule_right_list > div").removeClass("effect");
+            $(".schedule_right_list .time_marker").empty();
+            $(".schedule_right_list .schedule_full_detail .arrows").remove();
+
+            $("#time_" + currentPoint).addClass("effect");
+            var offsetTop = currentPoint * 66 / 30;
+            $("#scroller").mCustomScrollbar("scrollTo", offsetTop - $("#scroller").height()/2);
+
+            $("#time_" + currentPoint + " .time_marker").append("<div class='ring'></div>");
+            if (!$("#time_" + currentPoint + " .schedule_full_detail").hasClass('.arrows'))
+                $("#time_" + currentPoint + " .schedule_full_detail").append("<div class='arrows'><div id='block_1' class='arrows_block'></div><div id='block_2' class='arrows_block'></div><div id='block_3' class='arrows_block'></div></div>");
+        }
+
+        $(function () {
+            var bCurrentDate = '@(currentDate == DateTime.Now.Date)';
+            if(bCurrentDate == 'True')
+            {
+                var timePoints = getAllTimePoint();
+                updateSchedule();
+                setInterval(updateSchedule, 60000);
+            }
+        })
+
+        $(".schedule_filter_small").change(function ()
+        {
+            var date = $(this).val();
+            window.location.href = "@Url.Action("Index", "ProgramScheduleDetails")?date=" + date; 
+        });
+    </script>
+    
+}
+
+<div id="allprograme" class="row allprograme_area">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#allprograme_filter">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="allprograme_filter">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="@Url.Action("Index", "VideoCategory")" data-toggle="collapse" data-target="#allprograme_filter">Tổng hợp các chương trình</a></li>
+                            <li class="active"><a href="@Url.Action("Index", "ProgramScheduleDetails")" data-toggle="collapse" data-target="#allprograme_filter">Lịch phát sóng</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row dayline wow fadeInDown">
+        <div class="container">
+            <select class="form-control schedule_filter_small">
+                @for (int i = -6; i <= 5; i++)
+                {
+                    var date = DateTime.Now.AddDays(i).Date;
+                    <option value="@date.ToShortDateString()" @(date == currentDate ? "selected" : "")>@String.Format("{0} - {1}", (i == 0 ? "Hôm nay" : date.DayOfWeekVN2()), @date.ToString("dd/MM"))</option>
+                }
+            </select>
+
+            <nav class="schedule_filter_large">
+                <ul class="list-inline">
+                    @*<li><i class="fa fa-angle-left fa-3x schedule_prev"></i></li>*@
+                    @for (int i = -6; i <= 5; i++)
+                    {
+                        var date = DateTime.Now.AddDays(i).Date;
+                        <li @(date == currentDate ? "class=active" : "")><a href="@Url.Action("Index", "ProgramScheduleDetails", new {date = date.ToShortDateString()})"><h4>@(i == 0 ? "Hôm nay" : date.DayOfWeekVN2())</h4><h6>@date.ToString("dd/MM")</h6></a></li>
+                    }
+                    @*<li><i class="fa fa-angle-right fa-3x schedule_next"></i></li>*@
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container schedule_content" id="scroller">
+            <div class="row">
+                <div class="col-xs-2 col-sm-2">
+                    @{
+                        var time = new TimeSpan();
+                        var addedTime = new TimeSpan(0, 30, 0);
+                        for (int i = 0; i < 48; i++)
+                        {
+                            <div class="single_ruler_piece"><span>@time.ToString("hh':'mm")</span></div>
+                            time = time.Add(addedTime);
+                        }
+
+                        //Thêm phần nhỏ ở dưới
+                        <div class="single_ruler_piece-last"><span>00:00</span></div>
+                    }
+                </div>
+                <div class="col-xs-10 col-sm-10 schedule_right_list">
+                    @foreach (var detail in Model)
+                    {
+                        var timeOfDay = detail.DateTime.TimeOfDay;
+                        var top = Math.Floor(timeOfDay.TotalMinutes * 66 / 30);
+                        <div id="time_@timeOfDay.TotalMinutes" data-time="@timeOfDay.TotalMinutes">
+                            <div class="time_marker" style="top: @(top+12)px;"></div>
+                            <div class="schedule_full_detail @(detail.VideoId.HasValue ? "has-video" : "")" style="top: @(top)px;">
+                                <a href="@(detail.VideoId.HasValue ? Url.Action("Details", "Video", new { id = detail.VideoId, title = detail.Video.UniqueTitle, date = detail.Video.PublishedTime.ToString("dd-MM-yyyy") }) : "#")">
+                                    <text>@timeOfDay.ToString("hh':'mm")</text>@Html.Raw(detail.FullName)
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section seo{
+    <meta name="description" content="Lịch phát sóng hằng ngày của VITV, lịch chiếu các chương trình theo ngày và giờ phát sóng, chương trình đang phát sóng...">
+    <meta name="keywords" content="Lịch phát sóng,VITV Lịch phát sóng hằng ngày,lich phat song,hang ngay">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/Content/Images/logo.png" />
+    <meta property="og:image:width" content="286" />
+    <meta property="og:image:height" content="60" />
+}

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<VITV.Data.Models.ArticleHighlightAll>
+
+@if (Model.Count() > 0)
+{
+    <div class="row mostview_news m11">
+        <div class="row mvw_title">TIN NỔI BẬT</div>
+        @foreach (var art in Model)
+        {
+            <div class="row single_news">
+                <a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.Article.UniqueTitle, date = art.Article.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                    <div class="poster" style="background:url('@(art.Article.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                    <p class="tl">@art.Article.Title</p>
+                    <p class="tm">@(String.Join(", ", art.Article.Reporters.Select(r => r.Name))) - @art.Article.PublishedTime.Value.ToString("dd/MM/yyyy")</p>
+                </a>
+            </div>
+        }
+    </div>
+}

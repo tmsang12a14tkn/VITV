@@ -1,0 +1,244 @@
+﻿@model HomeModel
+@{
+    ViewBag.Title = "Trang chủ";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+        <div class="timeline-container">
+            <div class="timeline-label">
+                <span class="label label-primary arrowed-in-right label-lg">
+                    <b>Hôm nay</b>
+                </span>
+            </div>
+
+            <div class="timeline-items">
+                @foreach(var job in Model.TodayJobs)
+                { 
+                    <div class="timeline-item clearfix">
+                        <div class="timeline-info">
+                            <i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i>
+                        </div>
+
+                        <div class="widget-box transparent">
+                            <div class="widget-header widget-header-small">
+                                <h5 class="widget-title smaller breadcrumb">
+                                    <a href="/TaskRequest/Details/@job.JobList.TaskRequestId" class="blue">@job.JobList.TaskRequest.Title</a>
+                                    <i class="ace-icon fa fa-angle-right"></i>
+                                    <a href="/Job/Details/@job.Id" data-toggle="modal" data-target="#job-view-modal" data-backdrop="static" data-href="/Job/Details/@job.Id" class="blue">@job.Title</a>
+                                </h5>
+
+                                @*<span class="widget-toolbar no-border">
+                                    <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                    16:22
+                                </span>*@
+
+                                @*<span class="widget-toolbar">
+                                    <a href="#" data-action="reload">
+                                        <i class="ace-icon fa fa-refresh"></i>
+                                    </a>
+
+                                    <a href="#" data-action="collapse">
+                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                    </a>
+                                </span>*@
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @job.ShortDescription
+                                    @*<div class="space-6"></div>
+
+                                    <div class="widget-toolbox clearfix">
+                                        <div class="pull-left">
+                                            <i class="ace-icon fa fa-hand-o-right grey bigger-125"></i>
+                                            <a href="#" class="bigger-110">Xem …</a>
+                                        </div>
+
+                                        <div class="pull-right action-buttons">
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-check green bigger-130"></i>
+                                            </a>
+
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-pencil blue bigger-125"></i>
+                                            </a>
+
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-times red bigger-125"></i>
+                                            </a>
+                                        </div>
+                                    </div>*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+               
+            </div><!-- /.timeline-items -->
+        </div><!-- /.timeline-container -->
+
+        <div class="timeline-container">
+            <div class="timeline-label">
+                <span class="label label-success arrowed-in-right label-lg">
+                    <b>Ngày mai</b>
+                </span>
+            </div>
+
+            <div class="timeline-items">
+                @foreach (var job in Model.TomorrowJobs)
+                {
+                    <div class="timeline-item clearfix">
+                        <div class="timeline-info">
+                            <i class="timeline-indicator ace-icon fa fa-cutlery btn btn-success no-hover"></i>
+                        </div>
+
+                        <div class="widget-box transparent">
+                            <div class="widget-header widget-header-small">
+                                <h5 class="widget-title smaller breadcrumb">
+                                    <a href="/TaskRequest/Details/@job.JobList.TaskRequestId" class="blue">@job.JobList.TaskRequest.Title</a>
+                                    <i class="ace-icon fa fa-angle-right"></i>
+                                    <a href="/Job/Details/@job.Id" data-toggle="modal" data-target="#job-view-modal" data-backdrop="static" data-href="/Job/Details/@job.Id" class="blue">@job.Title</a>
+                                </h5>
+
+                                @*<span class="widget-toolbar no-border">
+                            <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                            16:22
+                        </span>*@
+
+                                @*<span class="widget-toolbar">
+                            <a href="#" data-action="reload">
+                                <i class="ace-icon fa fa-refresh"></i>
+                            </a>
+
+                            <a href="#" data-action="collapse">
+                                <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </span>*@
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    @job.ShortDescription
+                                    @*<div class="space-6"></div>
+
+                            <div class="widget-toolbox clearfix">
+                                <div class="pull-left">
+                                    <i class="ace-icon fa fa-hand-o-right grey bigger-125"></i>
+                                    <a href="#" class="bigger-110">Xem …</a>
+                                </div>
+
+                                <div class="pull-right action-buttons">
+                                    <a href="#">
+                                        <i class="ace-icon fa fa-check green bigger-130"></i>
+                                    </a>
+
+                                    <a href="#">
+                                        <i class="ace-icon fa fa-pencil blue bigger-125"></i>
+                                    </a>
+
+                                    <a href="#">
+                                        <i class="ace-icon fa fa-times red bigger-125"></i>
+                                    </a>
+                                </div>
+                            </div>*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div><!-- /.timeline-items -->
+        </div><!-- /.timeline-container -->
+
+        @*<div class="timeline-container">
+            <div class="timeline-label">
+                <span class="label label-grey arrowed-in-right label-lg">
+                    <b>Trong tuần</b>
+                </span>
+            </div>
+
+            <div class="timeline-items">
+                <div class="timeline-item clearfix">
+                    <div class="timeline-info">
+                        <i class="timeline-indicator ace-icon fa fa-leaf btn btn-primary no-hover green"></i>
+                    </div>
+
+                    <div class="widget-box transparent">
+                        <div class="widget-header widget-header-small">
+                            <h5 class="widget-title smaller">Lorum Ipsum</h5>
+
+                            <span class="widget-toolbar no-border">
+                                <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                10:22
+                            </span>
+
+                            <span class="widget-toolbar">
+                                <a href="#" data-action="reload">
+                                    <i class="ace-icon fa fa-refresh"></i>
+                                </a>
+
+                                <a href="#" data-action="collapse">
+                                    <i class="ace-icon fa fa-chevron-up"></i>
+                                </a>
+                            </span>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                Anim pariatur cliche reprehenderit, enim eiusmod
+                                <span class="blue bolder">high life</span>
+                                accusamus terry richardson ad squid …
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        
+        <!-- /.timeline-container -->
+    </div>
+</div>
+
+@section scripts
+{
+       
+        <script>
+
+                
+                @*function resizeScrollContent() {
+                $("#chat-list .scroller").height((window.innerHeight - 200) + "px");
+                $("#chat-group .scroller").height((window.innerHeight - 200) + "px");
+            }
+            function filterChatList(name) {
+                if (name === null || name.match(/^ *$/) !== null) {
+                    $('.chat-user-item').removeClass("hidden");
+                }
+                else {
+                    $('.chat-user-item').each(function (index) {
+                        if ($(this).data('displayname').toString().toLowerCase().indexOf(name.toLowerCase()) < 0)
+                            $(this).addClass("hidden");
+                        else
+                            $(this).removeClass("hidden");
+                    });
+                }
+            }
+            resizeScrollContent();
+            jQuery(function ($) {
+                var userAuthorized = '@(User.Identity.IsAuthenticated.ToString().ToLower())';
+
+                if (userAuthorized) {
+                    var chat = new Chat('@(User.Identity.GetUserId())');
+                };
+
+                $(window).resize(function () {
+                    resizeScrollContent();
+                });
+                $("#chat-filter").keyup(function () {
+                    filterChatList($("#chat-filter").val());
+
+                });
+            })*@
+        </script>
+    }

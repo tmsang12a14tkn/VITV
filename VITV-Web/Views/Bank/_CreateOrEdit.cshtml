@@ -1,0 +1,50 @@
+﻿@using System.Globalization
+@model BankModel
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Thumbnail, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.Thumbnail)
+    <div class="col-lg-10">
+        <img id="photoView" width=200 height=200 src="@(Model != null && !String.IsNullOrEmpty(Model.Thumbnail) ? Model.Thumbnail : "")" />
+        <input class="form-control" id="photoinput" type="file" name="thumbnail" accept="image/*">
+    </div>
+    @Html.ValidationMessageFor(model => model.Thumbnail, string.Empty, new { @class = "help-block" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.IssueDate, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.IssueDate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IssueDate, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.UpdateTime, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group">
+            <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+            @Html.TextBoxFor(model => model.UpdateTime, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", id = "UpdateTime", data_format = "dd/MM/yyyy" })
+        </div>
+        @Html.ValidationMessageFor(model => model.UpdateTime, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CharterCapital, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextBoxFor(model => model.CharterCapital, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CharterCapital, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+
+

@@ -1,0 +1,505 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="Quản lý nhân sự, công việc - VITSoftware" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!-- bootstrap & fontawesome -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
+
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="~/Content/css/jquery-ui.custom.min.css" />
+    <link rel="stylesheet" href="~/Content/css/fullcalendar.min.css" />
+    <link href="~/Content/css/chosen.min.css" rel="stylesheet" />
+    <link href="~/Content/css/daterangepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/themejstree/default/style.css" />
+    <link href="~/Content/css/jquery.gritter.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap-editable.min.css" rel="stylesheet" />
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="~/Content/fonts.googleapis.com.css" />
+    <link rel="stylesheet" href="~/Content/chat.css" />
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="~/Content/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="~/Content/css/ace-part2.min.css" class="ace-main-stylesheet" />
+    <![endif]-->
+    <!--[if lte IE 9]>
+      <link rel="stylesheet" href="~/Content/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="~/Scripts/ace-extra.min.js"></script>
+    
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <!--[if lte IE 8]>
+    <script src="~/Scripts/html5shiv.min.js"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="no-skin">
+    <div id="navbar" class="navbar navbar-default">
+        <script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+        </script>
+
+        <div class="navbar-container" id="navbar-container">
+            <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                <span class="sr-only">Toggle sidebar</span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+            </button>
+
+            <div class="navbar-header pull-left">
+                <a href="/" class="navbar-brand">
+                    <img src="~/Content/images/logo.png" />
+                </a>
+            </div>
+
+           @*@Html.Action("TopNotification", "Home")*@
+        </div><!-- /.navbar-container -->
+    </div>
+
+    <div class="main-container" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.check('main-container', 'fixed') } catch (e) { }
+        </script>
+
+        <div id="sidebar" class="sidebar responsive">
+            <script type="text/javascript">
+                try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
+            </script>
+
+            <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                    <a class="btn btn-info" href="/">
+                        <i class="ace-icon fa fa-home"></i>
+                    </a>
+
+                    <a class="btn btn-success" href="/Calendar">
+                        <i class="ace-icon fa fa-calendar"></i>
+                    </a>
+
+                    <a class="btn btn-warning" href="Job/MyJobs">
+                        <i class="ace-icon fa fa-briefcase"></i>
+                    </a>
+
+                    <a class="btn btn-danger" href="/Employee/ProfilePage">
+                        <i class="ace-icon fa fa-user"></i>
+                    </a>
+                </div>
+
+                <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                    <span class="btn btn-success"></span>
+
+                    <span class="btn btn-info"></span>
+
+                    <span class="btn btn-warning"></span>
+
+                    <span class="btn btn-danger"></span>
+                </div>
+            </div><!-- /.sidebar-shortcuts -->
+            <strong>DỰ ÁN</strong>
+            @*@Html.Action("Menu", "Project")*@
+
+            <div class="space-6"></div>
+            <strong>QUẢN LÝ</strong>
+            <ul class="nav nav-list">
+
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-pencil-square-o"></i>
+                        <span class="menu-text"> Quản lý cá nhân </span>
+
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="/Calendar">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Lịch làm việc
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="">
+                            <a href="/Group/MyGroup">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Tổ/Ban
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="/TaskRequest/MyRequests">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Công việc của tôi
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+            @if(User.IsInRole("Admin"))
+            { 
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-globe"></i>
+                        <span class="menu-text"> Quản lý dự án </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="#" data-toggle="modal" data-target="#project-modal" data-href="/Project/Create">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Tạo dự án
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="/Project/All">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Danh sách dự án
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="/Project/Trash">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Đã xóa
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="/Department">
+                        <i class="menu-icon fa fa-globe"></i>
+                        <span class="menu-text"> Quản lý phòng ban </span>
+
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="/department/index">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Danh sách phòng ban
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-users"></i>
+                        <span class="menu-text"> Quản lý nhân viên </span>
+
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="/Employee/List">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Danh sách nhân viên
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a href="/Employee">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Sắp sếp nhân sự
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="">
+                    <a href="/Equipment">
+                        <i class="menu-icon fa fa-laptop"></i>
+                        <span class="menu-text"> Quản lý thiết bị</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a href="/equipment/index">
+                                <i class="menu-items fa fa-caret-right"></i>
+                                Danh sách thiết bị
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/Holiday/Management">
+                        <i class="menu-icon fa fa-calendar-o"></i>
+                        <span class="menu-text"> Lịch nghỉ </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            }
+            </ul><!-- /.nav-list -->
+
+            <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+                <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+            </div>
+
+            <script type="text/javascript">
+                try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+            </script>
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs" id="breadcrumbs">
+                    <script type="text/javascript">
+                        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+                    </script>
+
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="active">@ViewBag.Title</li>
+                    </ul><!-- /.breadcrumb -->
+
+                    <div class="nav-search" id="nav-search">
+                        <form class="form-search">
+                            <span class="input-icon">
+                                <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                                <i class="ace-icon fa fa-search nav-search-icon"></i>
+                            </span>
+                        </form>
+                    </div><!-- /.nav-search -->
+                </div>
+
+                <div class="page-content">
+                    <div class="ace-settings-container" id="ace-settings-container">
+                        <div class="btn btn-app btn-xs btn-info ace-settings-btn" id="ace-settings-btn">
+                            <i class="ace-icon fa fa-comment bigger-130"></i>
+                        </div>
+
+                        <div class="ace-settings-box clearfix" id="ace-settings-box" style="width:500px; padding:0px; border-color: #6fb3e0">
+                            <div class="modal-content" id="chat-list">
+                               
+                                <div class="modal-body">
+                                    <div class="row scroller" style="height:300px; overflow-y: scroll">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                @Html.Action("GetListUser", "Message")
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="background: #6fb3e0 ">
+                                    <input class="form-control" type="text" id="chat-filter" placeholder="Tìm người" />
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.ace-settings-box -->
+                    <div id="containerchat"></div>
+                    @RenderBody()
+
+                </div><!-- /.page-content -->
+            </div>
+        </div><!-- /.main-content -->
+
+        <div class="footer">
+            <div class="footer-inner">
+                <div class="footer-content">
+                    <span class="bigger-120">
+                        <span class="blue bolder">VITSofware</span>
+                        Application &copy; 2013-@DateTime.Now.Year
+                    </span>
+
+                    &nbsp; &nbsp;
+                    <span class="action-buttons">
+                        <a href="#">
+                            <i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+
+    <div id="project-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div id="project-delete-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div id="request-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div id="job-view-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div id="job-delete-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div id="request-delete-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    
+    <div id="response-delete-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div id="notification-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    @*<div id="containerchat" class="col-sm-6 containerchat" >
+    </div>*@
+    <audio id="sound" src="~/Content/sound/Beep.mp3" type="audio/mpeg"></audio>
+
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script src="~/Scripts/jquery.2.1.1.min.js"></script>
+
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script src="~/Scripts/jquery.1.11.1.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='~/Scripts/jquery.min.js'>" + "<" + "/script>");
+    </script>
+
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+     window.jQuery || document.write("<script src='~/Scripts/jquery1x.min.js'>"+"<"+"/script>");
+    </script>
+    <![endif]-->
+    <script type="text/javascript">
+        if ('ontouchstart' in document.documentElement) document.write("<script src='~/Scripts/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <!-- page specific plugin scripts -->
+    <script src="~/Scripts/jquery-ui.custom.min.js"></script>
+    <script src="~/Scripts/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/fullcalendar.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/MicrosoftAjax.js"></script>
+
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/daterangepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+
+    <!-- ace scripts -->
+    <script src="~/Scripts/ace-elements.min.js"></script>
+    <script src="~/Scripts/ace.min.js"></script>
+    <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script src="~/Scripts/jquery.gritter.min.js"></script>
+    <script src="~/Scripts/jquery.chatwindow.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+   
+    <script src="~/Scripts/jquery.hotkeys.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/bootstrap-wysiwyg.min.js"></script>
+    <script src="~/Scripts/bootstrap-editable.js"></script>
+    <script src="~/Scripts/ace-editable.min.js"></script>
+
+    <script src="~/Scripts/jquery.main.js"></script>
+
+    <script src="/signalr/hubs" type="text/javascript"></script>
+
+    <script src="~/Scripts/signalR.notification.js"></script>
+    <script src="~/Scripts/chat/signalR.chat.js"></script>
+    @RenderSection("scripts", required: false)
+
+    <script>
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+        })
+       //show datepicker when clicking on the icon
+       .next().on(ace.click_event, function () {
+           $(this).prev().focus();
+       });
+			
+		
+    </script>
+</body>
+</html>

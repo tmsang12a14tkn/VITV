@@ -1,0 +1,29 @@
+﻿@model PollQuestion
+
+@using (Ajax.BeginForm("Delete", "Poll", null, new AjaxOptions
+{
+    HttpMethod = "Post",
+    OnSuccess = "OnSuccessDeletePoll",
+}, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="modal-header">
+        <div class="row">
+            <span class="fa-stack">
+                <i class="fa fa-trash fa-stack-1x fa-2x "></i>
+            </span>
+            <b> Xoá bình chọn</b>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="exampleInputEmail1"><b>Bạn có muốn xoá bình chọn "@(Model.Name)" này hay không ?</b></label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary">Xoá</button>
+    </div>
+}
+    
+

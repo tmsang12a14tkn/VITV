@@ -1,0 +1,195 @@
+﻿@model IEnumerable<Contact>
+
+@{
+    ViewBag.Title = "Quản lý liên hệ";
+    var statuses = ViewBag.ContactStatuses as List<ContactStatus>;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Quản lý liên hệ người dùng</h2>
+@*<ul class="nav nav-tabs">
+    <li class="active"><a href="#tab-all" data-toggle="tab">Tất cả</a></li>
+    @foreach (var status in statuses)
+    {
+        <li><a href="#tab-@status.Id" data-toggle="tab">@status.Name</a></li>
+    }
+</ul>
+<div class="tab-content tab-content-body clearfix">
+    <div class="tab-pane fade in active" id="tab-all">*@
+        <p class="btn-group pull-right" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" class="filter-status" name="options" value="0"> Tất cả
+            </label>
+            @foreach (var status in statuses)
+            {
+                <label class="btn btn-primary">
+                    <input type="radio" class="filter-status" name="options" value="@status.Id"> @status.Name
+                </label>
+            }
+        </p>
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-12 contact-box" id="contact-box-@item.Id" data-statusid="@item.StatusId">
+                    <div class="main-box clearfix">
+                        <header class="main-box-header clearfix">
+                            <div class="pull-left">
+                                @if(User.CanAccess("Delete", "Contact", "admin"))
+                                { 
+                                    using (Ajax.BeginForm("Delete", "Contact", new { id = item.Id}, new AjaxOptions
+                                    {
+                                        OnSuccess = "onSuccessDeleteContact",
+                                        Confirm = "Bạn có chắc chắc xóa thư này"
+                                    }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="submit" value="Xóa" class="btn btn-danger" data-id="@item.Id"/>
+                                    }
+                                }
+                            </div>
+                            <div class="btn-group pull-right" data-toggle="buttons">
+                                @foreach (var status in statuses)
+                                {
+                                    <label class="btn btn-primary @(status.Id == item.StatusId?"active":"")">
+                                        <input type="radio" class="change-status" name="options" value="@status.Id" data-id="@item.Id"> @status.Name
+                                    </label>
+                                }
+                            </div>
+                        </header>
+                        <div class="main-box-body clearfix">
+                            <p>
+                                <label><b>Tên: </b></label>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </p>
+                            <p>
+                                <label><b>Thời gian: </b></label>
+                                @Html.DisplayFor(modelItem => item.CreatedDatetime)
+                            </p>
+                            <p>
+                                <label><b>Email: </b></label>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </p>
+                            <p>
+                                <label><b>Tiêu đề: </b></label>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </p>
+                            <p>
+                                <label><b>Nội dung: </b></label>
+                                @Html.DisplayFor(modelItem => item.ContactContent)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    @*</div>
+    @foreach (var status in statuses)
+    {
+    <div class="tab-pane fade" id="tab-@status.Id">
+        <div class="row">
+            @foreach (var item in Model.Where(i=>i.StatusId == status.Id))
+            {
+                <div class="col-md-12 contact-box" data-statusid="@item.StatusId">
+                    <div class="main-box clearfix">
+                        <header class="main-box-header clearfix"></header>
+                        <div class="main-box-body clearfix">
+                            <div class="btn-group" data-toggle="buttons">
+                                @foreach (var status in statuses)
+                                {
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="options" id="option1" value="@status.Id"> @status.Name
+                                    </label>
+                                }
+                            </div>
+                            <p>
+                                <label><b>Tên: </b></label>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </p>
+                            <p>
+                                <label><b>Email: </b></label>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </p>
+                            <p>
+                                <label><b>Tiêu đề: </b></label>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </p>
+                            <p>
+                                <label><b>Nội dung: </b></label>
+                                @Html.DisplayFor(modelItem => item.ContactContent)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    }
+</div>*@
+        
+
+@section scripts {
+    <script src="~/Scripts/isotope.js"></script>
+    <script>
+        var filterValue = 0;
+        $('#sidebar-nav #contactMng').toggleClass("active");
+        $('#sidebar-nav #contactMng').siblings().removeClass("active");
+
+        $('.grid').isotope({
+            // set itemSelector so .grid-sizer is not used in layout
+            itemSelector: '.grid-item',
+            percentPosition: true,
+            masonry: {
+                gutter: 10
+            }
+        });
+
+        $('input.change-status').on('change', function () {
+            var id = $(this).data('id');
+            var value = $(this).val();
+            $.post("/Contact/ChangeStatus", { id : id, value : value }, function (data)
+            {
+                if (data.success == true) {
+                    $("#contact-box-" + id).attr("data-statusid", value);
+                    applyFilter();
+                }
+            });
+        });
+
+        $('input.filter-status').on('change', function () {
+            filterValue = $(this).val();
+            applyFilter();
+        });
+
+        //$('.btn-delete-contact').on("click", function () {
+        //    var id = $(this).data('id');
+        //    $.post("/Contact/Delete", { id: id }, function (data) {
+        //        if (data.success == true) {
+        //            console.log("dd");
+        //        }
+        //    });
+        //});
+
+        function onSuccessDeleteContact(data)
+        {
+            console.log(data);
+            if(data.success)
+            {
+                $("#contact-box-" + data.id).remove();
+            }
+        }
+
+        function applyFilter()
+        {
+            if (filterValue != 0)//all
+            {
+                $(".contact-box[data-statusid=" + filterValue + "]").show();
+                $(".contact-box[data-statusid!=" + filterValue + "]").hide();
+
+            }
+            else {
+                $(".contact-box").show();
+            }
+        }
+    </script>
+}

@@ -1,0 +1,143 @@
+﻿@model Recruit
+
+<div class="table-wrapper">
+    <table class="table table-wrapper__table">
+        <thead class="table__head">
+            <tr>
+                <th colspan="2" class="table__cell table__cell--heading h17">
+                    <a href="#"><strong>Thông tin vị trí tuyển dụng</strong></a>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table__body">
+            <tr>
+                <td class="table__cell l4">@Html.DisplayNameFor(model => model.JobPosition)</td>
+                <td class="table__cell">@Model.JobPosition</td>
+            </tr>
+            <tr>
+                <td class="table__cell l4">@Html.DisplayNameFor(model => model.Amount)</td>
+                <td class="table__cell">@Model.Amount</td>
+            </tr>
+            <tr>
+                <td class="table__cell l4">@Html.DisplayNameFor(model => model.CategoryId)</td>
+                <td class="table__cell">@Model.Category.Name</td>
+            </tr>
+            <tr>
+                <td class="table__cell l4">@Html.DisplayNameFor(model => model.CityId)</td>
+                <td class="table__cell">@Model.City.Name</td>
+            </tr>
+
+            @if (!string.IsNullOrEmpty(Model.JobFeature))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.JobFeature)</td>
+                    <td class="table__cell">@Model.JobFeature</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Description)</td>
+                    <td class="table__cell">@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Requirement))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Requirement)</td>
+                    <td class="table__cell">@Html.Raw(Model.Requirement.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Degree))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Degree)</td>
+                    <td class="table__cell">@Model.Degree</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Experience))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Experience)</td>
+                    <td class="table__cell">@Model.Experience</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Gender))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Gender)</td>
+                    <td class="table__cell">@Model.Gender</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.JobType))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.JobType)</td>
+                    <td class="table__cell">@Model.JobType</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Salary))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Salary)</td>
+                    <td class="table__cell">@Model.Salary</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Probation))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Probation)</td>
+                    <td class="table__cell">@Html.Raw(Model.Probation.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Remuneration))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Remuneration)</td>
+                    <td class="table__cell">@Html.Raw(Model.Remuneration.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Resume))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Resume)</td>
+                    <td class="table__cell">@Html.Raw(Model.Resume.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.DateExpire))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.DateExpire)</td>
+                    <td class="table__cell">@Model.DateExpire</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Submission))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.Submission)</td>
+                    <td class="table__cell">@Html.Raw(Model.Submission.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ContactInfo))
+            {
+                <tr>
+                    <td class="table__cell l4">@Html.DisplayNameFor(model => model.ContactInfo)</td>
+                    <td class="table__cell">@Html.Raw(Model.ContactInfo.Replace(Environment.NewLine, "<br/>"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

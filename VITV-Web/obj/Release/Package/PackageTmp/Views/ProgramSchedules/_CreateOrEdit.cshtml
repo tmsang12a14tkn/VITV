@@ -1,0 +1,35 @@
+﻿@model ProgramSchedule
+
+<div class="form-group">
+    @Html.LabelFor(model => model.VideoCategoryId, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.DropDownList("VideoCategoryId", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.VideoCategoryId, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+@Html.HiddenFor(model=>model.DayOfWeek)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Time, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        <div class="input-group">
+            <span class="add-on input-group-addon"><i class="fa fa-clock-o"></i></span>
+            @Html.TextBoxFor(model => model.Time, new { @class = "form-control timepicker" })
+        </div>
+        @Html.ValidationMessageFor(model => model.Time, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <div class="checkbox-nice">
+            <input type="checkbox" id="IsNew" name="IsNew" value="true" @(Model == null || Model.Id == default(int) ? "" : (Model.IsNew ? "checked" : ""))>
+            <label for="IsNew">@Html.DisplayNameFor(model => model.IsNew)</label>
+            @*<input name="IsNew" type="hidden" value="false" />*@
+        </div>
+        @Html.ValidationMessageFor(model => model.IsNew, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+@*@Html.HiddenFor(model => model.IsNew)*@

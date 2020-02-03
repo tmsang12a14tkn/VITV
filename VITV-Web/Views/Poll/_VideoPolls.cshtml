@@ -1,0 +1,20 @@
+﻿@model List<PollQuestion>
+@{
+    var now = DateTime.Now;
+}
+
+@foreach (var question in Model)
+{
+    if (question.Displayed)
+    {
+        //&& question.FromDate <= now && (question.EndDate == null || question.EndDate >= now)
+        <div class="row" id="poll_panel@(question.Id)" style="margin-bottom:20px">
+            @Html.Action("Question", "Poll", new { questionId = question.Id })
+        </div>
+
+    }
+
+}
+
+
+    

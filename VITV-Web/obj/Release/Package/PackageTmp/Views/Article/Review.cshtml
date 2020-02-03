@@ -1,0 +1,262 @@
+﻿@model Article
+@{
+    ViewBag.Title = "Review";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div id="comment-box" class="comment-box closed">
+    <div class="">
+        <textarea rows="4" class="form-control article-comment" id="txt-articlecomment"></textarea>
+        <input type="button" value="Đăng" id="btn-submitreview" class="btn btn-sm btn-primary"/>
+        <input type="button" value="Hủy" id="btn-cancelreview" class="btn btn-sm btn-info"/>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-2">
+        <h3>Danh sách bài viết</h3>
+
+        <div class="tabs-wrapper tabs-no-header">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-queue" data-toggle="tab">Wait</a></li>
+                <li><a href="#tab-done" data-toggle="tab">Done</a></li>
+                <li><a href="#tab-published" data-toggle="tab">Published</a></li>
+            </ul>
+            <div class="tab-content tab-content-body clearfix">
+                <div class="tab-pane fade in active" id="tab-queue">
+                    <ul class="list-unstyled">
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="tab-done">
+                    <ul class="list-unstyled">
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="tab-published">
+                    <ul class="list-unstyled">
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                        <li><a href="/Article/Review/130">@Model.Title</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-8">
+        <button id="btn-cmt" class="btn btn-default"><i class="fa fa-comment"></i></button>
+        <div class="row">
+            <iframe id="texteditor" class="col-md-12" frameborder="0" border="0" cellspacing="0"
+                    style="border-style: none; height: 600px;" src="/Article/TextEditor/@Model.Id"></iframe>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default pull-right" id="btn-submit">Xong</button>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+
+        <h3>Bình luận</h3>
+        <ul id="cmtList" class="list-unstyled"></ul>
+
+    </div>
+</div>
+
+
+@section styles
+{
+    <style>
+        #comment-box {
+            position: fixed;
+            right: 0;
+            top: 220px;
+            width: 300px;
+            z-index: 1000;
+            -webkit-transition: all 0.2s ease-in-out 0s;
+            -moz-transition: all 0.2s ease-in-out 0s;
+            transition: all 0.2s ease-in-out 0s;
+        }
+        #comment-box.closed {
+            right: -300px;
+        }
+        #comment-box > div
+        {
+            background: #dddddd;
+            box-shadow: -3px 3px 3px -2px rgba(0,0,0,0.1);
+            padding: 15px;
+        }
+        #cmtList .img {
+            float: left;
+            margin-top: 8px;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        #cmtList .main-box-header
+        {
+            border-bottom: 1px solid #e7ebee;
+        }
+         #cmtList .main-box-body
+        {
+            padding: 10px 20px 10px 40px;
+        }
+         #cmtList li.highlighted{
+             background-color: #808080;
+         }
+        .comment-content {
+            color: #6c6f75;
+            font-size: 0.85em;
+        }
+        .comment-author {
+            font-weight: 300;
+        }
+        .comment-content, .comment-author{
+            padding-left: 60px;
+        }
+
+       
+    </style>
+}
+
+@section Scripts
+{
+   
+    <script>
+        
+        $(function ()
+        {
+            var iframe = document.getElementById('texteditor');
+            iframe.onload = function () {
+                
+                var idoc = iframe.contentDocument || iframe.contentWindow.document; // ie compatibility
+                var iwin = iframe.contentWindow || iframe.contentDocument.defaultView;
+
+                idoc.parent = document;
+
+                $("#btn-cmt").on("click", function () {
+                    //if (getSelectionText() != "") {
+                        //$("#comment-box").show();
+                        $('#comment-box').toggleClass('closed');
+                    //}
+                })
+                $("#btn-submitreview").on("click", function ()
+                {
+                    var cmtText = $("#txt-articlecomment").val();
+                    //highlight
+                    var uuid = idoc.highlight("red", cmtText);
+                    //add comment to right box
+                    var cmtPointer = $("<li class='clearfix'></li>")
+                        .attr("data-id", uuid)
+                            .html("<div class='main-box'>"
+                                + "<div class='main-box-header clearfix'>"
+                                    + "<div class='img'>"
+                                        + "<img src='http://centaurus.adbee.technology/img/samples/scarlet.png'>"
+                                    + "</div>"
+                                     + "<div class='comment-author'>" + "Me" + "</div>"
+                                    + "<div class='comment-content'>" + cmtText + "</div>"
+                                    + "<div class='icon-box pull-right'><a href='#' class='btn pull-left btn-delcmt'><i class='fa fa-trash'></i></a></div>"
+                                + "</div>"
+                                + "<div class='main-box-body'>"
+                                + "<ul class='list-unstyled reply-list'></ul><div class='form-group'>"
+                                    + "<div class='input-group'>"
+                                        + "<input type='text' class='form-control'>"
+                                        + "<span class='input-group-btn'>"
+                                            + "<button class='btn btn-primary btn-replycmt' type='button'>Reply</button>"
+                                        + "</span>"
+                                    + "</div>"
+                                + "</div>"
+                            + "</div></div>");
+
+                    cmtPointer.appendTo("#cmtList");
+
+                    //reset and close comment box
+                    if (iwin.getSelection)
+                        iwin.getSelection().removeAllRanges();
+                    else
+                        idoc.selection.empty();
+                    $("#txt-articlecomment").val('');
+                    $('#comment-box').addClass('closed');
+                });
+                
+                $("#btn-cancelreview").on("click", function ()
+                {
+                    $("#txt-articlecomment").val('');
+                    $("#comment-box").addClass('closed');
+                });
+
+                $("#cmtList").on("mouseenter","li", function () {
+                    $(this).addClass("highlighted");
+                    var id = $(this).data("id");
+                    $cmtElement = $(idoc).find("." + id);
+                    $cmtElement.popover('show');
+                    function flicker() {
+                        $cmtElement.animate({ opacity: 1.0 }, 300, function () {
+                            $cmtElement.animate({ opacity: 0.4 }, 300, function () {
+                                flicker();
+                            });
+                        });
+                    }
+                    flicker();
+                });
+                $("#cmtList").on("mouseleave", "li", function () {
+                    $(this).removeClass("highlighted");
+                    var id = $(this).data("id");
+                    $cmtElement = $(idoc).find("." + id);
+                    $cmtElement.popover('hide');
+                    $cmtElement.stop();
+                    $cmtElement.css({ opacity: 1 });
+                });
+
+                $("#cmtList").on("click", "a.btn-delcmt", function () {
+                    //delete comment
+                    console.log("delete comment");
+                    var $parentLi = $(this).closest('li');
+                    var id = $parentLi.data("id");
+
+                    idoc.removeComment(id);
+
+                    //remove item on right panel
+                    $parentLi.remove();
+                });
+
+                $("#cmtList").on("click", "button.btn-replycmt", function () {
+                    var $replyInput = $(this).closest("div.input-group").children('input');
+                    var replyText = $replyInput.val();
+                    $replyInput.val('');
+
+                    var $replyList = $(this).closest("div.main-box-body").children('ul.reply-list');
+                    $replyList.append("<li class='clearfix'>"
+                        + "<div class='img'>"
+                            + "<img src='http://centaurus.adbee.technology/img/samples/scarlet.png'>"
+                        + "</div>"
+                        + replyText
+                        + "</li>");
+                });
+
+                
+
+               
+
+                function getSelectionText() {
+                    var text = "";
+                    if (iwin.getSelection) {
+                        text = iwin.getSelection().toString();
+                    } else if (idoc.selection && idoc.selection.type != "Control") {
+                        text = idoc.selection.createRange().text;
+                    }
+                    return text;
+                }
+            };
+        })
+       
+    </script>
+}
+

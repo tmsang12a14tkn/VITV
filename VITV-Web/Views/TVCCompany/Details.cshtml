@@ -1,0 +1,27 @@
+﻿@model VITV.Data.Models.TVCCompany
+
+@{
+    ViewBag.Title = "Chi tiết công ty";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chi tiết công ty</h2>
+
+<div>
+    <h4>Công ty</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Danh sách công ty", "Index")
+</p>

@@ -1,0 +1,65 @@
+﻿@model List<PagePermissionModel>
+@{
+    ViewBag.Title = "Phân quyền truy cập";
+    Layout = "../Shared/_AdminLayout.cshtml";
+    List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> roles = ViewBag.Roles as List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>;
+    List<PagePermissionSiteModel> pagePermissionSites = ViewBag.Sites as List<PagePermissionSiteModel>;
+}
+
+<div class="row">
+    <div class="col-sm-12 main-box clearfix">
+        @using(Html.BeginForm("PagePermission", "Admin", FormMethod.Post))
+        { 
+            <div class="tabs-wrapper">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab-admin" data-toggle="tab">Admin</a></li>
+                    <li><a href="#tab-portal" data-toggle="tab">Portal</a></li>
+                </ul>
+                <div class="tab-content tab-content-body clearfix">
+                    @{var acIndex = 0;} 
+                    @foreach (var pagePermissionSite in pagePermissionSites)
+                    {
+                        <div class="tab-pane @(pagePermissionSite.Site=="admin"?"active":"")" id="tab-@pagePermissionSite.Site">
+                            <table class="table table-striped table-responsive">
+                                <thead>
+
+                                    <tr>
+                                        <th>Trang</th>
+                                        @for (int i = 0; i < roles.Count; i++)
+                                        {
+                                            <th>
+                                                @roles[i].Name
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < pagePermissionSite.ControllerActions.Count; i++)
+                                    {
+                                        var controllerAction = pagePermissionSite.ControllerActions[i];
+                                        <tr>
+                                            <td>@(string.IsNullOrEmpty(controllerAction.Description) ? string.Format("{0}/{1}", controllerAction.ControllerName, controllerAction.ActionName) : controllerAction.Description)</td>
+                                            @for (int j = 0; j < roles.Count; j++)
+                                            {
+                                                <td>
+                                                    @Html.Hidden("pagePermissions[" + (acIndex * roles.Count + j).ToString() + "].ControllerActionId", controllerAction.Id)
+                                                    @Html.Hidden("pagePermissions[" + (acIndex * roles.Count + j).ToString() + "].RoleId", roles[j].Id)
+                                                    @*<input type="checkbox" @(controllerAction.Permissions.Any(p => p.Role.Id == roles[j].Id) ? "checked" : "") name="pagePermissions[@(i * roles.Count + j)].CanAccess" />*@
+                                                    @Html.CheckBox("pagePermissions[" + (acIndex * roles.Count + j).ToString() + "].CanAccess", controllerAction.Permissions.Any(p => p.Role.Id == roles[j].Id))
+                                                </td>
+                                            }
+                                        </tr>
+                                        acIndex ++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+       
+        <input type="submit" class="btn btn-default" value="Lưu"/>
+        }
+    </div>
+
+</div>

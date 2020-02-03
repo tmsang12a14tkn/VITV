@@ -1,0 +1,343 @@
+﻿@model VideoCategory
+@{
+    ViewBag.Title = "Báo cáo theo chuyên mục cha";
+}
+<div class="row">
+    <div class="col-md-4">
+        <select id="yearSelect" class="form-control">
+            @for (int y = 2015; y <= DateTime.Now.Year; y++)
+            {
+                <option value="@y" @(y == DateTime.Now.Year ? "selected" : "")>Năm @y</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8" id="chart1"></div>
+    <div class="col-md-4" id="chart2"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table id="table-videoreport" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <td rowspan="2">Thời gian</td>
+                    @for (int i = 0; i < Model.Children.Count; i++)
+                    {
+                        <td colspan="3" class="text-center"><a href="/videoaccess/AllDetailReports?catId=@Model.Children.ElementAt(i).Id">@Model.Children.ElementAt(i).Name</a></td>
+                    }
+                    <td rowspan="2">Week</td>
+                </tr>
+                <tr>
+                    @for (int i = 0; i < Model.Children.Count; i++)
+                    {
+                        <td><span data-toggle="tooltip" title="Lượt xem không trùng">Xem không trùng</span></td>
+                        <td><span data-toggle="tooltip" title="Lượt xem bao gồm cả trùng">Tổng lượt xem</span></td>
+                        <td><span data-toggle="tooltip" title="Chênh lệch so với tuần trước">So với tuần trước</span></td>
+                    }
+                </tr>
+                
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>Tổng cộng</th>
+                    @for (int i = 0; i < Model.Children.Count; i++)
+                    {
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    }
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+@section styles
+{
+    <link href="~/Content/DataTable/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/DataTable/buttons.dataTables.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+    <style>
+        td.increase
+        {
+            color:#009f60;
+        }
+        td.decrease
+        {
+            color: #c9302c;
+        }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Scripts/DataTable/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/DataTable/dataTables.buttons.js"></script>
+    <script src="~/Scripts/DataTable/jszip.min.js"></script>
+    <script src="~/Scripts/DataTable/buttons.html5.js"></script>
+    <script src="~/Scripts/DataTable/buttons.print.js"></script>
+    <script src="~/Scripts/DataTable/buttons.colVis.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jspdf/libs/base64.js"></script>
+
+    @*<script src="~/Scripts/bootstrap-table.js"></script>
+        <script src="~/Scripts/bootstrap-table-export.js"></script>
+        <script src="~/Scripts/export/tableExport.js"></script>*@
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+
+    @*Highchart*@
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+        function weekDetail(week)
+        {
+            var res = week.split(" - ");
+            location.href = '/VideoAccess/VideoReportByCat?catId=@Model.Id&from='+res[0]+'&to='+res[1];
+        }
+        $(function () {
+            $("#column_option").hide();
+           
+            var chartOptions =
+                {
+                    chart: { type: 'column', animation: false },
+                    xAxis:
+                   {
+                       tickInterval: 1
+                   },
+                    yAxis:
+                        {
+                            reversedStacks: false,
+                            title: { text: "Lượt xem" }
+                        },
+                    plotOptions: {
+                        line: { animation: false },
+                        column: { animation: false, stacking: "normal" },
+                        spline: { animation: false }
+                    },
+                    tooltip:
+                    {
+                        shared:true,
+                        formatter: function () {
+                            var s = '<b>Tuần ' + this.x + '</b>';
+                            var total = 0;
+                            $.each(this.points, function () {
+                                s += '<br/> <span style="font-weight:bold; color:' + this.series.color + '">- ' + this.series.name + '</span>: ' + this.y + ' (' + Math.round(this.percentage * 10) / 10 + '%)';
+                                total += this.y;
+                            });
+                            s+='<br/>Tổng cộng: '+ total;
+                            return s;
+                        }
+                    }
+                };
+            var pieChartOptions =
+            {
+                chart: { type: 'pie', animation: false },
+                tooltip: {
+                    shared: true,
+                    formatter: function ()
+                    {
+                        console.log(this);
+                        var s = '<b>' + this.series.name + '</b>';
+                        $.each(this.series.data, function () {
+                            s += '<br/> <span style="font-weight:bold; color:' + this.color + '">- ' + this.name + '</span>: ' + this.y + ' (' + Math.round(this.percentage * 10) / 10 + '%)';
+                        });
+                        s += '<br/>Tổng cộng: ' + this.total;
+                        return s;
+                    }
+                }
+            };
+
+            function render()
+            {
+                var year = $("#yearSelect").val();
+                var chartQuery = "/videoaccess/getparentcategoryreport?catId=@Model.Id&year=" + year;
+                $.getJSON(chartQuery, function (accessdata) {
+                    //Render - COLUMN CHART
+                    var chartSeries = [];
+                    var pieChartSeries = [{
+                        name: accessdata.CatName, data: []
+                    }];
+
+                    $.each(accessdata.Children, function (i, cat) {
+                        chartSeries[i] = {};
+                        chartSeries[i].name = cat.CatName;
+                        chartSeries[i].data = [];
+
+                        pieChartSeries[0].data[i] = { name: cat.CatName, y: 0 };
+                        $.each(cat.Data, function (j, week) {
+                            chartSeries[i].data.push([week.Week, week.IPViewCount]);
+                            pieChartSeries[0].data[i].y += week.IPViewCount;
+                        })
+
+                    });
+                    chartOptions.series = chartSeries;
+                    chartOptions.title = { text: accessdata.CatName };
+                    $("#chart1").highcharts(chartOptions);
+
+                    //Render - PIE CHART
+                    pieChartOptions.series = pieChartSeries;
+                    pieChartOptions.title = { text: accessdata.CatName };
+                    $("#chart2").highcharts(pieChartOptions);
+
+                    //Render - TABLE
+                    var tableData = {};
+                    tableData = [];
+                    for (var i = 0; i < 54; i++) {
+                        tableData[i] = [i];
+                        for (var j = 0; j < accessdata.Children.length; j++) {
+                            tableData[i].push(0); tableData[i].push(0); tableData[i].push(0);
+                        }
+                        tableData[i][accessdata.Children.length * 3 + 1] = i;
+                    }
+                    $.each(accessdata.Children, function (i, cat) {
+                        $.each(cat.Data, function (j, week) {
+                            tableData[week.Week][i * 3 + 1] = week.IPViewCount;
+                            tableData[week.Week][i * 3 + 2] = week.PageViewCount;
+                            tableData[week.Week][i * 3 + 3] = j > 0 ? (week.IPViewCount - cat.Data[j - 1].IPViewCount) : 0;
+                        });
+                    });
+                    $.each(accessdata.Weeks, function(wi, week)
+                    {
+                        tableData[wi][accessdata.Children.length * 3 + 2] = week;
+                    });
+                    
+                    var dataTableOptions = {
+                        data: tableData,
+                        order: [],
+                        paging: false,
+                        columnDefs:
+                        [
+                            {
+                                "targets": 0,
+                                "orderData": [accessdata.Children.length * 3 + 1],
+                                "render": function (data, type, full, meta) {
+                                    //console.log(data, type, full, meta);
+                                    return '<a href="javascript:weekDetail(\'' + full[full.length - 1] + '\')">Tuần ' + data + '</a>';
+                                },
+                                createdCell: function (td, cellData, rowData, row, col) {
+                                    $(td).find('span').attr('data-toggle', 'tooltip').attr('title', rowData[rowData.length - 1]).attr('data-placement', 'right');
+                                }
+                            },
+                            {
+                                "targets": 1,
+                                'orderable': false
+                            },
+                            {
+                                "targets": 2,
+                                'orderable': false,
+                            },
+                            {
+                                "targets": [accessdata.Children.length * 3 + 1, accessdata.Children.length * 3 + 1],
+                                "visible": false,
+                                "searchable": false
+                            }
+                        ],
+                        initComplete: function(settings, json)
+                        {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        },
+                        footerCallback: function (row, data, start, end, display) {
+                            var api = this.api(), data;
+
+                            
+                            // Remove the formatting to get integer data for summation
+                            var intVal = function (i) {
+                                return typeof i === 'string' ?
+                                    i.replace(/[\$,]/g, '') * 1 :
+                                    typeof i === 'number' ?
+                                    i : 0;
+                            };
+                            var totalChild = '@Model.Children.Count';
+                            // Total over all pages
+                            for (var i = 0; i < totalChild; i++) {
+                                var colIndex = i * 3 + 1;
+                                var data1 = api.column(colIndex).data();
+                                var data2 = api.column(colIndex + 1).data();
+
+                                var total1 = data1.length ?
+                                    data1.reduce(function (a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }) : 0;
+
+                                var total2 = data2.length ?
+                                    data2.reduce(function (a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }) : 0;
+
+                                // Update footer
+                                $(api.column(colIndex).footer()).html(total1);
+                                $(api.column(colIndex + 1).footer()).html(total2);
+                            }
+                        },
+                    };
+                    $.each(accessdata.Children, function (i, cat) {
+                        dataTableOptions.columnDefs.push({
+                            targets: 3 * (i + 1),
+                            orderable: false,
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                var className = cellData > 0 ? "increase" : (cellData == 0 ? "" : "decrease");
+                                $(td).addClass(className);
+                            }
+                        });
+                    });
+                    var table = $("#table-videoreport").DataTable();
+                    table.destroy();
+
+                    $("#table-videoreport").DataTable(dataTableOptions);
+                });
+            }
+           
+            $('input:radio[name="radiocharttype"]').change(function () {
+                var charttype = $(this).val();
+                chartOptions.chart.type = charttype;
+                if (charttype == "column")
+                {
+                    $("#column_option").show();
+                }
+                $('#chart1').highcharts(chartOptions);
+            });
+
+            $("#cb_stackcolumn").on("change", function (evt) {
+                var checked = this.checked;
+                if (checked == true && chartOptions.chart.type == "column") {
+                    chartOptions.series[1].visible = false;
+                    chartOptions.series[2].visible = true;
+                    chartOptions.legend = { reversed: false },
+                    chartOptions.plotOptions.series = { stacking: "normal" };
+                }
+                else {
+                    chartOptions.series[1].visible = true;
+                    chartOptions.series[2].visible = false;
+                    chartOptions.plotOptions.series = { stacking: null };
+                }
+                $('#chart1').highcharts(chartOptions);
+            });
+
+            $("#yearSelect").on("change", render);
+
+            render();
+
+            $('#sidebar-nav #devReportMng').toggleClass("active");
+            $('#sidebar-nav #devReportMng').siblings().removeClass("active");
+
+            $('#sidebar-nav a#dr-li-2').toggleClass("active");
+            $('#sidebar-nav a#dr-li-2').parent().siblings().removeClass("active");
+        });
+
+        function convertToDate(unix_timestamp)
+        {
+            var date = new Date(unix_timestamp);
+            var dateMM = moment(date);
+            return dateMM.format("DD-MM-YYYY");
+        }
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Recruit>
+
+@if (Model.Count() < 0)
+{
+    <h1 class="h1 h1--alt m2 m10">Không có tin tuyển dụng nào</h1>
+}
+else
+{
+    <h1 class="h1 h1--alt m2 m10">Các tin tuyển dụng</h1>
+
+    var rows = Math.Ceiling((double)Model.Count() / 3);
+    var cnt = 0;
+    var temp = 1;
+    for (int i = 0; i < rows; i++)
+    {
+        <div class="row m1">
+            @for (int j = 0 + cnt; j < Model.Count(); j++)
+            {
+                var item = Model.ElementAt(j);
+                if (temp > 3)
+                {
+                    temp = 0;
+                    cnt += 3;
+                    break;
+                }
+                else
+                {
+                    <div class="col-sm-4">
+                        <div class="home-playlists__playlist-item br3">
+                            <div class="media media--sm-v">
+                                <div class="media__image media__image--thumb playlist-link__image">
+                                    <a class="ga-link" data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#recruit-content" href="/Recruit/Details/@item.Id">
+                                        <span class="thumb thumb--square ">
+                                            <span class="thumb__sizer">
+                                                <span class="thumb__tugger">
+                                                    <img class=" thumb__image" src="@item.Thumbnail">
+                                                    <span class="thumb__aligner"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="media__message text-center">
+                                    <h4 class="h9 m5">
+                                        @Ajax.ActionLink(item.JobPosition, "Details", "Recruit", new { id = item.Id },
+                                        new AjaxOptions
+                                        {
+                                            HttpMethod = "GET",
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "recruit-content"
+                                        }, new { @class = "ga-link" })
+                                        </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    temp++;
+                }
+            }
+        </div>
+    }
+}

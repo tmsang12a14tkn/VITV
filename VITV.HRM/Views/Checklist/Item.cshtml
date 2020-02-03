@@ -1,0 +1,59 @@
+﻿@model Job
+@{
+    Employee me = ViewBag.Me;
+}
+<tr class="checklist-item" id="checklist-item-@Model.Id">
+    <td>
+        <label>
+            <input name="form-field-checkbox" type="checkbox" data-id="@Model.Id" class="ace input-lg item-checkbox" @(ViewBag.CanEdit == true || Model.Employees.Any(e=>e.Id == me.Id)?"":"disabled") @(Model.Done ? "checked" : "")>
+            <span class="lbl bigger-120"> </span>
+        </label>
+    </td>
+    <td>
+        <a data-toggle="modal" data-backdrop="static" data-target="#job-view-modal" data-href="/Job/Details/@Model.Id">@Model.Title</a>
+    </td>
+    <td>@(Model.StartTime.HasValue ? Model.StartTime.Value.ToString("dd/MM/yyyy HH:mm") : "")</td>
+    <td>@(Model.EndTime.HasValue ? Model.EndTime.Value.ToString("dd/MM/yyyy HH:mm") : "")</td>
+    <td>
+        @Model.EmployeesString("Name")
+    </td>
+    <td>
+        @Model.EquipmentsString("Name")
+    </td>
+
+    <td>
+        <span>@Model.ShortDescription</span>
+    </td>
+    <td data-toggle="modal" data-backdrop="static" data-target="#job-view-modal" data-href="/Job/Details/@Model.Id">
+        <a href="#" class="btn btn-info btn-sm no-radius">
+            <i class="ace-icon fa fa-envelope"></i>
+            Trả lời
+            <span class="badge badge-danger">@Model.Responses.Count</span>
+        </a>
+        <a href="#" class="btn btn-yellow btn-sm no-radius">
+            <i class="ace-icon fa fa-paperclip"></i>
+            Đính kèm
+            <span class="badge badge-purple">@Model.Attachments.Count</span>
+        </a>
+        @*<span class="label label-lg label-pink arrowed-right">@Model.Responses.Count <i class="ace-icon fa fa-rss"></i></span>
+        <span class="label label-lg label-yellow arrowed-in">@Model.Attachments.Count <i class="ace-icon fa fa-paperclip"></i></span>*@
+
+    </td>
+    <td>
+        <div class="hidden-sm hidden-xs btn-group">
+            @*<a data-toggle="modal" data-backdrop="static" data-target="#job-view-modal" data-href="/Job/Details/@Model.Id" class="btn btn-xs btn-success">
+                <i class="ace-icon fa fa-check bigger-120"></i>
+            </a>
+
+            <a data-toggle="modal" data-target="#job-modal" data-href="/Job/Edit/@Model.Id" class="btn btn-xs btn-info">
+                <i class="ace-icon fa fa-pencil bigger-120"></i>
+            </a>*@
+            @if (ViewBag.CanEdit == true)
+            { 
+                <a data-toggle="modal" data-target="#job-delete-modal" data-href="/Job/Delete/@Model.Id" class="btn btn-xs btn-danger">
+                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                </a>
+            }
+        </div>
+    </td>
+</tr>

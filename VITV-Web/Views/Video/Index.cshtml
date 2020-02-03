@@ -1,0 +1,200 @@
+﻿@model VideoHomeView
+
+@{
+    ViewBag.Title = "Tổng hợp video | VITV";
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+}
+
+<div class="row allvideo_area">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#allvideo_filter">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                        <a href="@Url.Action("Index","Video")"><h3 class="navbar-brand">VIDEO</h3></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="allvideo_filter">
+                        @using (Html.BeginForm("Index", "Video", FormMethod.Get))
+                        {
+                            <div class="navbar-form navbar-right" role="search" id="formsearch">
+                                <div class="form-group dropdown" id="rangeDropdown">
+                                    <input type="hidden" name="rangeType" id="filterByRange" value="@Model.VideoFilterView.Range" />
+                                    <input type="hidden" name="begin" id="filterByBegin" value="@(Model.VideoFilterView.Begin.HasValue ? Model.VideoFilterView.Begin.Value.ToShortDateString() : "")" />
+                                    <input type="hidden" name="end" id="filterByEnd" value="@(Model.VideoFilterView.End.HasValue ? Model.VideoFilterView.End.Value.ToShortDateString() : "")" />
+                                    <button id="rangeLabel" class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                                        <span class="text-value">Mọi lúc</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="rangeLabel">
+                                        <li role="presentation" class="fixed-range active" data-range="All">Mọi lúc</li>
+                                        <li role="presentation" class="fixed-range" data-range="Day">Trong ngày</li>
+                                        <li role="presentation" class="fixed-range" data-range="Week">Trong tuần</li>
+                                        <li role="presentation" class="fixed-range" data-range="Month">Trong tháng</li>
+                                        <li role="presentation" class="fixed-range" data-range="ThreeMonth">Trong 3 tháng</li>
+                                        <li role="presentation" class="fixed-range" data-range="SixMonth">Trong 6 tháng</li>
+                                        <li role="presentation" class="divider"></li>
+                                        <li role="presentation" class="custom-range" data-range="Custom" data-toggle="modal" data-target="#rangeModal">Trong khoảng</li>
+                                    </ul>
+                                </div>
+                                @*<div class="form-group">
+                                    <div class="dropdown">
+                                        <select class="form-control" id="sortbyevent" name="evtId">
+                                            <option selected value="all">Tất cả</option>
+                                            @foreach (var evt in Model.SpecialEvents)
+                                            {
+                                                <option value="@evt.Id">@evt.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    <div class="dropdown">
+                                        <select class="form-control" id="sortbycat" name="cat">
+                                            <option value="all" @(Model.SearchVideoModel.cat == "all" ? "selected='selected'" : "")>Tất cả chương trình</option>
+
+                                            @foreach (var grp in Model.VideoCatGroups)
+                                            {
+                                                if (Model.SearchVideoModel.cat == grp.UniqueTitle)
+                                                {
+                                                    <option value="@grp.UniqueTitle" selected>Tất cả @grp.Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@grp.UniqueTitle">Tất cả @grp.Name</option>
+                                                }
+
+                                                <optgroup label="@(grp.Name)">
+                                                    @foreach (var cat in grp.VideoCats.OrderBy(c => c.Order))
+                                                    {
+                                                        if (Model.SearchVideoModel.cat == Convert.ToString(cat.Id))
+                                                        {
+                                                            <option value="@cat.UniqueTitle" selected>@cat.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@cat.UniqueTitle">@cat.Name</option>
+                                                        }
+
+                                                    }
+                                                </optgroup>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input class="form-control" id="sortbyreporter" name="rep" placeholder="Biên tập viên" type="text" value="@(String.IsNullOrEmpty(Model.SearchVideoModel.rep) ? "" : Model.SearchVideoModel.rep)">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="sortbytitle" name="title" placeholder="Tiêu đề" type="text" value="@(String.IsNullOrEmpty(Model.SearchVideoModel.title) ? "" : Model.SearchVideoModel.title)">
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-danger" id="filterBtn" value="Tìm" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="allvideo_content">
+        <div class="container results" id="browse-results">
+            @*@Html.Action("Filter", "Video", new { evtId = Model.evtId})*@
+            @Html.Partial("_List", Model.VideoFilterView)
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="rangeModal" tabindex="-1" role="dialog" aria-labelledby="rangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="rangeModalLabel">Chọn thời gian</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="rangeBegin">Từ</label>
+                    <input class="form-control" id="rangeBegin" />
+                </div>
+                <div class="form-group">
+                    <label for="rangeEnd">Đến</label>
+                    <input class="form-control" id="rangeEnd" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary btn-ok" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="specialEventModal" tabindex="-1" role="dialog" aria-labelledby="seModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="seModalLabel">Chọn sự kiện</h4>
+            </div>
+            <div class="modal-body">
+                <ul role="menu">
+                    @foreach (var evt in Model.SpecialEvents)
+                    {
+                        <li role="presentation">
+                            <label for="rangeBegin">Sự kiện @evt.Name</label>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary btn-ok" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/toggle.js"></script>
+    <script src="~/Scripts/jquery.vitv.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#rangeBegin').datetimepicker({
+                format: 'd/m/Y',
+                formatDate: 'd/m/Y',
+                onShow: function (ct) {
+                    this.setOptions({
+                        maxDate: jQuery('#rangeEnd').val() ? jQuery('#rangeEnd').val() : false
+                    })
+                },
+                timepicker: false
+            });
+            $('#rangeEnd').datetimepicker({
+                format: 'd/m/Y',
+                formatDate: 'd/m/Y',
+                onShow: function (ct) {
+                    this.setOptions({
+                        minDate: jQuery('#rangeBegin').val() ? jQuery('#rangeBegin').val() : false
+                    })
+                },
+                timepicker: false
+            });
+
+
+        });
+        $("#rangeDropdown").rangeDropdown();
+        function OnCompleteFilter(data) {
+            //$("#browse-results").empty().append(data);
+            //window.history.pushState('obj', 'newtitle', '/abc');
+            //return false;
+        }
+    </script>
+}

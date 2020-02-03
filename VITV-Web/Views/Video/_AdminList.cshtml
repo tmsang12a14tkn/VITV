@@ -1,0 +1,124 @@
+﻿@model VideoFilterView
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center"><span>Hình ảnh</span></th>
+                <th class="text-center"><a href="#" ng-click="sort_by('Title', $event)"><span>Tiêu đề</span></a></th>
+                <th><a href="#" ng-click="sort_by('PublishedTime', $event)"><span>Ngày giờ phát sóng</span></a></th>
+                <th class="text-center"><a href="#" ng-click="sort_by('CategoryName', $event)"><span>Chuyên mục</span></a></th>
+                <th class="text-center"><span>Quan trọng</span></th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach (VideoView vd in Model.Videos)*@
+            @foreach (Video vd in Model.Videos)
+            {
+                <tr>
+                    <td><a href="/Video/Edit/@vd.Id" class=" table-link"><img src="@vd.Thumbnail" width="200" height="200"></a></td>
+                    <td><a href="/Video/Edit/@vd.Id" class=" table-link">@vd.Title</a></td>
+                    <td>@vd.DisplayTime | jsonDate: 'dd-MM-yyyy HH:mm'</td>
+                    @*<td class="text-center">@vd.CategoryName</td>*@
+                    <td class="text-center">@(vd.Category != null ? vd.Category.Name : "")</td>
+                    <td>
+                        @using (Html.BeginForm("SetHot", "Video"))
+                        {
+                            <input type="hidden" name="id" value="@vd.Id" />
+                            <input type="submit" class="btn btn-danger" value="Nổi bật" ng-if="vd.IsHot" />
+                            <input type="submit" class="btn btn-success" value="Bình thường" ng-if="!vd.IsHot" />
+                        }
+                    </td>
+                    <td style="width: 15%;">
+                        <a href="/Video/Details/@vd.Id">
+                            <span class="fa-stack">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                        <a href="/Video/Delete/@vd.Id" class="table-link danger" data-toggle="modal" data-target="#deleteVideoModal"
+                           data-ajax="true"
+                           data-ajax-complete=""
+                           data-ajax-mode="replace"
+                           data-ajax-update="#deleteVideoContent">
+                            <span class="fa-stack">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="results__pagination">
+    <div class="pagination">
+        @if(Model.Page>1)
+        {
+            @Ajax.ActionLink("Trước", "Filter", "Video", new { page = Model.Page - 1, range = Model.Range, rep = Model.Reporter, cat = Model.Category }, new AjaxOptions
+            {
+                HttpMethod = "Get",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "browse-results"
+            }, new { @class = "pagination__item pagination__link" });
+        }
+        else
+        {
+            <span>Trước</span>
+        }
+        
+        <span class="pagination__separator">|</span>
+        @{
+            int startPag = Math.Max(1, Model.Page - 2);
+            int endPag = Math.Min(startPag + 4, Model.PageCount);
+            for (int pag = startPag; pag <= endPag; pag++ )
+            {
+                if(pag == Model.Page)
+                { 
+                    <span class="">@pag</span>
+                    <span class="">|</span>
+                }
+                else
+                { 
+                     @Ajax.ActionLink(pag.ToString(), "Filter", "Video",  new { page = pag, range= Model.Range, rep = Model.Reporter, cat = Model.Category}, new AjaxOptions 
+                    {
+                       HttpMethod = "Get",
+                       InsertionMode = InsertionMode.Replace,
+                       UpdateTargetId = "browse-results"
+                    }, new { @class = ""})
+                    <span class="pagination__separator">|</span>
+                }
+            }
+            if(endPag != Model.PageCount)
+            {
+                <span class="">…</span>
+                @Ajax.ActionLink(Model.PageCount.ToString(), "Filter", "Video", new { page = Model.PageCount, range = Model.Range, rep = Model.Reporter, cat = Model.Category }, new AjaxOptions
+                {
+                    HttpMethod = "Get",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "browse-results"
+                }, new { @class = "" })
+              
+                <span class="">|</span>
+            }
+        }
+        @if (Model.Page < Model.PageCount)
+        {
+            @Ajax.ActionLink("Sau", "Filter", "Video", new { page = Model.Page + 1, range = Model.Range, rep = Model.Reporter, cat = Model.Category }, new AjaxOptions
+            {
+                HttpMethod = "Get",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "browse-results"
+            }, new { @class = "" });
+        }
+        else
+        {
+            <span>Sau</span>
+        }
+    </div>
+</div>

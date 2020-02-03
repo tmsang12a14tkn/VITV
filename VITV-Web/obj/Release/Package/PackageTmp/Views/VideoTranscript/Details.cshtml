@@ -1,0 +1,237 @@
+﻿@model VideoTranscriptView
+
+@{
+    ViewBag.Title = "Chỉnh sửa chi tiết cho video";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <header class="main-box-header clearfix">
+            <h2 class="pull-left">Chi tiết của video</h2>
+        </header>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">
+                    Video -
+                    <a href="@Url.Action("Details", "Video", new { id = Model.Video.Id, title = Model.Video.UniqueTitle, date = Model.Video.PublishedTime.ToString("dd-MM-yyyy") })" target="_blank">@Model.Video.Title</a>
+                </h2>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <video id="video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" data-settings="autoresize:fit;" style="height: 460px;">
+                        @if (Model != null && Model.Video != null && !String.IsNullOrEmpty(Model.Video.Url))
+                        {
+                            <source src="@Model.Video.Url" type='video/mp4'>
+                        }
+                    </video>
+                </div>
+                <div class="row form-inline">
+                    <h3>Thêm nhanh nội dung chi tiết</h3>
+                    <input type="text" class="form-control" id="cur-time" value="0:00" />
+                    <button class="btn btn-primary" id="btn-add">Thêm nội dung tại thời gian này</button>
+                </div>
+                <div class="row form-inline">
+                    <h3>Tua nhanh thời gian</h3>
+                    <input type="text" class="form-control" id="jump-time" value="0:00" />
+                    <button class="btn btn-primary" id="btn-jump">Tua</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Nội dung chi tiết theo thời gian</h2>
+
+                <div class="pull-right">
+                    @Ajax.ActionLink("Thêm nội dung", "Create", "VideoTranscript", new { vId = Model.Video.Id },
+                    new AjaxOptions
+                    {
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "modal_content",
+                        OnSuccess = "loadElements"
+                    }, new { @class = "btn btn-primary mrg-b-lg", data_toggle = "modal", data_target = "#modal" })
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <div class="table-responsive">
+                        <div id="list_transcipt" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                            @Html.Partial("_ListTranscripts", Model.VideoTranscriptModels)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div id="modal_content"></div>
+    </div>
+</div>
+
+<div class="modal" id="delete_modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="delete_content">
+
+        </div>
+    </div>
+</div>
+
+@section styles {
+    <link href="~/Content/VideoJS/videojs.css" rel="stylesheet" />
+    <link href="~/Content/nifty-component.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/ImageSelect.jquery.js"></script>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/jquery.dataTables.bootstrap.js"></script>
+    <script>
+        function initTable() {
+            var table = $('#table').dataTable({
+                'info': false,
+                'iDisplayLength': 25,
+                'columnDefs': [{ orderable: false, targets: -1 }]
+            });
+        }
+
+        function onSucceed() {
+            $('#modal').modal('hide');
+            initTable();
+        }
+
+        function onDeleteSucceed(data) {
+            $("#delete_modal").modal("hide");
+            initTable();
+        }
+
+        function loadElements() {
+            setTimeout(function () {
+                $('#SecondSeek').spinner({
+                    spin: function (event, ui) {
+                        if (ui.value >= 60) {
+                            $(this).spinner('value', ui.value - 60);
+                            $('#MinuteSeek').spinner('stepUp');
+                            return false;
+                        } else if (ui.value < 0) {
+                            $(this).spinner('value', ui.value + 60);
+                            $('#MinuteSeek').spinner('stepDown');
+                            return false;
+                        }
+                    }
+                });
+
+                $('#MinuteSeek').spinner({
+                    spin: function (event, ui) {
+                        if (ui.value >= 60) {
+                            $(this).spinner('value', ui.value - 60);
+                            $('#HourSeek').spinner('stepUp');
+                            return false;
+                        } else if (ui.value < 0) {
+                            $(this).spinner('value', ui.value + 60);
+                            $('#HourSeek').spinner('stepDown');
+                            return false;
+                        }
+                    }
+                });
+
+                $('#HourSeek').spinner({
+                    min: 0
+                });
+
+                $("#tbReporters").chosen({
+                    width: "100%",
+                    no_results_text: "Không có kết quả nào!"
+                });
+
+                $('#tbReporters').on('change', function (evt, params) {
+                    var ids = "";
+                    var selectedIds = $("#tbReporters").chosen().val();
+
+                    if (selectedIds != null) {
+                        $.each(selectedIds, function (index, value) {
+                            ids = ids + ", " + value;
+                        });
+                    }
+                    $("#ReporterIds").val(ids);
+                });
+
+                $('#closeBtn').on('click', function () {
+                    $('.modal').modal('hide');
+                });
+            }, 100);
+        }
+
+        $(document).ready(function () {
+            initTable();
+
+            videojs("video").ready(function () {
+                var myPlayer = this;
+                var cur_time = 0;
+
+                myPlayer.on('timeupdate', function () {
+                    cur_time = this.currentTime();
+                    $('#cur-time').val(formatTime(cur_time));
+                });
+
+                $('#btn-add').on('click', function () {
+                    myPlayer.pause();
+                    console.log('/VideoTranscript/Create?t=' + cur_time + '&vid=@(Model.Video.Id)');
+                    $('#modal_content').load('/VideoTranscript/Create?t=' + cur_time + '&vid=@(Model.Video.Id)', function (response, status, xhr) {
+                        if (status == "success") {
+                            $('#modal').modal('show');
+                            loadElements();
+                        }
+                    });
+                });
+
+                $('#btn-jump').on('click', function (e) {
+                    e.preventDefault();
+                    myPlayer.play();
+                    myPlayer.pause();
+                    myPlayer.currentTime(parseStringTime($('#jump-time').val()));
+                    myPlayer.play();
+                });
+            });
+
+            $(document).on('click', '.col-time', function (e) {
+                e.preventDefault();
+                var myPlayer = videojs("video");
+                myPlayer.play();
+                myPlayer.pause();
+                myPlayer.currentTime($(this).data('jumptime'));
+                myPlayer.play();
+            });
+
+            function formatTime(s) {
+                var hours = Math.floor(s / 60 / 60),
+                    minutes = Math.floor((s - (hours * 60 * 60)) / 60),
+                    seconds = Math.floor(s - (hours * 60 * 60) - (minutes * 60));
+                return ((hours > 0) ? hours + ':' : '') + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
+            }
+
+            function parseStringTime(val) {
+                var times = val.split(':');
+                var result = 0;
+
+                if (times.length == 3)
+                    result = (+times[0]) * 60 * 60 + (+times[1]) * 60 + (+times[2]);
+                else
+                    result = (+times[0]) * 60 + (+times[1]);
+
+                return result;
+            }
+        });
+    </script>
+}
+

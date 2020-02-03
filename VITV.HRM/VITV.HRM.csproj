@@ -1,0 +1,1198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D1C8DDEF-9955-49D6-8D63-0EADA09D044D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VITV.HRM</RootNamespace>
+    <AssemblyName>VITV.HRM</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Amazon.Adm">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Amazon.Adm.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Android">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Apple">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Apple.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Blackberry">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Blackberry.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Core">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.FirefoxOS">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.FirefoxOS.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Google.Chrome">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Google.Chrome.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Windows">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.WindowsPhone">
+      <HintPath>..\packages\PushSharp.2.2.1.0\lib\net40\PushSharp.WindowsPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\Binder.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="ChatModels\ChatClient.cs" />
+    <Compile Include="ChatModels\ChatHub.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BranchController.cs" />
+    <Compile Include="Controllers\ConferenceController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
+    <Compile Include="Controllers\EquipmentController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\HolidayController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\GroupNotificationController.cs" />
+    <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\JobResponseController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\PersonalDayoffController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\PersonalTaskController.cs" />
+    <Compile Include="Controllers\ChecklistController.cs" />
+    <Compile Include="Controllers\TaskRequestController.cs" />
+    <Compile Include="Controllers\TaskResponseController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Utilities.cs" />
+    <Compile Include="Mappings\AutoMapperConfiguration.cs" />
+    <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />
+    <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
+    <Compile Include="Migrations\201505060835484_1.cs" />
+    <Compile Include="Migrations\201505060835484_1.Designer.cs">
+      <DependentUpon>201505060835484_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505060909191_2.cs" />
+    <Compile Include="Migrations\201505060909191_2.Designer.cs">
+      <DependentUpon>201505060909191_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505060927071_3.cs" />
+    <Compile Include="Migrations\201505060927071_3.Designer.cs">
+      <DependentUpon>201505060927071_3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505080339235_emplyeeworkinfo.cs" />
+    <Compile Include="Migrations\201505080339235_emplyeeworkinfo.Designer.cs">
+      <DependentUpon>201505080339235_emplyeeworkinfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505080357294_emplyeeworkinfo2.cs" />
+    <Compile Include="Migrations\201505080357294_emplyeeworkinfo2.Designer.cs">
+      <DependentUpon>201505080357294_emplyeeworkinfo2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505080750135_dayoff.cs" />
+    <Compile Include="Migrations\201505080750135_dayoff.Designer.cs">
+      <DependentUpon>201505080750135_dayoff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505120415048_workinfo-enddate.cs" />
+    <Compile Include="Migrations\201505120415048_workinfo-enddate.Designer.cs">
+      <DependentUpon>201505120415048_workinfo-enddate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505120750550_project.cs" />
+    <Compile Include="Migrations\201505120750550_project.Designer.cs">
+      <DependentUpon>201505120750550_project.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505121016159_addbranch.cs" />
+    <Compile Include="Migrations\201505121016159_addbranch.Designer.cs">
+      <DependentUpon>201505121016159_addbranch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505121050296_department-branchid.cs" />
+    <Compile Include="Migrations\201505121050296_department-branchid.Designer.cs">
+      <DependentUpon>201505121050296_department-branchid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505140822404_notification.cs" />
+    <Compile Include="Migrations\201505140822404_notification.Designer.cs">
+      <DependentUpon>201505140822404_notification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505200302470_taskrequest.cs" />
+    <Compile Include="Migrations\201505200302470_taskrequest.Designer.cs">
+      <DependentUpon>201505200302470_taskrequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505200805002_edit-taskrequest1.cs" />
+    <Compile Include="Migrations\201505200805002_edit-taskrequest1.Designer.cs">
+      <DependentUpon>201505200805002_edit-taskrequest1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505210358079_addequipment.cs" />
+    <Compile Include="Migrations\201505210358079_addequipment.Designer.cs">
+      <DependentUpon>201505210358079_addequipment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505210512527_requestattachment.cs" />
+    <Compile Include="Migrations\201505210512527_requestattachment.Designer.cs">
+      <DependentUpon>201505210512527_requestattachment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505220315241_project-request-response.cs" />
+    <Compile Include="Migrations\201505220315241_project-request-response.Designer.cs">
+      <DependentUpon>201505220315241_project-request-response.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505220357556_reponse-employee.cs" />
+    <Compile Include="Migrations\201505220357556_reponse-employee.Designer.cs">
+      <DependentUpon>201505220357556_reponse-employee.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505220732476_editequipment.cs" />
+    <Compile Include="Migrations\201505220732476_editequipment.Designer.cs">
+      <DependentUpon>201505220732476_editequipment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505250746381_addconference.cs" />
+    <Compile Include="Migrations\201505250746381_addconference.Designer.cs">
+      <DependentUpon>201505250746381_addconference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505250821398_message.cs" />
+    <Compile Include="Migrations\201505250821398_message.Designer.cs">
+      <DependentUpon>201505250821398_message.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505250857352_isdelete.cs" />
+    <Compile Include="Migrations\201505250857352_isdelete.Designer.cs">
+      <DependentUpon>201505250857352_isdelete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505260440059_fix-response.cs" />
+    <Compile Include="Migrations\201505260440059_fix-response.Designer.cs">
+      <DependentUpon>201505260440059_fix-response.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505260447086_fix-response-2.cs" />
+    <Compile Include="Migrations\201505260447086_fix-response-2.Designer.cs">
+      <DependentUpon>201505260447086_fix-response-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505270507110_rename-notification.cs" />
+    <Compile Include="Migrations\201505270507110_rename-notification.Designer.cs">
+      <DependentUpon>201505270507110_rename-notification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505290845378_notification1.cs" />
+    <Compile Include="Migrations\201505290845378_notification1.Designer.cs">
+      <DependentUpon>201505290845378_notification1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506030304429_edit-taskrequest.cs" />
+    <Compile Include="Migrations\201506030304429_edit-taskrequest.Designer.cs">
+      <DependentUpon>201506030304429_edit-taskrequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506040213183_checklist.cs" />
+    <Compile Include="Migrations\201506040213183_checklist.Designer.cs">
+      <DependentUpon>201506040213183_checklist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506050811187_private-project.cs" />
+    <Compile Include="Migrations\201506050811187_private-project.Designer.cs">
+      <DependentUpon>201506050811187_private-project.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506060246536_change-name-1.cs" />
+    <Compile Include="Migrations\201506060246536_change-name-1.Designer.cs">
+      <DependentUpon>201506060246536_change-name-1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506060301021_change-name-2.cs" />
+    <Compile Include="Migrations\201506060301021_change-name-2.Designer.cs">
+      <DependentUpon>201506060301021_change-name-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506060301523_change-name-3.cs" />
+    <Compile Include="Migrations\201506060301523_change-name-3.Designer.cs">
+      <DependentUpon>201506060301523_change-name-3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506060314469_change-name-4.cs" />
+    <Compile Include="Migrations\201506060314469_change-name-4.Designer.cs">
+      <DependentUpon>201506060314469_change-name-4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506060333041_jobemployee.cs" />
+    <Compile Include="Migrations\201506060333041_jobemployee.Designer.cs">
+      <DependentUpon>201506060333041_jobemployee.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506060421234_changejob.cs" />
+    <Compile Include="Migrations\201506060421234_changejob.Designer.cs">
+      <DependentUpon>201506060421234_changejob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506080237564_abc.cs" />
+    <Compile Include="Migrations\201506080237564_abc.Designer.cs">
+      <DependentUpon>201506080237564_abc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506080352599_fixjob.cs" />
+    <Compile Include="Migrations\201506080352599_fixjob.Designer.cs">
+      <DependentUpon>201506080352599_fixjob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506101021296_short-desc.cs" />
+    <Compile Include="Migrations\201506101021296_short-desc.Designer.cs">
+      <DependentUpon>201506101021296_short-desc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506110754025_jobattachment1.cs" />
+    <Compile Include="Migrations\201506110754025_jobattachment1.Designer.cs">
+      <DependentUpon>201506110754025_jobattachment1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506110754506_jobattachment2.cs" />
+    <Compile Include="Migrations\201506110754506_jobattachment2.Designer.cs">
+      <DependentUpon>201506110754506_jobattachment2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506120242235_job-equipments.cs" />
+    <Compile Include="Migrations\201506120242235_job-equipments.Designer.cs">
+      <DependentUpon>201506120242235_job-equipments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506120811242_notification-job.cs" />
+    <Compile Include="Migrations\201506120811242_notification-job.Designer.cs">
+      <DependentUpon>201506120811242_notification-job.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506150307307_time-usernotifi.cs" />
+    <Compile Include="Migrations\201506150307307_time-usernotifi.Designer.cs">
+      <DependentUpon>201506150307307_time-usernotifi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506150405153_jobattachment-jobid.cs" />
+    <Compile Include="Migrations\201506150405153_jobattachment-jobid.Designer.cs">
+      <DependentUpon>201506150405153_jobattachment-jobid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506150846462_workinfo-starrdate.cs" />
+    <Compile Include="Migrations\201506150846462_workinfo-starrdate.Designer.cs">
+      <DependentUpon>201506150846462_workinfo-starrdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506190950241_addIsViewMessage.cs" />
+    <Compile Include="Migrations\201506190950241_addIsViewMessage.Designer.cs">
+      <DependentUpon>201506190950241_addIsViewMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507080454526_deviceuser.cs" />
+    <Compile Include="Migrations\201507080454526_deviceuser.Designer.cs">
+      <DependentUpon>201507080454526_deviceuser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507080804163_personaldayoff.cs" />
+    <Compile Include="Migrations\201507080804163_personaldayoff.Designer.cs">
+      <DependentUpon>201507080804163_personaldayoff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507150845246_fixdeviceuser.cs" />
+    <Compile Include="Migrations\201507150845246_fixdeviceuser.Designer.cs">
+      <DependentUpon>201507150845246_fixdeviceuser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Branch.cs" />
+    <Compile Include="Models\DeviceUser.cs" />
+    <Compile Include="Models\Job.cs" />
+    <Compile Include="Models\JobList.cs" />
+    <Compile Include="Models\Conference.cs" />
+    <Compile Include="Models\Dayoff.cs" />
+    <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\DepartmentArrangeView.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\EmployeeSkill.cs" />
+    <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\Extension\MyExtension.cs" />
+    <Compile Include="Models\JobResponse.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\GroupNotification.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\Notification\NotificationHub.cs" />
+    <Compile Include="Models\PersonalDayoff.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\ProjectAttachment.cs" />
+    <Compile Include="Models\JobAttachment.cs" />
+    <Compile Include="Models\ResponseAttachment.cs" />
+    <Compile Include="Models\TaskRequest.cs" />
+    <Compile Include="Models\Skill.cs" />
+    <Compile Include="Models\EmployeeWorkInfo.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\PersonalJob.cs" />
+    <Compile Include="Models\PositionLevel.cs" />
+    <Compile Include="Models\PositionLevelView.cs" />
+    <Compile Include="Models\TaskResponse.cs" />
+    <Compile Include="Models\UserNotification.cs" />
+    <Compile Include="Models\View\CalendarAllModel.cs" />
+    <Compile Include="Models\View\CalendarModel.cs" />
+    <Compile Include="Models\View\CalendarMonthModel.cs" />
+    <Compile Include="Models\View\CalendarYearModel.cs" />
+    <Compile Include="Models\View\CheckTokenModel.cs" />
+    <Compile Include="Models\View\EmployeeRequests.cs" />
+    <Compile Include="Models\View\EmployeeStatistic.cs" />
+    <Compile Include="Models\View\GroupPositionLevelView.cs" />
+    <Compile Include="Models\View\HomeModel.cs" />
+    <Compile Include="Models\View\LoginModel.cs" />
+    <Compile Include="Models\View\MyJobs.cs" />
+    <Compile Include="Models\View\PersonalDayoffModel.cs" />
+    <Compile Include="Models\View\ProfilePageModel.cs" />
+    <Compile Include="Models\View\RegisterViewModel.cs" />
+    <Compile Include="Models\VITVSecondContext.cs" />
+    <Compile Include="Models\WorkDay.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\DropDownListsModel.cs" />
+    <Compile Include="ViewModels\EmployeeEditModel.cs" />
+    <Compile Include="ViewModels\EmployeeModel.cs" />
+    <Compile Include="ViewModels\JsTreeModel.cs" />
+    <Compile Include="ViewModels\ListNotiChatModel.cs" />
+    <Compile Include="ViewModels\MessageModel.cs" />
+    <Compile Include="ViewModels\TreeModel.cs" />
+    <Compile Include="ViewModels\HolidayModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\assets\copy_csv_xls_pdf.swf" />
+    <Content Include="Content\assets\LogoVIT3.png" />
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chat.css" />
+    <Content Include="Content\css\ace-ie.min.css" />
+    <Content Include="Content\css\ace-part2.min.css" />
+    <Content Include="Content\css\ace-rtl.min.css" />
+    <Content Include="Content\css\ace.min.css" />
+    <Content Include="Content\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\css\bootstrap-duallistbox.min.css" />
+    <Content Include="Content\css\bootstrap-editable.min.css" />
+    <Content Include="Content\css\bootstrap-multiselect.min.css" />
+    <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\css\bootstrap-timepicker.min.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\chosen-sprite%402x.png" />
+    <Content Include="Content\css\chosen-sprite.png" />
+    <Content Include="Content\css\chosen.min.css" />
+    <Content Include="Content\css\colorbox.min.css" />
+    <Content Include="Content\css\colorpicker.css" />
+    <Content Include="Content\css\colorpicker.min.css" />
+    <Content Include="Content\css\datepicker.min.css" />
+    <Content Include="Content\css\daterangepicker.min.css" />
+    <Content Include="Content\css\dropzone.min.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\fullcalendar.min.css" />
+    <Content Include="Content\css\images\border.png" />
+    <Content Include="Content\css\images\controls.png" />
+    <Content Include="Content\css\images\loading.gif" />
+    <Content Include="Content\css\images\loading_background.png" />
+    <Content Include="Content\css\images\meteorshower2.jpg" />
+    <Content Include="Content\css\images\overlay.png" />
+    <Content Include="Content\css\images\pattern.jpg" />
+    <Content Include="Content\css\img\alpha.png" />
+    <Content Include="Content\css\img\hue.png" />
+    <Content Include="Content\css\img\saturation.png" />
+    <Content Include="Content\css\jquery-ui.custom.min.css" />
+    <Content Include="Content\css\jquery-ui.min.css" />
+    <Content Include="Content\css\jquery.gritter.min.css" />
+    <Content Include="Content\css\prettify.min.css" />
+    <Content Include="Content\css\select2-spinner.gif" />
+    <Content Include="Content\css\select2.min.css" />
+    <Content Include="Content\css\select2.png" />
+    <Content Include="Content\css\select2x2.png" />
+    <Content Include="Content\css\ui.jqgrid.css" />
+    <Content Include="Content\css\ui.jqgrid.min.css" />
+    <Content Include="Content\elements.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\fonts.googleapis.com.css" />
+    <Content Include="Content\fonts\fonts.googleapis.com.css" />
+    <Content Include="Content\Froala\font-awesome.css" />
+    <Content Include="Content\images\user-default.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\chosen-sprite.png" />
+    <Content Include="Content\images\favicon.ico" />
+    <Content Include="Content\images\login-bg.jpg" />
+    <Content Include="Content\images\login-flag.png" />
+    <Content Include="Content\jquery.datetimepicker.css" />
+    <Content Include="Content\layout.css" />
+    <Content Include="Content\sound\Beep.mp3" />
+    <Content Include="Content\themejstree\default-dark\32px.png" />
+    <Content Include="Content\themejstree\default-dark\40px.png" />
+    <Content Include="Content\themejstree\default-dark\style.css" />
+    <Content Include="Content\themejstree\default-dark\style.min.css" />
+    <Content Include="Content\themejstree\default-dark\throbber.gif" />
+    <Content Include="Content\themejstree\default\30px.png" />
+    <Content Include="Content\themejstree\default\32px.png" />
+    <Content Include="Content\themejstree\default\40px.png" />
+    <Content Include="Content\themejstree\default\style.css" />
+    <Content Include="Content\themejstree\default\style.min.css" />
+    <Content Include="Content\themejstree\default\throbber.gif" />
+    <Content Include="Content\themejstree\docs.css" />
+    <Content Include="Content\themejstree\proton\30px.png" />
+    <Content Include="Content\themejstree\proton\32px.png" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-bold-webfont.svg" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-extralight-webfont.svg" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-regular-webfont.svg" />
+    <Content Include="Content\themejstree\proton\style.css" />
+    <Content Include="Content\themejstree\proton\style.min.css" />
+    <Content Include="Content\themejstree\proton\throbber.gif" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Content\css\images\Thumbs.db" />
+    <Content Include="Content\css\bootstrap-tagsinput.less" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-bold-webfont.eot" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-bold-webfont.ttf" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-bold-webfont.woff" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-extralight-webfont.eot" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-extralight-webfont.ttf" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-extralight-webfont.woff" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-regular-webfont.eot" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-regular-webfont.ttf" />
+    <Content Include="Content\themejstree\proton\fonts\titillium\titilliumweb-regular-webfont.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\less\bootstrap-datetimepicker-build.less" />
+    <Content Include="Content\less\_bootstrap-datetimepicker.less" />
+    <None Include="Properties\PublishProfiles\hrm.zeusgang.com.pubxml" />
+    <Content Include="Scripts\ace-editable.min.js" />
+    <Content Include="Scripts\ace-elements.min.js" />
+    <Content Include="Scripts\ace-extra.min.js" />
+    <Content Include="Scripts\ace.min.js" />
+    <Content Include="Scripts\additional-methods.min.js" />
+    <Content Include="Scripts\angular-animate.min.js.map" />
+    <Content Include="Scripts\angular-aria.min.js.map" />
+    <Content Include="Scripts\angular-cookies.min.js.map" />
+    <Content Include="Scripts\angular-loader.min.js.map" />
+    <Content Include="Scripts\angular-messages.min.js.map" />
+    <Content Include="Scripts\angular-resource.min.js.map" />
+    <Content Include="Scripts\angular-route.min.js.map" />
+    <Content Include="Scripts\angular-sanitize.min.js.map" />
+    <Content Include="Scripts\angular-touch.min.js.map" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
+    <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="Icon.png" />
+    <Content Include="Scripts\angular-animate.js" />
+    <Content Include="Scripts\angular-animate.min.js" />
+    <Content Include="Scripts\angular-aria.js" />
+    <Content Include="Scripts\angular-aria.min.js" />
+    <Content Include="Scripts\angular-cookies.js" />
+    <Content Include="Scripts\angular-cookies.min.js" />
+    <Content Include="Scripts\angular-csp.css" />
+    <Content Include="Scripts\angular-loader.js" />
+    <Content Include="Scripts\angular-loader.min.js" />
+    <Content Include="Scripts\angular-messages.js" />
+    <Content Include="Scripts\angular-messages.min.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-resource.js" />
+    <Content Include="Scripts\angular-resource.min.js" />
+    <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular-route.min.js" />
+    <Content Include="Scripts\angular-sanitize.js" />
+    <Content Include="Scripts\angular-sanitize.min.js" />
+    <Content Include="Scripts\angular-scenario.js" />
+    <Content Include="Scripts\angular-touch.js" />
+    <Content Include="Scripts\angular-touch.min.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\app\Admin\index.js" />
+    <Content Include="Scripts\app\Role\index.js" />
+    <Content Include="Scripts\bootbox.min.js" />
+    <Content Include="Scripts\bootstrap-colorpicker.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-editable.js" />
+    <Content Include="Scripts\bootstrap-editable.min.js" />
+    <Content Include="Scripts\bootstrap-markdown.min.js" />
+    <Content Include="Scripts\bootstrap-multiselect.min.js" />
+    <Content Include="Scripts\bootstrap-tag.min.js" />
+    <Content Include="Scripts\bootstrap-tagsinput.js" />
+    <Content Include="Scripts\bootstrap-timepicker.min.js" />
+    <Content Include="Scripts\bootstrap-wysiwyg.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\chat\signalR.chatpopup.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\dataTables.colVis.min.js" />
+    <Content Include="Scripts\dataTables.tableTools.min.js" />
+    <Content Include="Scripts\daterangepicker.min.js" />
+    <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\excanvas.min.js" />
+    <Content Include="Scripts\fuelux.spinner.min.js" />
+    <Content Include="Scripts\fuelux.tree.min.js" />
+    <Content Include="Scripts\fuelux.wizard.min.js" />
+    <Content Include="Scripts\fullcalendar.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
+    <Content Include="Scripts\grid.locale-en.js" />
+    <Content Include="Scripts\html5shiv.min.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <None Include="Scripts\jquery-2.1.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-2.1.4.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.custom.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.1.11.1.min.js" />
+    <Content Include="Scripts\jquery.2.1.1.min.js" />
+    <Content Include="Scripts\jquery.autosize.min.js" />
+    <Content Include="Scripts\jquery.bootstrap-duallistbox.min.js" />
+    <Content Include="Scripts\jquery.chatwindow.js" />
+    <Content Include="Scripts\jquery.colorbox-min.js" />
+    <Content Include="Scripts\jquery.colorbox.min.js" />
+    <Content Include="Scripts\jquery.dataTables.bootstrap.js" />
+    <Content Include="Scripts\jquery.dataTables.bootstrap.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.js" />
+    <Content Include="Scripts\jquery.easypiechart.min.js" />
+    <Content Include="Scripts\jquery.flot.min.js" />
+    <Content Include="Scripts\jquery.flot.pie.min.js" />
+    <Content Include="Scripts\jquery.flot.resize.min.js" />
+    <Content Include="Scripts\jquery.form.min.js" />
+    <Content Include="Scripts\jquery.gritter.min.js" />
+    <Content Include="Scripts\jquery.hotkeys.min.js" />
+    <Content Include="Scripts\jquery.inputlimiter.1.3.1.min.js" />
+    <Content Include="Scripts\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\jquery.jstree.js" />
+    <Content Include="Scripts\jquery.knob.min.js" />
+    <Content Include="Scripts\jquery.main.js" />
+    <Content Include="Scripts\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.mobile.custom.min.js" />
+    <Content Include="Scripts\jquery.nestable.js" />
+    <Content Include="Scripts\jquery.nestable.min.js" />
+    <Content Include="Scripts\jquery.raty.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Scripts\jquery.slimscroll.min.js" />
+    <Content Include="Scripts\jquery.sparkline.min.js" />
+    <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.vitv.js" />
+    <Content Include="Scripts\jquery1x.min.js" />
+    <Content Include="Scripts\jstree.min.js" />
+    <Content Include="Scripts\markdown.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\prettify.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\shapeshift\jquery.shapeshift.js" />
+    <Content Include="Scripts\shapeshift\jquery.shapeshift.min.js" />
+    <Content Include="Scripts\shapeshift\vendor\jquery.touch-punch.min.js" />
+    <Content Include="Scripts\app\Holiday\index.js" />
+    <Content Include="Scripts\chat\signalR.chat.js" />
+    <Content Include="Scripts\spin.min.js" />
+    <Content Include="Scripts\typeahead.jquery.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Upload\Avatar\binh.jpg" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_OldLayout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Scripts\shapeshift\jquery.shapeshift.coffee" />
+    <Content Include="Views\Group\Create.cshtml" />
+    <Content Include="Views\Group\_Delete.cshtml" />
+    <Content Include="Views\Group\Edit.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Employee\EditPositionGroup.cshtml" />
+    <Content Include="Views\Employee\PositionView.cshtml" />
+    <Content Include="Views\Employee\Index2.cshtml" />
+    <Content Include="Views\Group\_AddGroup.cshtml" />
+    <Content Include="Views\Group\_ConfirmRemovePositionLevel.cshtml" />
+    <Content Include="Views\Department\_Delete.cshtml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Employee\Statistic.cshtml" />
+    <Content Include="Views\Employee\ProfilePage.cshtml" />
+    <Content Include="Views\Employee\List.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Group\Details.cshtml" />
+    <Content Include="Views\GroupNotification\Add.cshtml" />
+    <Content Include="Views\GroupNotification\Edit.cshtml" />
+    <Content Include="Views\GroupNotification\Delete.cshtml" />
+    <Content Include="Views\Holiday\Management.cshtml" />
+    <Content Include="Views\Holiday\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Holiday\Delete.cshtml" />
+    <Content Include="Views\Holiday\Create.cshtml" />
+    <Content Include="Views\Holiday\Edit.cshtml" />
+    <Content Include="Views\Branch\_AddBranch.cshtml" />
+    <Content Include="Views\Department\_AddDepartment.cshtml" />
+    <Content Include="Views\TaskRequest\Add.cshtml" />
+    <Content Include="Views\TaskRequest\MyRequests.cshtml" />
+    <Content Include="Views\TaskRequest\Edit.cshtml" />
+    <Content Include="Views\Home\TopNotification.cshtml" />
+    <Content Include="Views\TaskRequest\Details.cshtml" />
+    <Content Include="Views\Project\MyProjects.cshtml" />
+    <Content Include="Views\Project\Details.cshtml" />
+    <Content Include="Views\Equipment\_Details.cshtml" />
+    <Content Include="Views\Equipment\Index.cshtml" />
+    <Content Include="Views\Equipment\Create.cshtml" />
+    <Content Include="Views\Equipment\Edit.cshtml" />
+    <Content Include="Views\Equipment\_Delete.cshtml" />
+    <Content Include="Views\Conference\Index.cshtml" />
+    <Content Include="Views\Conference\_GetDialogConference.cshtml" />
+    <Content Include="Views\Project\Create.cshtml" />
+    <Content Include="Views\Project\Edit.cshtml" />
+    <Content Include="Views\TaskResponse\_Details.cshtml" />
+    <Content Include="Views\Project\_List.cshtml" />
+    <Content Include="Views\Project\All.cshtml" />
+    <Content Include="Views\Project\Menu.cshtml" />
+    <Content Include="Views\Project\Delete.cshtml" />
+    <Content Include="Views\Project\Trash.cshtml" />
+    <Content Include="Views\TaskRequest\Delete.cshtml" />
+    <Content Include="Views\TaskResponse\Delete.cshtml" />
+    <Content Include="Views\Notification\Get.cshtml" />
+    <Content Include="Views\Conference\_GetDialogEditDeleteConference.cshtml" />
+    <Content Include="Views\Message\_Last10.cshtml" />
+    <Content Include="Views\GroupNotification\Index.cshtml" />
+    <Content Include="Views\Notification\Popup.cshtml" />
+    <Content Include="Scripts\signalR.notification.js" />
+    <Content Include="Views\Checklist\List.cshtml" />
+    <Content Include="Views\Message\_ChatWindow.cshtml" />
+    <Content Include="Views\Checklist\Details.cshtml" />
+    <Content Include="Views\Checklist\Item.cshtml" />
+    <Content Include="Views\Job\Details.cshtml" />
+    <Content Include="Views\JobResponse\_Details.cshtml" />
+    <Content Include="Views\JobResponse\Delete.cshtml" />
+    <Content Include="Views\Message\_ListUser.cshtml" />
+    <Content Include="Views\Job\Delete.cshtml" />
+    <Content Include="Views\Message\_ChatList.cshtml" />
+    <Content Include="Views\Job\MyJobs.cshtml" />
+    <Content Include="Views\Employee\Add.cshtml" />
+    <Content Include="Views\Employee\EditEmp.cshtml" />
+    <Content Include="Views\Employee\Delete.cshtml" />
+    <Content Include="Views\Message\Get.cshtml" />
+    <Content Include="Views\Message\GetListNotiMessage.cshtml" />
+    <Content Include="Views\PersonalDayoff\Create.cshtml" />
+    <Content Include="Views\Calendar\Year.cshtml" />
+    <Content Include="Views\Calendar\All.cshtml" />
+    <Content Include="Views\Calendar\Month.cshtml" />
+    <Content Include="Views\PersonalDayoff\_CreateOrEdit.cshtml" />
+    <Content Include="Views\PersonalDayoff\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Upload\Attachment\" />
+    <Folder Include="Upload\Equipment\" />
+    <Folder Include="Views\AuthCallback\" />
+    <Folder Include="Views\Device\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505060835484_1.resx">
+      <DependentUpon>201505060835484_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505060909191_2.resx">
+      <DependentUpon>201505060909191_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505060927071_3.resx">
+      <DependentUpon>201505060927071_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505080339235_emplyeeworkinfo.resx">
+      <DependentUpon>201505080339235_emplyeeworkinfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505080357294_emplyeeworkinfo2.resx">
+      <DependentUpon>201505080357294_emplyeeworkinfo2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505080750135_dayoff.resx">
+      <DependentUpon>201505080750135_dayoff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505120415048_workinfo-enddate.resx">
+      <DependentUpon>201505120415048_workinfo-enddate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505120750550_project.resx">
+      <DependentUpon>201505120750550_project.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121016159_addbranch.resx">
+      <DependentUpon>201505121016159_addbranch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121050296_department-branchid.resx">
+      <DependentUpon>201505121050296_department-branchid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505140822404_notification.resx">
+      <DependentUpon>201505140822404_notification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505200302470_taskrequest.resx">
+      <DependentUpon>201505200302470_taskrequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505200805002_edit-taskrequest1.resx">
+      <DependentUpon>201505200805002_edit-taskrequest1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505210358079_addequipment.resx">
+      <DependentUpon>201505210358079_addequipment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505210512527_requestattachment.resx">
+      <DependentUpon>201505210512527_requestattachment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505220315241_project-request-response.resx">
+      <DependentUpon>201505220315241_project-request-response.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505220357556_reponse-employee.resx">
+      <DependentUpon>201505220357556_reponse-employee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505220732476_editequipment.resx">
+      <DependentUpon>201505220732476_editequipment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505250746381_addconference.resx">
+      <DependentUpon>201505250746381_addconference.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505250821398_message.resx">
+      <DependentUpon>201505250821398_message.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505250857352_isdelete.resx">
+      <DependentUpon>201505250857352_isdelete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505260440059_fix-response.resx">
+      <DependentUpon>201505260440059_fix-response.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505260447086_fix-response-2.resx">
+      <DependentUpon>201505260447086_fix-response-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505270507110_rename-notification.resx">
+      <DependentUpon>201505270507110_rename-notification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505290845378_notification1.resx">
+      <DependentUpon>201505290845378_notification1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506030304429_edit-taskrequest.resx">
+      <DependentUpon>201506030304429_edit-taskrequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506040213183_checklist.resx">
+      <DependentUpon>201506040213183_checklist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506050811187_private-project.resx">
+      <DependentUpon>201506050811187_private-project.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506060246536_change-name-1.resx">
+      <DependentUpon>201506060246536_change-name-1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506060301021_change-name-2.resx">
+      <DependentUpon>201506060301021_change-name-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506060301523_change-name-3.resx">
+      <DependentUpon>201506060301523_change-name-3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506060314469_change-name-4.resx">
+      <DependentUpon>201506060314469_change-name-4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506060333041_jobemployee.resx">
+      <DependentUpon>201506060333041_jobemployee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506060421234_changejob.resx">
+      <DependentUpon>201506060421234_changejob.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506080237564_abc.resx">
+      <DependentUpon>201506080237564_abc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506080352599_fixjob.resx">
+      <DependentUpon>201506080352599_fixjob.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506101021296_short-desc.resx">
+      <DependentUpon>201506101021296_short-desc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506110754025_jobattachment1.resx">
+      <DependentUpon>201506110754025_jobattachment1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506110754506_jobattachment2.resx">
+      <DependentUpon>201506110754506_jobattachment2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506120242235_job-equipments.resx">
+      <DependentUpon>201506120242235_job-equipments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506120811242_notification-job.resx">
+      <DependentUpon>201506120811242_notification-job.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506150307307_time-usernotifi.resx">
+      <DependentUpon>201506150307307_time-usernotifi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506150405153_jobattachment-jobid.resx">
+      <DependentUpon>201506150405153_jobattachment-jobid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506150846462_workinfo-starrdate.resx">
+      <DependentUpon>201506150846462_workinfo-starrdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506190950241_addIsViewMessage.resx">
+      <DependentUpon>201506190950241_addIsViewMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507080454526_deviceuser.resx">
+      <DependentUpon>201507080454526_deviceuser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507080804163_personaldayoff.resx">
+      <DependentUpon>201507080804163_personaldayoff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507150845246_fixdeviceuser.resx">
+      <DependentUpon>201507150845246_fixdeviceuser.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1704</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1704/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <servers defaultServer="SelfHostServer">
+            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:1704/" workingDir="" />
+          </servers>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

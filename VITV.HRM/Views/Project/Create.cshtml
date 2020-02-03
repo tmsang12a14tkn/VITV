@@ -1,0 +1,73 @@
+﻿@model Project
+@{
+    List<Employee> employees = ViewBag.Employees;
+}
+<div class="modal-header no-padding">
+    <div class="table-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <span class="white">&times;</span>
+        </button>
+        Tạo dự án
+    </div>
+</div>
+@using (Html.BeginForm("Create", "Project", FormMethod.Post,
+            new { enctype = "multipart/form-data", @class = "form-horizontal project-form", id="add-project-form" }))
+{
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-title"> Tên </label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="form-title" placeholder="Tên" name="Title">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="form-content"> Nội dung </label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="form-content" name="Content" placeholder="Content"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="attachments">Tệp đính kèm</label>
+            <div class="col-sm-10">
+                <input multiple type="file" id="attachments" name="attachments" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(model => model.Start)
+            @Html.HiddenFor(model => model.End)
+            <label class="col-sm-2 control-label no-padding-right" for="date-range">Thời gian</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="date-range" name="date-range" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(model => model.EmployeeIds)
+            <label class="col-sm-2 control-label no-padding-right" for="receivedemployees">Nhân sự</label>
+
+            <div class="col-sm-10">
+                <select data-placeholder="..." multiple="multiple" id="tbEmployees" name="tbEmployees" class="form-control">
+                    @foreach (var ep in employees)
+                    {
+                        <option value="@ep.Id" data-img-src="@ep.ProfilePicture">@ep.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" for="">Riêng tư</label>
+            <div class="col-sm-10">
+                <label>
+                    <input name="IsPrivate" class="ace ace-switch" type="checkbox" value="true" />
+                    <span class="lbl"></span>
+                    <input name="IsPrivate" class="" type="hidden" value="false" />
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer no-margin-top">
+        <button type="submit" class="btn btn-sm btn-danger pull-right">
+            <i class="ace-icon fa fa-times"></i>
+            OK
+        </button>
+    </div>
+}

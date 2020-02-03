@@ -1,0 +1,141 @@
+﻿@model StockMarket
+@{
+    ViewBag.Title = "Biểu đồ sàn " + Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="margin-top: 100px">
+    <div>
+        Thông tin sàn: @Model.Name
+    </div>
+    <div>
+        Mã: @Model.Ticker
+    </div>
+   
+</div>
+<div id="container" style="height: 600px; min-width: 310px;"></div>
+
+@section styles
+{
+
+}
+@section scripts
+{
+    <script src="~/Content/HighStock/js/highstock.js"></script>
+    <script src="~/Content/HighStock/js/modules/exporting.js"></script>
+    <script>
+        $(function () {
+            Highcharts.setOptions({
+                lang: {
+                    loading: 'Đang tải...',
+                    months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                    weekdays: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
+                    shortMonths: ['01', '02', '03', '4', '05', '06', '07', '08', '09', '10', '11', '12'],
+                    exportButtonTitle: "Xuất ra",
+                    printButtonTitle: "Khoảng",
+                    rangeSelectorFrom: "Từ",
+                    rangeSelectorTo: "Đến",
+                    rangeSelectorZoom: "Phóng lớn",
+                    downloadPNG: 'Lưu ảnh PNG',
+                    downloadJPEG: 'Lưu ảnh JPEG',
+                    downloadPDF: 'Lưu tệp PDF',
+                    downloadSVG: 'Lưu ảnh SVG'
+                }
+            });
+
+            $.getJSON('/ExchangeRates/GetMarketBy?name=@(Model.Name)', function (data) {
+                // Create the chart
+                $('#container').highcharts('StockChart', {
+
+                    rangeSelector: {
+                        buttons: [{
+                            count: 1,
+                            type: 'week',
+                            text: '1 tuần'
+                        }, {
+                            count: 1,
+                            type: 'month',
+                            text: '1 tháng'
+                        }, {
+                            count: 3,
+                            type: 'month',
+                            text: '3 tháng'
+                        },
+                        {
+                            count: 6,
+                            type: 'month',
+                            text: '6 tháng'
+                        },
+                        {
+                            count: 1,
+                            type: 'year',
+                            text: '1 năm'
+                        },
+                            {
+                                count: 2,
+                                type: 'year',
+                                text: '2 năm'
+                            }
+                        ],
+                        inputEnabled: false,
+                        buttonSpacing: 10,
+                        buttonTheme: {
+                            width: 100,
+                            style:
+                            {
+                                color: "#1f8dc3"
+                            }
+                        },
+                        selected: 2
+                    },
+                    title: {
+                        text: 'Biểu đồ sàn chứng khoán @(Model.Name)'
+                    },
+
+                    series: [{
+                        name: '@(Model.Name)',
+                        data: data,
+                        turboThreshold: 10000
+                    }, ],
+                    scrollbar: {
+                        barBackgroundColor: '#1f8dc3',
+                        barBorderRadius: 3,
+                        barBorderWidth: 0,
+                        buttonBackgroundColor: '#CF2B3E',
+                        buttonBorderWidth: 0,
+                        buttonBorderRadius: 7,
+                        trackBackgroundColor: 'none',
+                        trackBorderWidth: 1,
+                        trackBorderRadius: 8,
+                        trackBorderColor: '#CCC'
+                    },
+                    tooltip:
+                    {
+                        valueDecimals: 2,
+                        formatter: function () {
+                            var s = '<b>' + Highcharts.dateFormat('%e/%b/%Y', this.x) + '</b>';
+                            $.each(this.points, function () {
+                                s += '<br/> <b>'+ this.series.name + '</b>: ' + this.y;
+                            });
+
+                            return s;
+                        }
+                    },
+                    xAxis:
+                    {
+                        dateTimeLabelFormats:
+                        {
+                            millisecond: '%H:%M:%S.%L',
+                            second: '%H:%M:%S',
+                            minute: '%H:%M',
+                            hour: '%H:%M',
+                            day: '%e/%b',
+                            week: '%e/%b',
+                            month: '%b/%y',
+                            year: '%Y'
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

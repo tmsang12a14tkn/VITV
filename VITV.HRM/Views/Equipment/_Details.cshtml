@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Equipment>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="clearfix">
+            <div class="pull-right tableTools-container">
+                @*<a class="btn btn-white btn-info btn-bold" href="/equipment/create">
+                    <i class="ace-icon fa fa-save bigger-120"></i>
+                    Thêm thiết bị
+                </a>*@
+            </div>
+        </div>
+        <div class="table-header">
+            &nbsp;
+        </div>
+
+        <!-- div.table-responsive -->
+        <!-- div.dataTables_borderWrap -->
+        <div>
+            <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Tên thiết bị</th>
+                        <th>Người sử dụng</th>
+                        <th>Trạng thái</th>
+                        <th>Ghi chú</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (Equipment equip in Model)
+                    {
+                        <tr>
+                            <td>@equip.Name</td>
+                            <td>@equip.Employee.Name</td>
+                            <td>@equip.Status</td>
+                            <td>@equip.Description</td>
+                            <td>
+                                <div class="hidden-sm hidden-xs action-buttons">
+                                    <a class="green" href="/equipment/edit/@equip.Id">
+                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                    </a>
+
+                                    <a class="red" href="/equipment/delete/@equip.Id" data-toggle="modal" data-target="#deleteModal"
+                                       data-ajax="true"
+                                       data-ajax-complete=""
+                                       data-ajax-mode="replace"
+                                       data-ajax-update="#deleteContent">
+                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                    </a>
+                                </div>
+
+                                <div class="hidden-md hidden-lg">
+                                    <div class="inline pos-rel">
+                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                            <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                            <li>
+                                                <a href="/equipment/edit/@equip.Id" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                    <span class="green">
+                                                        <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a class="tooltip-error" title="Delete" data-rel="tooltip" href="/equipment/delete/@equip.Id" data-toggle="modal" data-target="#deleteModal"
+                                                   data-ajax="true"
+                                                   data-ajax-complete=""
+                                                   data-ajax-mode="replace"
+                                                   data-ajax-update="#deleteContent">
+                                                    <span class="red">
+                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="deleteContent">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

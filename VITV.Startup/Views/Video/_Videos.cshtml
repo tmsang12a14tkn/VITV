@@ -1,0 +1,26 @@
+﻿@model List<VITV.Data.Models.Video>
+
+@foreach (var rVideo in Model)
+{
+    <div class="row m13">
+        <div class="single_video">
+            <div class="col col-md-5 vid-img">
+                <div class="video_image">
+                    <a href="http://vitv.vn/tin-video/@(rVideo.PublishedTime.ToString("dd-MM-yyyy"))/@(rVideo.UniqueTitle)/@(rVideo.Id)" target="_blank">
+                        <img class="poster" src="@rVideo.Thumbnail">
+                    </a>
+                </div>
+            </div>
+            <div class="col col-md-7">
+                <div class="video_info">
+                    <h3><a href="http://vitv.vn/tin-video/@(rVideo.PublishedTime.ToString("dd-MM-yyyy"))/@(rVideo.UniqueTitle)/@(rVideo.Id)" target="_blank">@(rVideo.Title)</a></h3>
+                    <div class="cn">@Html.Raw(rVideo.Content)</div>
+                    <p class="tm">Phát sóng @rVideo.DisplayTime.ToString("HH:mm") ngày @rVideo.DisplayTime.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<input type="hidden" id="tmp_cur_num_record" value="@(ViewBag.CurNumRecord)" />
+<input type="hidden" id="tmp_has_more_video" value="@(ViewBag.HasMoreVideo)" />

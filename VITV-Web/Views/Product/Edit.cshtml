@@ -1,0 +1,31 @@
+﻿@model Product
+
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chỉnh sửa sản phẩm";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2>Chỉnh sửa sản phẩm</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.Partial("_CreateOrEdit", Model)
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-success">Hoàn thành</button>
+                            @Html.ActionLink("Quay về trang quản lý", "Management")
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

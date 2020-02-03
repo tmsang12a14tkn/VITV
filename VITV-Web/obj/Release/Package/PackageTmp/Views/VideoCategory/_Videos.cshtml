@@ -1,0 +1,109 @@
+﻿@model List<Video>
+
+@for (int i = 0; i < 2; i++)
+{
+    <div class="row single_related">
+        @for (int j = 0; j < 4; j++)
+        {
+            var vIndex = i * 4 + j;
+            if (vIndex < Model.Count)
+            {
+                var rVideo = Model[vIndex];
+                <div class="col-sm-3 wow fadeInDown" data-wow-duration="400ms" data-wow-delay="@((j + 1) * 100 * (i + 1))ms">
+                    <div class=" single_video">
+                    <div class="video_image">
+                        <a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">
+                            <span class="thumb">
+                                <span class="thumb_sizer">
+                                    <span class="thumb_tugger">
+                                        <img class="poster" src="@rVideo.Thumbnail">
+                                        <span class="slide" style="display: block; position: absolute; top: 0; left: 0; background: url(@rVideo.Category.ProfilePhoto) no-repeat center;"></span>
+                                    </span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="video_info">
+                        <p><a href="@Url.Action("Details", "VideoCategory", new { title = @rVideo.Category.UniqueTitle})"><span>@rVideo.Category.Name</span></a></p>
+                        @if (rVideo.Category.GroupId != 2)
+                            {
+                            <h4><a href="@Url.Action("Details", "Video", new { id = rVideo.Id, title = rVideo.UniqueTitle, date = rVideo.PublishedTime.ToString("dd-MM-yyyy") })">@rVideo.Title</a></h4>
+                            }
+                        <p>Phát sóng @rVideo.DisplayTime.ToString("HH:mm") ngày @rVideo.DisplayTime.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+<div class="results__pagination">
+    <div class="pagination">
+        @if (ViewBag.PageCount > 1)
+        {
+            if (ViewBag.Page > 1)
+            {
+                @Ajax.ActionLink("Trước", "Videos", "VideoCategory", new { page = ViewBag.Page - 1, catId = ViewBag.catId, month = ViewBag.month, year = ViewBag.year }, new AjaxOptions
+                {
+                    HttpMethod = "Get",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "result_container"
+                }, new { @class = "pagination__item pagination__link" });
+            }
+            else
+            {
+                <span>Trước</span>
+            }
+            <span class="pagination__separator">|</span>
+
+            int startPag = Math.Max(1, ViewBag.Page - 2);
+            int endPag = Math.Min(startPag + 4, ViewBag.PageCount);
+            for (int pag = startPag; pag <= endPag; pag++)
+            {
+                if (pag == ViewBag.Page)
+                {
+                    <span class="">@pag</span>
+                    <span class="">|</span>
+                }
+                else
+                {
+                    @Ajax.ActionLink(pag.ToString(), "Videos", "VideoCategory", new { page = pag, catId = ViewBag.catId, month = ViewBag.month, year = ViewBag.year }, new AjaxOptions
+                    {
+                        HttpMethod = "Get",
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "result_container"
+                    }, new { @class = "" })
+                    <span class="pagination__separator">|</span>
+                }
+            }
+            if (endPag != ViewBag.PageCount)
+            {
+                <span class="">…</span>
+                @Ajax.ActionLink(((int)ViewBag.PageCount).ToString(), "Videos", "VideoCategory", new { page = ViewBag.PageCount, catId = ViewBag.catId, month = ViewBag.month, year = ViewBag.year }, new AjaxOptions
+                {
+                    HttpMethod = "Get",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "result_container"
+                }, new { @class = "" })
+
+                <span class="">|</span>
+            }
+
+            if (ViewBag.Page < ViewBag.PageCount)
+            {
+                @Ajax.ActionLink("Sau", "Videos", "VideoCategory", new { page = ViewBag.Page + 1, catId = ViewBag.catId, month = ViewBag.month, year = ViewBag.year }, new AjaxOptions
+                {
+                    HttpMethod = "Get",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "result_container"
+                }, new { @class = "" });
+            }
+            else
+            {
+                <span>Sau</span>
+            }
+        }
+    </div>
+</div>
+

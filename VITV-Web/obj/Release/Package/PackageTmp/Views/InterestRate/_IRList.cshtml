@@ -1,0 +1,41 @@
+﻿@model InterestRateModel
+@{
+    var context = new VITVContext();
+    var typeValue = (int)ViewData["TypeValue"];
+    var targetValue = (int)ViewData["TargetValue"];
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center"><span>Ngân hàng\Kỳ hạn</span></th>
+                @foreach (var item in Model.Terms)
+                {
+                    <th class="text-center"><span>@item.Name</span></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model.Banks)
+            {
+                <tr>
+                    <td class="text-center"><img src="@b.Thumbnail" /></td>
+
+                    @foreach (var t in Model.Terms)
+                    {
+                        var ir = context.InterestRates.Where(i => i.BankId == b.Id && i.TermId == t.Id && i.TypeValue == typeValue && i.TargetValue == targetValue).FirstOrDefault();
+                        if (ir != null)
+                        {
+                            <td class="text-center"><span class="edit" data-pk="@(ir.Id)">@(ir.PercentValue != 0 ? ir.PercentValue.ToString() : "")</span></td>
+                        }
+                        else
+                        {
+                            <td class="text-center"><span class="edit" data-pk="0_@(b.Id)_@(t.Id)_@(typeValue)_@(targetValue)"></span></td>
+                        }                        
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

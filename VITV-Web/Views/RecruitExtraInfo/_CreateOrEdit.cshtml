@@ -1,0 +1,20 @@
+﻿@model RecruitExtraInfo
+
+@Html.HiddenFor(model => model.Name)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.RecruitRule, new { @class = "col-lg-2 control-label" })
+    <div class="col-lg-10">
+        @Html.TextAreaFor(model => model.RecruitRule, new { @class = "form-control editable" })
+        @Html.ValidationMessageFor(model => model.RecruitRule, string.Empty, new { @class = "help-block" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.RecruitForm, new { @class = "col-lg-2 control-label" })
+    @Html.HiddenFor(model => model.RecruitForm)
+    <div class="col-lg-10">
+        <input id="fileupload" name="fileupload" class="form-control" type="file" />
+        @Html.ValidationMessageFor(model => model.RecruitForm, string.Empty, new { @class = "help-block" })
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<VITV.Data.Models.Article>
+
+@{
+    VITV.Data.Models.Keyword keyword = ViewBag.Keyword;
+    ViewBag.Title = "Tag: " + @keyword.Value + " - StartUp VITV";
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+}
+
+<!--News Area-->
+<div class="row text_pg_area">
+    <div class="row kw_name">
+        <span><i class="fa fa-tags"></i> Tags:</span> @keyword.Value
+    </div>
+    <div class="row">
+        <div class="related_article_content" id="pg_article">
+            @foreach (var art in Model.Take(15))
+            {
+                <div class="row single_related" data-groupid="@(string.Join<string>(",", art.Categories.Select(a => a.Id.ToString())))">
+                    <div class="single_article">
+                        <div class="col col-xs-4">
+                            <div class="article_image">
+                                <a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">
+                                    <div class="poster" style="background:url('@(art.Thumbnail)') no-repeat;background-size:cover;background-position: 50% 50%;"></div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col col-xs-8">
+                            <div class="article_info">
+                                <h3><a href="@Url.Action("Details", "Article", new { id = art.Id, title = art.UniqueTitle, date = art.PublishedTime.Value.ToString("dd-MM-yyyy") })">@(art.Title)</a></h3>
+                                <p class="cn">@(art.ShortBrief)</p>
+                                <p class="tm">@(String.Join(",", art.Reporters.Select(r => r.Name))) - @(art.PublishedTime.Value.ToString("dd/MM/yyyy"))</p>
+                                <p class="rp">
+                                    @foreach (var rp in art.Reporters)
+                                    {
+                                        <img class="sm_reporter" src="@rp.ProfilePicture" />
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row" id="pg_block">
+            @Html.Partial("_Pagination", new VITV.Data.ViewModels.ArticlePaginationView { Page = 1, Articles = Model.ToList() })
+        </div>
+    </div>
+</div>
+
+@section seo {
+    <meta name="description" content="Startup.vitv.vn là trang thông tin công nghệ và khởi nghiệp trực thuộc Kênh truyền hình kinh tế Tài chính VITV. Trang tin được định hướng là nơi cung cấp thông tin cho các bạn trẻ sắp khởi nghiệp và lần đầu khởi nghiệp nhằm hỗ trợ cộng đồng khởi nghiệp trẻ của Việt Nam trong giai đoạn hội nhập mạnh mẽ hiện nay.">
+    <meta name="keywords" content="tin tức,bài viết,cổng công nghệ,tin tuc,bai viet,startup,vitv">
+    <meta property="og:title" content="Tin tức - Bài viết - StartUp VITV">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="@(Request.Url.AbsoluteUri)">
+    <meta property="og:image" content="./fb_share_img.jpg" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="544" />
+}
+

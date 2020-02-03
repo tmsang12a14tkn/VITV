@@ -1,0 +1,324 @@
+﻿@model VideoFilterView
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Quản lý video";
+    //IEnumerable<IGrouping<DateTime, Video>> videolistgroups = Model.Videos.OrderByDescending(b => b.PublishedTime).GroupBy(b => b.PublishedTime.Date);
+
+}
+
+<div class="row" ng-app="indexVideoModule" ng-controller="IndexVideoModuleCtrl">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">
+                <h2 class="pull-left">Quản lý video</h2>
+                @using (Html.BeginForm("Management", "Video", FormMethod.Get, new { page = 1 }))
+                {
+                    <div class="navbar-form navbar-right" role="search" id="formsearch">
+                        <div class="form-group dropdown" id="rangeDropdown">
+                            <input type="hidden" name="rangeType" id="filterByRange" value="@Model.Range" />
+                            <input type="hidden" name="begin" id="filterByBegin" value="@(Model.Begin.HasValue?Model.Begin.Value.ToShortDateString():"")" />
+                            <input type="hidden" name="end" id="filterByEnd" value="@(Model.End.HasValue?Model.End.Value.ToShortDateString():"")" />
+                            <input type="hidden" name="eventId" id="filterByEventId" />
+                            <button id="rangeLabel" class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                                <span class="text-value">Mọi lúc</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="rangeLabel">
+                                <li role="presentation" class="fixed-range active" data-range="All">Mọi lúc</li>
+                                <li role="presentation" class="fixed-range" data-range="Day">Trong ngày</li>
+                                <li role="presentation" class="fixed-range" data-range="Week">Trong tuần</li>
+                                <li role="presentation" class="fixed-range" data-range="Month">Trong tháng</li>
+                                <li role="presentation" class="fixed-range" data-range="ThreeMonth">Trong 3 tháng</li>
+                                <li role="presentation" class="fixed-range" data-range="SixMonth">Trong 6 tháng</li>
+                                <li role="presentation" class="divider"></li>
+                                <li role="presentation" class="custom-range" data-range="Custom" data-toggle="modal" data-target="#rangeModal">Trong khoảng</li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="sortbyevent" name="evtId">
+                                <option value="all">Tất cả</option>
+                                @foreach (var evt in ViewBag.SpecialEvents)
+                                {
+                                    <option value="@evt.Id" @(evt.Id == Model.EventId ? "selected" : "")>@evt.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="sortbycat" name="cat">
+                                <option value="all">Tất cả chương trình</option>
+                                @foreach (VideoCatGroup grp in ViewBag.VideoCatGroups)
+                                {
+                                    <optgroup label="@(grp.Name)">
+                                        @foreach (var cat in grp.VideoCats.OrderBy(c => c.Order))
+                                        {
+                                            <option value="@cat.Id" @(cat.Id.ToString() == Model.Category ? "selected" : "")>@cat.Name</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control" id="sortbyreporter" name="rep" placeholder="Biên tập viên" type="text" value="@Model.Reporter">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" id="sortbytitle" name="title" placeholder="Tiêu đề" type="text" value="@Model.Title">
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control" name="orderby">
+                                <option selected disabled>Sắp xếp theo</option>
+                                <option value="time">Thời gian phát</option>
+                                <option value="view">Lượt xem</option>
+                                <option value="title">Tiêu đề</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-danger" id="filterBtn" value="Tìm kiếm" />
+                        </div>
+                    </div>
+                }
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table user-list table-hover" id="manage_video">
+                            <thead>
+                                <tr>
+                                    <th><span>Tên</span></th>
+                                    <th><span>Giờ đăng</span></th>
+                                    @*<th class="text-center"><span></span></th>*@
+                                    <th><span>Người đăng</span></th>
+                                    <th><span>Tình trạng</span></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            @Html.Partial("_ListVideo", Model.Videos)
+                        </table>
+                    </div>
+
+
+
+
+
+                    @*@foreach (Video vd in Model.Videos)
+                        {
+
+                            string color = vd.IsPublished == false ? "red" : "green";
+                            <div class="col-lg-4 col-md-5 col-sm-6" id="video_@vd.Id">
+                                <div class="main-box clearfix profile-box-menu">
+                                    <div class="main-box-body clearfix">
+                                        <div class="profile-box-header @(color)-bg clearfix">
+                                            @if (vd.VideoTranscripts == null || vd.VideoTranscripts.Count <= 0)
+                                            {
+                                                <div class="yellow" style="position: absolute; right: 15px; top:5px">
+                                                    <i class="fa fa-warning fa-fw fa-2x" title="Chưa có nội dung chi tiết"></i>
+                                                </div>
+                                            }
+                                            <img src="@vd.Thumbnail" alt="" class="profile-img img-responsive">
+                                            <p>@vd.Title</p>
+                                            <div class="job-position">
+                                                @vd.Category.Name
+                                            </div>
+                                            <ul class="contact-details" style="list-style-type: none;">
+                                                <li>
+                                                    <i class="fa fa-user"></i> Người đăng: @(vd.UploadUser != null ? (vd.UploadUser.EmployeeId.HasValue ? @vd.UploadUser.Employee.Name : @vd.UploadUser.UserName) : "")
+                                                </li>
+                                                <li>
+                                                    <i class="fa fa-calendar"></i> @vd.PublishedTime
+                                                </li>
+                                            </ul>
+                                            <div class="icon-box pull-right">
+                                                <a href="@vd.Url" class="btn pull-left" download title="Tải về">
+                                                    <i class="fa fa-download fa-inverse"></i>
+                                                </a>
+                                                <a href="@Url.Action("Details", "Video", new { id = vd.Id, title = vd.UniqueTitle, date = vd.PublishedTime.ToString("dd-MM-yyyy") })" target="_blank" class="btn pull-left">
+                                                    <i class="fa fa-play fa-inverse"></i>
+                                                </a>
+                                                <a href="/Video/Edit/@vd.Id" class="btn pull-left" title="Chỉnh sửa">
+                                                    <i class="fa fa-edit fa-inverse"></i>
+                                                </a>
+                                                <a href="@Url.Action("Details", "VideoTranscript", new { vId = vd.Id })" class="btn pull-left" title=" thay đổi nội dung chi tiết" style="color:#fff;">
+                                                    <i class="fa fa-list fa-inverse"></i> Thay đổi nội dung chi tiết
+                                                </a>
+                                                <a href="/Video/Delete/@vd.Id" class="btn pull-left" title="Xóa" data-toggle="modal" data-target="#deleteVideoModal"
+                                                   data-ajax="true"
+                                                   data-ajax-complete=""
+                                                   data-ajax-mode="replace"
+                                                   data-ajax-update="#deleteVideoContent">
+                                                    <i class="fa fa-trash-o fa-inverse"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }*@
+                </div>
+
+                @*<div class="results__pagination">
+                        <div class="pagination">
+                            @if (Model.Page > 1)
+                            {
+                                <span>
+                                    @Html.ActionLink("Đầu tiên", "Management", "Video", new { page = 1, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "pagination__item pagination__link" })
+                                </span>
+                                <span class="">|</span>
+                                <span>
+                                    @Html.ActionLink("Trước", "Management", "Video", new { page = Model.Page - 1, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "pagination__item pagination__link" })
+                                </span>
+                            }
+                            else
+                            {
+                                <span>Trước</span>
+                            }
+
+                            <span class="pagination__separator">|</span>
+                            @{
+                                int startPag = Math.Max(1, Model.Page - 2);
+                                int endPag = Math.Min(startPag + 4, Model.PageCount);
+                                for (int pag = startPag; pag <= endPag; pag++)
+                                {
+                                    if (pag == Model.Page)
+                                    {
+                                        <span class="">@pag</span>
+                                        <span class="">|</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink(pag.ToString(), "Management", "Video", new { page = pag, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+                                        <span class="pagination__separator">|</span>
+                                    }
+                                }
+                                if (endPag != Model.PageCount)
+                                {
+                                    <span class="">…</span>
+                                    @Html.ActionLink(Model.PageCount.ToString(), "Management", "Video", new { page = Model.PageCount, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+
+                                    <span class="">|</span>
+                                }
+                            }
+                            @if (Model.Page < Model.PageCount)
+                            {
+                                <span>
+                                    @Html.ActionLink("Sau", "Management", "Video", new { page = Model.Page + 1, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+                                </span>
+                                <span class="">|</span>
+                                <span>
+                                    @Html.ActionLink("Cuối cùng", "Management", "Video", new { page = Model.PageCount, rangeType = Model.Range, rep = Model.Reporter, cat = Model.Category, title = Model.Title, evtId = Model.EventId }, new { @class = "" })
+                                </span>
+                            }
+                            else
+                            {
+                                <span>Sau</span>
+                            }
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deleteVideoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="deleteVideoContent">
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal" id="rangeModal" tabindex="-1" role="dialog" aria-labelledby="rangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Đóng</span></button>
+                <h4 class="modal-title" id="rangeModalLabel">Chọn thời gian</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="rangeBegin">Từ</label>
+                    <input class="form-control" id="rangeBegin" />
+                </div>
+                <div class="form-group">
+                    <label for="rangeEnd">Đến</label>
+                    <input class="form-control" id="rangeEnd" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary btn-ok" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    @*<script src="~/Scripts/angular.js"></script>*@
+    @*<script src="~/Scripts/app/Video/vd-index-2.js"></script>*@
+    <script src="~/Scripts/jquery.vitv.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#rangeBegin').datetimepicker({
+                format: 'd/m/Y',
+                formatDate: 'd/m/Y',
+                onShow: function (ct) {
+                    this.setOptions({
+                        maxDate: jQuery('#rangeEnd').val() ? jQuery('#rangeEnd').val() : false
+                    })
+                },
+                timepicker: false
+            });
+            $('#rangeEnd').datetimepicker({
+                format: 'd/m/Y',
+                formatDate: 'd/m/Y',
+                onShow: function (ct) {
+                    this.setOptions({
+                        minDate: jQuery('#rangeBegin').val() ? jQuery('#rangeBegin').val() : false
+                    })
+                },
+                timepicker: false
+            });
+
+            isloading = false;
+            $(window).scroll(function () {
+                if ($(window).scrollTop() == ($(document).height() - $(window).height()) && isloading == false) {
+                    isloading = true;
+                    var rangeType = $('#filterByRange').val();
+                    var begin = $('#filterByBegin').val();
+                    var end = $('#filterByEnd').val();
+                    var evtId = $('#sortbyevent').val();
+                    var cat = $('#sortbycat').val();
+                    var rep = $('#sortbyreporter').val();
+                    var title = $('#sortbytitle').val();
+                    var lastdate = $('#manage_video tbody:last-child').data('lastdate');
+                    $.post("/Video/GetScrollListVideo", { evtId: evtId, begin: begin, end: end, lastdate: lastdate, cat: cat, rep: rep, title: title, rangeType: rangeType }, function (data) {
+                        isloading = false;
+                        $("#manage_video").append(data);
+                    });
+                }
+            });
+        });
+
+        $("#rangeDropdown").rangeDropdown();
+
+        $('#sidebar-nav #videoMng').toggleClass("active");
+        $('#sidebar-nav #videoMng').siblings().removeClass("active");
+
+        $('#sidebar-nav a#vd-li-2').toggleClass("active");
+        $('#sidebar-nav a#vd-li-2').parent().siblings().removeClass("active");
+
+        function OnDeleteSuccess(data) {
+            if (data.success == true) {
+                $("#deleteVideoModal").modal("hide");
+                $("#video_" + data.id).remove();
+            }
+            else {
+                alert(data.error);
+            }
+        }
+    </script>
+
+}

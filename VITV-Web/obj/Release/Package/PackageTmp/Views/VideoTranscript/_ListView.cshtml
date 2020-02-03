@@ -1,0 +1,35 @@
+﻿@model List<VideoTranscript>
+
+@{
+    var height = Convert.ToInt32(ViewData["height"].ToString());
+}
+
+<div class="col-xs-6 col-md-4">
+    <div class="transcript_box" @(height > 0 ? "style=height:" + height + "px" : "")>
+        <div class="row transcript_title">
+            <div class="col-xs-10">
+                <b>NỘI DUNG CHI TIẾT</b>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="#">&nbsp;</a>
+            </div>
+        </div>
+        <div class="row transcript_hr_line"></div>
+        <div class="row transcript_timeline" @(height > 0 ? "style=height:" + (height - 45) + "px" : "")>
+            <ul class="list-group">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+                    <li class="list-group-item single_transcript" data-seektime="@item.ConvertedToSeconds" data-toggle="tooltip" data-placement="bottom">
+                        <a href="#" data-seektime="@item.ConvertedToSeconds" class="btn-seek-time">
+                            <div class="left">
+                                @((item.HourSeek > 0) ? item.HourSeek + ":" : "")@((item.MinuteSeek < 10) ? "0" + item.MinuteSeek : item.MinuteSeek.ToString()):@((item.SecondSeek < 10) ? "0" + item.SecondSeek : item.SecondSeek.ToString())
+                            </div>
+                            <div class="right">@Html.Raw(item.Title)</div>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

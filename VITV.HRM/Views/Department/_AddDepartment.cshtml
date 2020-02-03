@@ -1,0 +1,27 @@
+﻿@model Department
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Thêm phòng ban</h4>
+</div>
+@using (Ajax.BeginForm("Create", "Department", new { }, new AjaxOptions
+{
+    OnSuccess = "OnAddDepartmentSuccess",
+    HttpMethod = "Post"
+}, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.BranchId)
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Tên phòng ban</label>
+            <input type="text" class="form-control" name="Name" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </div>
+}
+
+
+

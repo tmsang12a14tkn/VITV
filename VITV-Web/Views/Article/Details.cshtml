@@ -1,0 +1,116 @@
+﻿@model ArticleModel
+
+@{
+    ViewBag.Title = Model.Title + " - VITV";
+    Layout = "~/Views/Shared/_VideosLayout.cshtml";
+}
+
+<div class="row news_detail">
+    <div class="row vline">
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#news_detail_filter">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <h3 class="navbar-brand">TIN TỨC</h3>
+                    </div>
+                    @*<div class="collapse navbar-collapse" id="news_detail_filter">
+                        <form class="navbar-form navbar-right" role="search">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <span>Loại tin</span>
+                                    <select class="form-control m14" id="videocat" name="videogroup">
+                                        <option value="chuyenmuc">Chính trị XH</option>
+                                        <option value="tintuc">Tin tức</option>
+                                        <option value="giaitri">Giải trí</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>*@
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="news_content">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="row news_detail_title">
+                    <h3>@Model.Title</h3>
+                    <h6>@Model.PublishedTime.ToString()</h6>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 news_detail_content">
+                        <p>@Model.ShortBrief</p>
+                       @Html.Raw(HttpUtility.HtmlDecode(Model.ArticleContent))
+                    </div>
+                    <div class="col-md-4 news_sidebar">
+                        <div class="row news_most_read">
+                            <h4>Đọc nhiều</h4>
+                            <div class="row single_news_most_read">
+                                <div class="row">
+                                    <img src="/Content/Images/news1.jpg">
+                                    <h4>Giám đốc 16 tuổi bỏ học làm giàu</h4>
+                                    <p>Nhân ngày kỷ niệm của cộng đồng doanh nhân Việt Nam, VnExpress vừa có cuộc trao đổi với ông Vũ Tiến Lộc - Chủ tịch Phòng Thương mại và Công nghiệp Việt Nam (VCCI) về chặng đường phát triển vừa qua.</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <ul class="list_most_read">
+                                    <li><a href="#">Sự khác biệt của những người thành công</a></li>
+                                    <li><a href="#">110 Những câu nói không có trong từ điển của người thành công</a></li>
+                                    <li><a href="#">Vì sao Nhật Bản có các công ty lâu đời nhất thế giới?</a></li>
+                                    <li><a href="#">21 Victoria Beckham là doanh nhân thành công nhất nước Anh</a></li>
+                                    <li><a href="#">Doanh nhân Nga soạn rời quê hương</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row news_related">
+                            <h4>Tin liên quan</h4>
+                            <div class="row">
+                                <div class="row single_news_related">
+                                    <img src="/Content/Images/news2.jpg">
+                                    <h4>G20 bỏ trừng phạt Nga</h4>
+                                    <h6>Thứ hai, 13/10/2014 | 13:39 GMT+7</h6>
+                                </div>
+                                <div class="row single_news_related">
+                                    <img src="/Content/Images/news3.jpg">
+                                    <h4>Giá vàng tăng vọt đầu tuần</h4>
+                                    <h6>Thứ hai, 13/10/2014 | 13:39 GMT+7</h6>
+                                </div>
+                                <div class="row single_news_related">
+                                    <img src="/Content/Images/news1.jpg">
+                                    <h4>Người giàu thành công nhờ đâu?</h4>
+                                    <h6>Thứ hai, 13/10/2014 | 13:39 GMT+7</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row news_social">
+                            <ul class="list-inline">
+                                <li><a href="https://twitter.com/kenhVITV" target="_blank"><img src="/Content/Images/tw.png" /></a></li>
+                                <li><a href="https://www.facebook.com/VITVkhoinguonkinhdoanh" target="_blank"><img src="/Content/Images/fb.png" /></a></li>
+                                <li><a href="https://www.youtube.com/user/kenhTHvitv" target="_blank"><img src="/Content/Images/yt.png" /></a></li>
+                                <li><a href="https://plus.google.com/103419870736642795128/about" target="_blank"><img src="/Content/Images/gp.png" /></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section seo
+{
+    <meta name="description" content="@Model.GetSEOMetaDescription()">
+    <meta name="keywords" content="@Model.Title - VITV @Model.CategoryName,@Model.SEO_FocusKeywords">
+    <meta property="og:title" content="@Model.GetSEOTitle()">
+    <meta property="og:description" content="@Model.GetSEOMetaDescription()">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="article">
+}

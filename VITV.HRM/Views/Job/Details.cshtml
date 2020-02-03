@@ -1,0 +1,227 @@
+﻿@model Job
+@{
+    ViewBag.Title = "Xem yêu cầu";
+    Employee me = ViewBag.Me;
+}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="blue bigger">
+        <a href="/TaskRequest/Details/@Model.JobList.TaskRequestId">@Model.JobList.TaskRequest.Title</a> <i class="ace-icon fa fa-angle-double-right"></i>
+        <span class="@(ViewBag.CanEdit==true?"item-editable":"")" data-pk="@Model.Id" data-url="/Job/EditProperty" data-name="Title" data-type="text" data-mode="inline" data-onblur="submit">@Model.Title</span>
+    </h4>
+</div>
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-sm-8">
+
+            <span class="@(ViewBag.CanEdit==true?"item-editable":"") clearfix" data-pk="@Model.Id" data-url="/Job/EditProperty" data-name="ShortDescription" data-type="text" data-mode="inline" data-onblur="submit">@Model.ShortDescription</span>
+
+
+            <span class="@(ViewBag.CanEdit==true?"item-editable":"")" data-pk="@Model.Id" data-url="/Job/EditProperty" data-name="Description" data-type="wysiwyg" data-mode="inline" data-onblur="submit">@Html.Raw(Model.Description)</span>
+
+            <div class="hr" />
+            <div id="job-employees-@Model.Id">
+                <div class="clearfix">
+                    <span class="blue bolder bigger-110 pull-left">Tham gia</span>
+
+                    @*<a href="#" class="blue pull-right edit-job-employees-btn" data-id="@Model.Id">
+                            <i class="ace-icon fa fa-pencil bigger-125"></i>
+                        </a>*@
+
+                </div>
+                @*<div class="profile-users clearfix">
+
+                        @foreach (var receiver in @Model.Employees)
+                        {
+                            <div class="itemdiv memberdiv">
+                                <div class="inline pos-rel">
+                                    <div class="user">
+                                        <a href="/Employee/ProfilePage/@receiver.Id">
+                                            <img src="@receiver.ProfilePicture" alt="avatar">
+                                        </a>
+                                    </div>
+                                    <div class="body">
+                                        <div class="name">
+                                            <a href="/Employee/ProfilePage/@receiver.Id">
+                                                <span class="user-status"></span>
+                                                @receiver.Name
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>*@
+                <div class="employees-edit">
+                    <span class="@(ViewBag.CanEdit==true?"item-editable":"")" data-pk="@Model.Id" data-url="/Job/EditProperty" data-name="Employees" data-sourcetype="equipments" data-type="select2" data-mode="inline" data-value="@Model.EmployeesString("Id")" data-onblur="submit">
+                        @Model.EmployeesString("Name")
+                    </span>
+                </div>
+
+            </div>
+            <div class="hr" />
+            <span class="@(ViewBag.CanEdit==true?"item-editable":"")" data-pk="@Model.Id" data-url="/Job/EditProperty" data-name="StartTime" data-mode="inline" data-type="datetime" data-template="DD MM YYYY  HH:mm" data-format="d.m.Y H:i" data-viewformat="dd/MM/yyyy HH:mm" data-value="" data-onblur="submit">
+                @Model.StartTime
+            </span>
+            -
+            <span class="@(ViewBag.CanEdit==true?"item-editable":"")" data-pk="@Model.Id" data-url="/Job/EditProperty" data-name="EndTime" data-mode="inline" data-type="datetime" data-template="DD MM YYYY  HH:mm" data-format="d.m.Y H:i" data-viewformat="dd/MM/yyyy HH:mm" data-value="" data-onblur="submit">
+                @Model.EndTime
+            </span>
+            <div class="hr" />
+
+            <div class="message-attachment clearfix">
+                <div class="attachment-title">
+                    <span class="blue bolder bigger-110">Đính kèm</span>
+                    &nbsp;
+                    <span class="grey">(@Model.Attachments.Count tệp)</span>
+
+                    <div class="inline position-relative">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                            &nbsp;
+                            <i class="ace-icon fa fa-caret-down bigger-125 middle"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-lighter">
+                            <li>
+                                <a href="#">Tải xuống tệp zip</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Display in slideshow</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form action="/Job/EditAttachments" method="post" class="edit-item-attachments-form">
+                    <input type="hidden" value="@Model.Id" name="Id" />
+                    <ul class="attachment-list clearfix list-unstyled">
+                        @{
+                            var imageExtentions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".svg", ".bmp", ".tiff" };
+                            var videoExtentions = new List<string> { "mpg", "mpeg", "flv", "mov", "avi", "swf", "mp4", "mkv", "webm", "wmv", "3gp" };
+                            var audioExtentions = new List<string> { "mp3", "ogg", "wav", "wma", "amr", "aac" };
+                            foreach (var attachment in Model.Attachments)
+                            {
+                                <li class="ace-file-input ace-file-multiple uploaded-attachment col-sm-12">
+                                    <input type="hidden" value="@attachment.AttachmentLink" name="uploadedAttachments" />
+                                    
+                                        <span class="ace-file-container hide-placeholder selected">
+                                            <span class="ace-file-name" data-title="">
+                                                <a href="@attachment.AttachmentLink" download="">
+                                                    <i class="ace-icon fa fa-download bigger-125 blue"></i>
+                                                </a>
+                                                <a target="_blank" href="@attachment.AttachmentLink">
+                                                    @{
+                                                        var extention = Path.GetExtension(attachment.AttachmentLink);
+                                                        if (imageExtentions.Contains(extention))
+                                                        {
+                                                                    <img class="middle" style="width: 50px; height: 50px;" src="@attachment.AttachmentLink">
+                                                                                <i class="ace-icon fa fa-picture-o file-image"></i>
+                                                        }
+                                                        else if (videoExtentions.Contains(extention))
+                                                        {
+                                                                    <i class="ace-icon fa fa-film file-video"></i>
+                                                        }
+                                                        else if (audioExtentions.Contains(extention))
+                                                        {
+                                                                    <i class="ace-icon fa fa-music file-audio"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                                    <i class="ace-icon fa fa-file"></i>
+                                                        }
+                                                    }
+                                                    @Path.GetFileName(attachment.AttachmentLink)
+                                                </a>
+                                            </span>
+                                        </span>
+                                    @if(ViewBag.CanEdit == true)
+                                    { 
+                                    <a class="remove" href="#">
+                                        <i class=" ace-icon fa fa-times"></i>
+                                    </a>
+                                    }
+                                     
+                                </li>
+                            }
+                        }
+
+                        @*@foreach (var attachment in Model.Attachments)
+                            {
+                                <li>
+                                    <a href="@attachment.AttachmentLink" class="attached-file">
+                                        <i class="ace-icon fa fa-file-o bigger-110"></i>
+                                        <span class="attached-name">@Path.GetFileName(attachment.AttachmentLink)</span>
+                                    </a>
+
+                                    <span class="action-buttons">
+                                        <a href="@attachment.AttachmentLink" download>
+                                            <i class="ace-icon fa fa-download bigger-125 blue"></i>
+                                        </a>
+
+                                        <a href="#">
+                                            <i class="ace-icon fa fa-trash-o bigger-125 red"></i>
+                                        </a>
+                                    </span>
+                                </li>
+                            }*@
+                    </ul>
+                    @if(ViewBag.CanEdit == true)
+                    {
+                        <ul class="attachment-list clearfix list-unstyled">
+                            <li class="col-sm-12">
+                                <input multiple type="file" id="input-item-attachments" name="attachments" />
+                            </li>
+                        </ul>
+                        <input type="submit" value="OK" class="btn btn-sm btn-success" />
+                    }
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <div id="response-items" style="max-height: 500px; overflow-y: auto; overflow-x:hidden">
+                @foreach (var response in Model.Responses)
+                {
+                    @Html.Partial("~/Views/JobResponse/_Details.cshtml", response)
+                }
+            </div>
+
+
+            @using (Html.BeginForm("Create", "JobResponse", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", id = "response-form" }))
+            {
+                @Html.Hidden("JobId", Model.Id)
+                <div class="">
+                    <div class="timeline-item clearfix">
+                        <div class="timeline-info">
+                            <img class="pull-left" src="@me.ProfilePicture" />
+                        </div>
+
+                        <div class="widget-box">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="">
+                                        <textarea class="form-control" name="Content"></textarea>
+                                    </div>
+
+                                    <div class="">
+                                        <input type="file" id="input-response-attachments" name="attachments" class="input-attachments" multiple />
+                                    </div>
+                                    <div class="clearfix">
+                                        <input type="submit" value="OK" typeof="text" class="btn btn-sm btn-danger pull-right" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

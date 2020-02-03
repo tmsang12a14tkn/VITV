@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "Quản lý phòng ban";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="widget-box widget-color-blue2">
+                    <div class="widget-header">
+                        <h4 class="widget-title lighter smaller">Danh sách phòng ban</h4>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main padding-8">
+                            <div id="tree" class="tree tree-selectable">
+                                <div class="tree-folder" style="display:none;">
+                                    <div class="tree-folder-header">
+                                        <i class="icon-folder ace-icon tree-plus"></i>
+                                        <div class="tree-folder-name"></div>
+                                    </div>
+                                    <div class="tree-folder-content"></div>
+                                    <div class="tree-loader" style="display:none"></div>
+                                </div>
+                                <div class="tree-item" style="display:none;">
+                                    <i class="icon-item ace-icon fa fa-times"></i>
+                                    <div class="tree-item-name"></div>
+                                </div>
+                                <div class="tree-item add-button" style="display:none;">
+                                    <div class="tree-item-name"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var $assets = "dist";//this will be used in fuelux.tree-sampledata.js
+        </script>
+
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div>
+
+<div class="modal fade" id="groupModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="groupContent">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="departmentModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="departmentContent">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="branchModal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="branchContent">
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts{
+    <!-- page specific plugin scripts -->
+    <script src="~/Scripts/fuelux.tree.min.js"></script>
+
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        function OnAddBranchSuccess(data) {
+            $('#branchModal').modal('hide');
+            $('#tree .tree-folder:visible, #tree .tree-item:visible').remove();
+            $('#tree').tree('render');
+        }
+
+        function OnAddDepartmentSuccess(data) {
+            $('#departmentModal').modal('hide');
+            $('#tree .tree-folder:visible, #tree .tree-item:visible').remove();
+            $('#tree').tree('render');
+        }
+
+        function OnAddGroupSuccess(data) {
+            $('#groupModal').modal('hide');
+            $('#tree .tree-folder:visible, #tree .tree-item:visible').remove();
+            $('#tree').tree('render');
+        }
+
+        jQuery(function ($) {            
+            var DataSource = function (options) {
+                this._data = options.data;
+            };
+
+            DataSource.prototype.data = function (options, callback) {
+                var $data = null
+                var $url = null;
+                var $param = null;
+
+                if (!('name' in options))
+                {
+                    $url = '/branch/getall';
+                }
+                else if ("type" in options && options.type == "folder")
+                {
+                    var dataId = options.id.split('-');
+                    var type = dataId[0];
+                    var $param = 'id=' + dataId[1];
+
+                    if (type == 'branch')
+                        $url = '/department/getbybranchid';
+                    else if (type == 'department')
+                        $url = '/group/getbydepartmentid';
+                }
+
+                if ($url != null)
+                {
+                    if ($param == null)
+                    {
+                        $.ajax({
+                            url: $url,
+                            dataType: 'json',
+                            success: function (response) {
+                                callback({ data: response || this._data });
+                            },
+                            error: function (response) {
+                                console.log(response);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $.ajax({
+                            url: $url,
+                            dataType: 'json',
+                            data: $param,
+                            success: function (response) {
+                                callback({ data: response || this._data });
+                            },
+                            error: function (response) {
+                                console.log(response);
+                            }
+                        });
+                    }
+                }
+            }
+
+            var treeDataSource = new DataSource({});
+
+            $('#tree').tree({
+                dataSource: treeDataSource,
+                'open-icon': 'ace-icon tree-minus',
+                'close-icon': 'ace-icon tree-plus',
+                'selectable': true,
+                'selected-icon': null,
+                'unselected-icon': null,
+                loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>'
+            });
+
+            $('#tree').on('selected.fu.tree', function (event) {
+                var selItem = $('#tree').tree('selectedItems')[0];
+                var dataId = selItem.id.split('-');
+
+                if (dataId[0] == 'add') {                    
+                    if (dataId[1] == 'branch') {
+                        $('#branchContent').load('/branch/create');
+                        $('#branchModal').modal('show');                        
+                    } else if (dataId[1] == 'department') {
+                        $('#departmentContent').load('/department/create?id=' + dataId[2]);
+                        $('#departmentModal').modal('show');
+                    } else if (dataId[1] == 'group') {
+                        $('#groupContent').load('/group/create?id=' + dataId[2]);
+                        $('#groupModal').modal('show');
+                    }
+                    $('.add-button').removeClass("tree-selected");
+                } else if (dataId[0] == 'group') {
+                    window.location = '/group/details/' + dataId[1];
+                }
+            });
+        });
+    </script>
+}

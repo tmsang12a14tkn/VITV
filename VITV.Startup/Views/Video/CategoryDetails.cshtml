@@ -1,0 +1,72 @@
+﻿@model VITV.Data.Models.VideoCategory
+@{
+    ViewBag.Title = "Chương trình - StartUp VITV";
+    Layout = "~/Views/Shared/_ArticleLayout.cshtml";
+}
+
+<div class="row video_news_area">
+    <div class="row hr_line">
+        <h4>@Model.Group.Name</h4>
+    </div>
+    <div class="row m3">
+        <div class="col col-md-5 cat-img"><img src="@Model.ProfilePhoto"></div>
+        <div class="col col-md-7 cat-info">
+            <h3>@Model.Name</h3>
+            <p class="tm">@Model.IntroductionBonus</p>
+            @Html.Raw(Model.Introduction)
+        </div>
+    </div>
+</div>
+
+<div class="row video_relate_area m7">
+    <div class="row hr_line">
+        <h4>Video trong chương trình</h4>
+    </div>
+    <div class="row">
+        <div class="related_video_content">
+            <div class="row single_related m7">
+                @Html.Action("GetMoreVideos", "Video", new { catId = Model.Id })
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Videos.Count() > 10)
+    {
+        <div class="row vd_viewmore">
+            <p class="divine_line">
+                <a href="" class="btn btn-default vm">Xem thêm</a>
+                <input type="hidden" id="current_record" value="10" />
+            </p>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        $('body').on('click', '.vm', function (e) {
+            e.preventDefault();
+            var targetDiv = $("div.single_related");
+            var curNumRecord = $('#current_record').val();
+            $.get('/Video/GetMoreVideos?catId=' + @Model.Id + '&numrecord=' + curNumRecord, function (data) {
+                targetDiv.append(data);
+                $('#current_record').val($('#tmp_cur_num_record').val());
+                if ($('#tmp_has_more_video').val() == 0) {
+                    $('.vd_viewmore').remove();
+                }
+                $('#tmp_cur_num_record').remove();
+                $('#tmp_has_more_video').remove();
+            });
+        });
+    </script>
+}
+
+@section seo {
+    <meta name="description" content="@Model.Description">
+    <meta name="keywords" content="@Model.Name, @Model.UniqueTitle">
+    <meta property="og:title" content="@(Model.Name)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="@(Request.Url.AbsoluteUri)">
+    <meta property="og:image" content="@(Model.ProfilePhoto)" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="544" />
+}

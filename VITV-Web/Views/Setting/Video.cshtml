@@ -1,0 +1,45 @@
+﻿@model VideoSetting
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Cài đặt phát video";
+}
+
+<div class="row">
+    <div class="col-ms-12">
+        <div class="main-box">
+            <header class="main-box-header clearfix">
+                <h2>Cấu hình phát video</h2>
+            </header>
+            <div class="main-box-body clearfix">
+                @using (Html.BeginForm("Video", "Setting", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="slAdvertiserOrder">Thứ tự của quảng cáo</label>
+                        <div class="col-lg-10" id="slAdvertiserOrder">
+                            <select name="AdvertiserOrder" class="form-control">
+                                <option value="1" @(Model.AdvertiserOrder == "1" ? "selected" : "")>Quảng cáo - Giới thiệu</option>
+                                <option value="2" @(Model.AdvertiserOrder == "2" ? "selected" : "")>Giới thiệu - Quảng cáo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="slSkipTime">Thời gian cho phép bỏ qua quảng cáo</label>
+                        <div class="col-lg-10" id="slSkipTime">
+                            <select name="SkipTime" class="form-control">
+                                <option value="3" @(Model.SkipTime == "3" ? "selected" : "")>3s</option>
+                                <option value="4" @(Model.SkipTime == "4" ? "selected" : "")>4s</option>
+                                <option value="5" @(Model.SkipTime == "5" ? "selected" : "")>5s</option>
+                                <option value="6" @(Model.SkipTime == "6" ? "selected" : "")>6s</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-success">Thay đổi</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
